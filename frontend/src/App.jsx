@@ -1,4 +1,4 @@
-import WeeklyCalendar from './components/WeeklyCalendar';
+import WeeklyCalendar from './features/calendar/WeeklyCalendar';
 import './App.css';
 
 /**

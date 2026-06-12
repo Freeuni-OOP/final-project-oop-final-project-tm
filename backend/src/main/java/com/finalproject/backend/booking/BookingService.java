@@ -9,9 +9,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
- * Service layer for calendar slot operations.
- * MOCK IMPLEMENTATION – uses an in-memory ConcurrentHashMap.
- * Replace map calls with BookingSlotRepository when DB is ready.
+ * Mock service – uses an in-memory store.
+ * Seeds slots for 8 weeks (2 past + current + 5 future) so the user
+ * can navigate the calendar freely.
  */
 @Service
 public class BookingService {
@@ -27,7 +27,7 @@ public class BookingService {
 
     private void seedMockData() {
         LocalDate today  = LocalDate.now();
-        LocalDate monday = today.minusDays(today.getDayOfWeek().getValue() - 1);
+        LocalDate thisMonday = today.minusDays(today.getDayOfWeek().getValue() - 1);
 
         SlotStatus[] pattern = {
             SlotStatus.FREE, SlotStatus.FREE,    SlotStatus.FREE,
@@ -36,34 +36,50 @@ public class BookingService {
         };
         int pIdx = 0;
 
-        for (int day = 0; day < 7; day++) {
-            for (int hour = 9; hour <= 17; hour++) {
-                long id = idCounter.getAndIncrement();
-                mockStore.put(id, new BookingSlot(
-                    id,
-                    monday.plusDays(day).atTime(hour, 0),
-                    pattern[pIdx++ % pattern.length]
-                ));
+        // Seed from 2 weeks ago up to 5 weeks ahead (8 weeks total)
+        for (int weekOffset = -2; weekOffset <= 5; weekOffset++) {
+            LocalDate monday = thisMonday.plusWeeks(weekOffset);
+            for (int day = 0; day < 7; day++) {
+                for (int hour = 9; hour <= 17; hour++) {
+                    long id = idCounter.getAndIncrement();
+                    mockStore.put(id, new BookingSlot(
+                        id,
+                        monday.plusDays(day).atTime(hour, 0),
+                        pattern[pIdx++ % pattern.length]
+                    ));
+                }
             }
         }
     }
 
     // ── Public methods ────────────────────────────────────────────────────────
 
-    /** Returns all slots for the current week sorted by date/time. */
-    public List<BookingSlotDTO> getAllSlotsForCurrentWeek() {
+    /**
+     * Returns slots for the week at the given offset from the current week.
+     * weekOffset = 0  → this week
+     * weekOffset = 1  → next week
+     * weekOffset = -1 → last week
+     */
+    public List<BookingSlotDTO> getAllSlotsForWeek(int weekOffset) {
+        LocalDate today      = LocalDate.now();
+        LocalDate thisMonday = today.minusDays(today.getDayOfWeek().getValue() - 1);
+        LocalDate weekMonday = thisMonday.plusWeeks(weekOffset);
+        LocalDate weekSunday = weekMonday.plusDays(6);
+
         return mockStore.values().stream()
+            .filter(s -> {
+                LocalDate d = s.getSlotDateTime().toLocalDate();
+                return !d.isBefore(weekMonday) && !d.isAfter(weekSunday);
+            })
             .sorted(Comparator.comparing(BookingSlot::getSlotDateTime))
             .map(s -> new BookingSlotDTO(s.getId(), s.getSlotDateTime(), s.getStatus().name()))
             .collect(Collectors.toList());
     }
 
-    /** FREE → PENDING. Returns empty if slot not found or not FREE. */
+    /** FREE → PENDING */
     public Optional<BookingSlotDTO> requestBooking(BookingRequestDTO dto) {
         BookingSlot slot = mockStore.get(dto.getSlotId());
-        if (slot == null || slot.getStatus() != SlotStatus.FREE) {
-            return Optional.empty();
-        }
+        if (slot == null || slot.getStatus() != SlotStatus.FREE) return Optional.empty();
         slot.setStatus(SlotStatus.PENDING);
         slot.setClientName(dto.getClientName());
         slot.setClientEmail(dto.getClientEmail());
@@ -71,23 +87,19 @@ public class BookingService {
         return Optional.of(new BookingSlotDTO(slot.getId(), slot.getSlotDateTime(), slot.getStatus().name()));
     }
 
-    /** PENDING → BOOKED. Returns empty if slot not found or not PENDING. */
+    /** PENDING → BOOKED */
     public Optional<BookingSlot> confirmBooking(Long slotId) {
         BookingSlot slot = mockStore.get(slotId);
-        if (slot == null || slot.getStatus() != SlotStatus.PENDING) {
-            return Optional.empty();
-        }
+        if (slot == null || slot.getStatus() != SlotStatus.PENDING) return Optional.empty();
         slot.setStatus(SlotStatus.BOOKED);
         mockStore.put(slot.getId(), slot);
         return Optional.of(slot);
     }
 
-    /** PENDING → FREE (slot freed again). Returns empty if not found or not PENDING. */
+    /** PENDING → FREE */
     public Optional<BookingSlot> rejectBooking(Long slotId) {
         BookingSlot slot = mockStore.get(slotId);
-        if (slot == null || slot.getStatus() != SlotStatus.PENDING) {
-            return Optional.empty();
-        }
+        if (slot == null || slot.getStatus() != SlotStatus.PENDING) return Optional.empty();
         slot.setStatus(SlotStatus.FREE);
         slot.setClientName(null);
         slot.setClientEmail(null);

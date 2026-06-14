@@ -1,0 +1,15 @@
+# ── System Requirements ────────────────────────────────────────────────────────
+# Install these tools before running the project.
+# Click the links to download the installer for your OS.
+
+Docker Desktop  >= 24.0     https://www.docker.com/products/docker-desktop
+Node.js         >= 18.0     https://nodejs.org
+Java JDK        >= 21       https://adoptium.net
+
+# ── After installing the tools above, run these commands ──────────────────────
+#
+#   Terminal 1 (database):   docker compose up -d
+#   Terminal 2 (backend):    cd backend  && ./mvnw spring-boot:run
+#   Terminal 3 (frontend):   cd frontend && npm install && npm run dev
+#
+# Then open: http://localhost:5173

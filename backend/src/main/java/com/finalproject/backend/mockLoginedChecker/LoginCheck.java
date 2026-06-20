@@ -1,4 +1,4 @@
-package mockLoginedChecker;
+package com.finalproject.backend.mockLoginedChecker;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +25,13 @@ public class LoginCheck {
         try {
             // 4. Validate the token mathematically using your Secret Key
             // (You will use a library like 'jjwt' to do this actual checking)
-            boolean isValid = true; //jwtService.validateToken(token);
 
-            return ResponseEntity.ok("User is verified");
-            /*
+            boolean isValid = false; //jwtService.validateToken(token);
+
+            if(token.equals("mock_super_secret_token_123")) {
+                isValid = true;
+            }
+
             if (isValid) {
                 // 5. Token is good! Return 200 OK.
                 // This makes response.ok = true in your React fetch!
@@ -37,8 +40,6 @@ public class LoginCheck {
                 // Token is tampered with or expired
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
             }
-
-             */
 
         } catch (Exception e) {
             // Something went wrong, reject them

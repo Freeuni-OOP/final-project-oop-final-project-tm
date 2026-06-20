@@ -1,4 +1,4 @@
-package mockLoginedChecker; // Note: Change this to match your actual package name!
+package com.finalproject.backend.mockLoginedChecker; // Note: Change this to match your actual package name!
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

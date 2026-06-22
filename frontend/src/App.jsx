@@ -3,6 +3,7 @@ import ServiceCreationPage from './components/ServiceCreation/ServiceCreationPag
 import './App.css';
 import ProtectedRoute from "./ProtectedRouter/ProtectedRoute.jsx";
 import LoginPage from './components/mock_login/LoginPage.jsx';
+import Service from './components/service/Service.jsx';
 
 function App() {
     return (
@@ -21,6 +22,11 @@ function App() {
                     {/* If they go to the base URL (localhost:5173/), redirect them somewhere */}
                     <Route path="/" element={<Navigate to="/create-service" />} />
 
+                    <Route path="/service" element={
+                        <ProtectedRoute>
+                            <Service/>
+                        </ProtectedRoute>
+                    } />
                 </Routes>
             </div>
         </BrowserRouter>

@@ -1,6 +1,6 @@
 /* ServiceCreationPage.css */
 
-.service-creation-page {
+.service-service {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -8,7 +8,7 @@
 }
 
 /* Upper half: holds the profile picture, title field, and ReadMe field */
-.service-creation-upper {
+.service-service-header {
     min-height: 50vh;
     display: flex;
     align-items: flex-start;
@@ -18,14 +18,14 @@
 }
 
 /* Profile picture */
-.profile-section {
+.service-profile-section {
     flex-shrink: 0;
     display: flex;
     justify-content: center;
     padding-top: 8px;
 }
 
-.profile-picture {
+.service-profile-picture {
     width: 140px;
     height: 140px;
     border-radius: 50%;
@@ -42,7 +42,7 @@
 }
 
 /* Column of input fields to the right of the profile picture */
-.fields-section {
+.service-fields-section {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -50,13 +50,13 @@
     max-width: 720px;
 }
 
-.field-group {
+.service.description {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.field-label {
+.service-title-label {
     color: #333333;
     font-size: 14px;
     font-weight: 600;
@@ -64,9 +64,7 @@
     text-transform: uppercase;
 }
 
-/* Shared styling for both fields */
-.service-title-input,
-.readme-textarea {
+.service-description-text-area {
     width: 90%;
     background-color: #ffffff;
     color: #333333;
@@ -78,36 +76,17 @@
     box-sizing: border-box;
 }
 
-.service-title-input::placeholder,
-.readme-textarea::placeholder {
-    color: #999999;
-}
-
-.service-title-input:focus,
-.readme-textarea:focus {
-    outline: none;
-    border-color: #b8924a;
-    box-shadow: 0 0 0 3px rgba(184, 146, 74, 0.15);
-}
-
-/* Element 2: long and narrow title input */
-.service-title-input {
-    height: 44px;
-}
-
-/* Element 3: big, multi-line ReadMe field */
-.readme-textarea {
+.service-description-text-area {
     min-height: 300px;
     resize: vertical;
     line-height: 1.5;
 }
 
-/* Bottom half: left empty for now */
 .service-creation-lower {
     flex: 1;
 }
 
-.service-creation-post-button{
+.service-return-home-page-button{
     width: 100px;
     height: 40px;
 }

@@ -1,8 +1,10 @@
 import 'react';
 import ProfilePic from '../../assets/tempProfilePicture.jpeg';
 import './ServiceCreationPage.css';
+import {useNavigate} from "react-router-dom";
 
 function ServiceCreationPage() {
+    const navigate = useNavigate();
     return (
         <div className="service-creation-page">
             <header className="service-creation-upper">
@@ -17,7 +19,7 @@ function ServiceCreationPage() {
 
                 <div className="fields-section">
                     <div className="field-group">
-                        <label htmlFor="service-title" className="field-label">=
+                        <label htmlFor="service-title" className="field-label">
                             Service Title
                         </label>
                         <input
@@ -26,8 +28,8 @@ function ServiceCreationPage() {
                             className="service-title-input"
                             placeholder="Enter a name for your service"
                         />
-                    </div>
 
+                </div>
                     <div className="field-group">
                         <label htmlFor="readme" className="field-label">
                             ReadMe
@@ -44,6 +46,13 @@ function ServiceCreationPage() {
             <section className="service-creation-lower">
                 {/* Intentionally left empty for now */}
             </section>
+            <div className="service-creation-post">
+                <button
+                    className="service-creation-post-button"
+                    onClick={() => navigate('/service')}>
+                    Create
+                </button>
+            </div>
         </div>
     );
 }

@@ -16,11 +16,15 @@ public class Users {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email",
+    unique = true)
     private String email;
 
     @Column(name = "about_me")
     private String aboutMe;
+
+    @Column(name = "password_hash")
+    private String passHash;
 
     @Column(name = "picture_url")
     private String picUrl;

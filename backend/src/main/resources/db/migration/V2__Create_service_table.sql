@@ -1,3 +1,4 @@
+USE book_to;
 DROP table IF EXISTS services;
 
 CREATE TABLE services (

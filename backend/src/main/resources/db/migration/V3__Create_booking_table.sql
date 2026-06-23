@@ -1,4 +1,4 @@
-
+USE book_to;
 DROP TABLE IF EXISTS bookings;
 
 
@@ -13,7 +13,7 @@ CREATE TABLE bookings (
     ON DELETE CASCADE,
 
 
-    CONSTRAINT fk_provider_with_service
+    CONSTRAINT fk_taker_with_service
     FOREIGN KEY (taker_id) REFERENCES users(user_id)
     ON DELETE CASCADE
 );

@@ -64,6 +64,22 @@ function WeeklyCalendar() {
     loadSlots();
   }, [weekOffset]); // ← re-runs every time weekOffset changes
 
+  // Silent background poll – picks up email confirm/reject without a manual refresh
+  const refreshSlots = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/slots?weekOffset=${weekOffset}`);
+      if (!res.ok) return;
+      setSlots(await res.json());
+    } catch {
+      // silently ignore network errors during background polling
+    }
+  }, [weekOffset]);
+
+  useEffect(() => {
+    const timer = setInterval(refreshSlots, 5000); // poll every 5 seconds
+    return () => clearInterval(timer);
+  }, [refreshSlots]);
+
   const handleSlotClick = useCallback((slot) => {
     if (slot.status !== 'FREE') return;
     setSelectedSlot(slot);

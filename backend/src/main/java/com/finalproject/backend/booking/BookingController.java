@@ -63,6 +63,7 @@ public class BookingController {
         }
 
         BookingSlot slot = result.get();
+
         return ResponseEntity.ok()
             .contentType(MediaType.TEXT_HTML)
             .body(buildPage("✅ Booking Confirmed!", "#28a745",
@@ -84,6 +85,7 @@ public class BookingController {
         }
 
         BookingSlot slot = result.get();
+
         return ResponseEntity.ok()
             .contentType(MediaType.TEXT_HTML)
             .body(buildPage("❌ Booking Rejected", "#dc3545",

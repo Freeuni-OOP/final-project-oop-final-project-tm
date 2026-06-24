@@ -29,7 +29,7 @@ sleep 15
 # ── 2. Backend ────────────────────────────────────────────────────────────────
 echo -e "\n☕ Starting Spring Boot Backend..."
 cd backend
-./mvnw spring-boot:run &
+./mvnw clean spring-boot:run &
 BACKEND_PID=$!
 cd ..
 

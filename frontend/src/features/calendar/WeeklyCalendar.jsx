@@ -37,7 +37,7 @@ function formatWeekRange(monday) {
   return `${monday.toLocaleDateString('en-US', opts)} – ${sunday.toLocaleDateString('en-US', { day: 'numeric' })}, ${sunday.getFullYear()}`;
 }
 
-function WeeklyCalendar() {
+function WeeklyCalendar({ serviceId = 1 }) {
   const [weekOffset,   setWeekOffset]   = useState(0);
   const [slots,        setSlots]        = useState([]);
   const [loading,      setLoading]      = useState(true);
@@ -51,7 +51,7 @@ function WeeklyCalendar() {
       setLoading(true);
       setFetchError(null);
       try {
-        const res = await fetch(`${API_BASE}/api/slots?weekOffset=${weekOffset}`);
+        const res = await fetch(`${API_BASE}/api/slots?serviceId=${serviceId}&weekOffset=${weekOffset}`);
         if (!res.ok) throw new Error(`Server responded with status ${res.status}`);
         setSlots(await res.json());
       } catch (err) {
@@ -64,21 +64,16 @@ function WeeklyCalendar() {
     loadSlots();
   }, [weekOffset]); // ← re-runs every time weekOffset changes
 
-  // Silent background poll – picks up email confirm/reject without a manual refresh
-  const refreshSlots = useCallback(async () => {
-    try {
-      const res = await fetch(`${API_BASE}/api/slots?weekOffset=${weekOffset}`);
-      if (!res.ok) return;
-      setSlots(await res.json());
-    } catch {
-      // silently ignore network errors during background polling
-    }
-  }, [weekOffset]);
-
   useEffect(() => {
-    const timer = setInterval(refreshSlots, 5000); // poll every 5 seconds
+    const poll = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/slots?serviceId=${serviceId}&weekOffset=${weekOffset}`);
+        if (res.ok) setSlots(await res.json());
+      } catch { /* ignore transient network errors */ }
+    };
+    const timer = setInterval(poll, 5000);
     return () => clearInterval(timer);
-  }, [refreshSlots]);
+  }, [weekOffset]);
 
   const handleSlotClick = useCallback((slot) => {
     if (slot.status !== 'FREE') return;

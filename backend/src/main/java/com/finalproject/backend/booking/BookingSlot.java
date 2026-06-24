@@ -4,11 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * JPA entity that maps to the `booking_slots` table created by V2 migration.
- *
- * NOTE: The mock BookingService uses an in-memory map and never persists these
- * objects to the database.  When the DB team is ready, swap the service's
- * in-memory map for calls to {@link BookingSlotRepository}.
+ * JPA entity that maps to the `booking_slots` table (created by V4 migration).
  */
 @Entity
 @Table(name = "booking_slots")
@@ -18,7 +14,9 @@ public class BookingSlot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Exact start date and time of this slot. */
+    @Column(name = "service_id", nullable = false)
+    private Integer serviceId;
+
     @Column(name = "slot_date_time", nullable = false)
     private LocalDateTime slotDateTime;
 
@@ -39,8 +37,9 @@ public class BookingSlot {
 
     public BookingSlot() {}
 
-    public BookingSlot(Long id, LocalDateTime slotDateTime, SlotStatus status) {
+    public BookingSlot(Long id, Integer serviceId, LocalDateTime slotDateTime, SlotStatus status) {
         this.id = id;
+        this.serviceId = serviceId;
         this.slotDateTime = slotDateTime;
         this.status = status;
     }
@@ -49,6 +48,9 @@ public class BookingSlot {
 
     public Long getId()                           { return id; }
     public void setId(Long id)                    { this.id = id; }
+
+    public Integer getServiceId()                 { return serviceId; }
+    public void setServiceId(Integer serviceId)   { this.serviceId = serviceId; }
 
     public LocalDateTime getSlotDateTime()                    { return slotDateTime; }
     public void setSlotDateTime(LocalDateTime slotDateTime)   { this.slotDateTime = slotDateTime; }

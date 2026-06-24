@@ -41,6 +41,11 @@ docker exec project_db mysql -ustudent -ppassword project_db -e "
 
 # ── 2. Backend ────────────────────────────────────────────────────────────────
 echo -e "\n☕ Starting Spring Boot Backend..."
+if lsof -ti:8080 >/dev/null 2>&1; then
+    echo "⚠️  Port 8080 already in use — killing existing process..."
+    kill $(lsof -ti:8080) 2>/dev/null
+    sleep 1
+fi
 cd backend
 ./mvnw clean spring-boot:run &
 BACKEND_PID=$!
@@ -48,6 +53,11 @@ cd ..
 
 # ── 3. Frontend ───────────────────────────────────────────────────────────────
 echo -e "\n⚛️  Starting React Frontend..."
+if lsof -ti:5173 >/dev/null 2>&1; then
+    echo "⚠️  Port 5173 already in use — killing existing process..."
+    kill $(lsof -ti:5173) 2>/dev/null
+    sleep 1
+fi
 cd frontend
 npm install --silent
 npm run dev &

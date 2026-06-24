@@ -1,0 +1,53 @@
+Index: frontend/src/App.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import 'react';\r\nimport LandingPage from './Pages/LandingPage';\r\n\r\nfunction App() {\r\n  return (\r\n      <LandingPage />\r\n  );\r\n}\r\n\r\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/frontend/src/App.jsx b/frontend/src/App.jsx
+--- a/frontend/src/App.jsx	(revision 6ba04c6909bf21ef0b3cd31f7094db9ede20daa7)
++++ b/frontend/src/App.jsx	(date 1782236691139)
+@@ -1,10 +1,36 @@
+-import 'react';
+-import LandingPage from './Pages/LandingPage';
++import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
++import ServiceCreationPage from './components/ServiceCreation/ServiceCreationPage';
++import './App.css';
++import ProtectedRoute from "./ProtectedRouter/ProtectedRoute.jsx";
++import LoginPage from './components/mock_login/LoginPage.jsx';
++import Service from './components/service/Service.jsx';
+ 
+ function App() {
+-  return (
+-      <LandingPage />
+-  );
++    return (
++        <BrowserRouter>
++            <div className="App">
++                <Routes>
++                    {/* If they go to localhost:5173/login, show the Login page */}
++                    <Route path="/login" element={<LoginPage />} />
++
++                    {/* If they go to localhost:5173/create-service, show your page */}
++                    <Route path="/create-service" element={
++                        <ProtectedRoute>
++                            <ServiceCreationPage/>
++                       </ProtectedRoute>
++                    } />
++                    {/* If they go to the base URL (localhost:5173/), redirect them somewhere */}
++                    <xRoute path="/" element={<Navigate to="/create-service" />} />
++
++                    <Route path="/service" element={
++                        <ProtectedRoute>
++                            <Service/>
++                        </ProtectedRoute>
++                    } />
++                </Routes>
++            </div>
++        </BrowserRouter>
++    );
+ }
+ 
+ export default App;
+\ No newline at end of file

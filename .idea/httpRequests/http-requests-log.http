@@ -1,0 +1,212 @@
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+Content-Length: 105
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=CCAA5308F6696883A18DA7AEC5DC2E52
+
+{
+  "email": "lizizizi@gmail.com",
+  "password": "222",
+  "first_name": "lizi",
+  "last_name": "nanana"
+}
+
+<> 2026-06-25T010019.201.json
+
+###
+
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+Content-Length: 56
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=4B41A59CDCC51BE6A7605E87E4253918
+
+{
+  "email": "lizizizi@gmail.com",
+  "password": "222"
+}
+
+###
+
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+Content-Length: 56
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=08B7538583DC0573CC742560692F9D71
+
+{
+  "email": "lizizizi@gmail.com",
+  "password": "222"
+}
+
+###
+
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+Content-Length: 56
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=74983159161BAE89E521348EEF49B2E4
+
+{
+  "email": "lizizizi@gmail.com",
+  "password": "222"
+}
+
+###
+
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+Content-Length: 71
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=FB312409E49F7DDE00A41B6C3B0051A4
+
+{
+  "email": "newuser@gmail.com",
+  "password": "mySecurePassword123"
+}
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=FB312409E49F7DDE00A41B6C3B0051A4
+
+{
+  "email": "elene@gmail.com",
+  "password": "123"
+}
+
+<> 2026-06-25T002929.200.json
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=FB312409E49F7DDE00A41B6C3B0051A4
+
+{
+  "email": "elene@gmail.com",
+  "password": "123"
+}
+
+<> 2026-06-25T002759.401.txt
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=FB312409E49F7DDE00A41B6C3B0051A4
+
+{
+  "email": "elene@gmail.com",
+  "password": "123"
+}
+
+<> 2026-06-25T002507.401.txt
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=FB312409E49F7DDE00A41B6C3B0051A4
+
+{
+  "email": "elene@gmail.com",
+  "password": "123"
+}
+
+<> 2026-06-25T002341.401.txt
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=FB312409E49F7DDE00A41B6C3B0051A4
+
+{
+  "email": "elene@gmail.com",
+  "password": "123"
+}
+
+<> 2026-06-25T002202.401.txt
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=FB312409E49F7DDE00A41B6C3B0051A4
+
+{
+  "email": "elene@gmail.com",
+  "password": "123"
+}
+
+<> 2026-06-25T002107.401.txt
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+Cookie: JSESSIONID=FB312409E49F7DDE00A41B6C3B0051A4
+
+{
+  "email": "elene@gmail.com",
+  "password": "123"
+}
+
+<> 2026-06-25T001801.401.txt
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+Content-Length: 53
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "email": "elene@gmail.com",
+  "password": "123"
+}
+
+###
+

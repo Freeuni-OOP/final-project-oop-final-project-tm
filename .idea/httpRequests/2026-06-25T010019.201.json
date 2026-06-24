@@ -1,0 +1,9 @@
+{
+  "id": 9,
+  "firstName": "lizi",
+  "lastName": "nanana",
+  "email": "lizizizi@gmail.com",
+  "aboutMe": null,
+  "passHash": "{bcrypt}$2a$10$VtEXiaxzZ.XyIaSO8PdHoueGk44MlmqqccpHvgC17HllLylpr.5s.",
+  "picUrl": null
+}

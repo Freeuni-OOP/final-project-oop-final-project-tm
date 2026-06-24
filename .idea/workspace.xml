@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="398de10a-de99-4411-b67f-96374d1cce39" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/finalproject/backend/entities/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/finalproject/backend/entities/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/finalproject/backend/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/finalproject/backend/repositories/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V1__Create_users_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V1__Create_users_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V2__Create_service_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V2__Create_service_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V4__Insert_base_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V4__Insert_base_data.sql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;LiziNann&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Freeuni-OOP/final-project-oop-final-project-tm.git&quot;,
+    &quot;accountId&quot;: &quot;16e180e9-e90f-4817-ac35-901ff696b43b&quot;
+  }
+}</component>
+  <component name="HttpClientOnboardingState">{
+  &quot;isOnboardingCommentShown&quot;: true
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0001576903062182" />
+      <entry key="S2" value="1.3185075951134926" />
+      <entry key="S5" value="2.6399902970891054" />
+      <entry key="S10" value="3.857866546469293" />
+      <entry key="S30" value="5.498569894222188" />
+      <entry key="S60" value="7.775050540582052" />
+      <entry key="M2" value="13.612477728935023" />
+      <entry key="M5" value="31.760312975174283" />
+      <entry key="M10" value="53.09086568052683" />
+      <entry key="M15" value="67.23008948434293" />
+      <entry key="M30" value="92.17074474124314" />
+      <entry key="H1" value="115.28226342710815" />
+      <entry key="H2" value="133.9916800143838" />
+      <entry key="H4" value="148.15667222762144" />
+      <entry key="D1" value="166.1779776818593" />
+      <entry key="W1" value="170.27750880050104" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="3.6173464261156374E-161" />
+      <entry key="S2" value="8.817163029219225E-41" />
+      <entry key="S5" value="1.3111723555320821E-16" />
+      <entry key="S10" value="1.5902912489092304E-8" />
+      <entry key="S30" value="0.004711450698613427" />
+      <entry key="S60" value="0.16697544281967586" />
+      <entry key="M2" value="1.3319694881677917" />
+      <entry key="M5" value="6.307823621229264" />
+      <entry key="M10" value="12.768631026353894" />
+      <entry key="M15" value="16.830349597782504" />
+      <entry key="M30" value="22.80950238981856" />
+      <entry key="H1" value="26.916883918321073" />
+      <entry key="H2" value="29.599175928793038" />
+      <entry key="H4" value="31.56389912047461" />
+      <entry key="D1" value="34.2418135785828" />
+      <entry key="W1" value="34.88534172196882" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="3.1705077248508484E-18" />
+      <entry key="MS500" value="3.7872609478221004E-4" />
+      <entry key="S2" value="0.41292361821224194" />
+      <entry key="S5" value="2.0155899283989562" />
+      <entry key="S10" value="3.4670287737857737" />
+      <entry key="S30" value="5.349618597420134" />
+      <entry key="S60" value="7.857252660949036" />
+      <entry key="M2" value="14.879303013823096" />
+      <entry key="M5" value="37.99583980387439" />
+      <entry key="M10" value="65.78799246889206" />
+      <entry key="M15" value="83.99612294303734" />
+      <entry key="M30" value="114.93438228650244" />
+      <entry key="H1" value="142.170878370095" />
+      <entry key="H2" value="163.57484498743716" />
+      <entry key="H4" value="179.71188092034407" />
+      <entry key="D1" value="200.41819347289544" />
+      <entry key="W1" value="205.16261727350735" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="3FaQjWuMZtXCvAJulzRj39uMQ9r" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Database Script.V1__Create_users_table.sql.executor": "Run",
+    "Database Script.V2__Create_service_table.sql.executor": "Run",
+    "Database Script.V3__Create_booking_table.sql.executor": "Run",
+    "Database Script.V4__Insert_base_data.sql.executor": "Run",
+    "HTTP Request.All in auth-test.executor": "Run",
+    "HTTP Request.auth-test | #1.executor": "Run",
+    "HTTP Request.auth-test | #2.executor": "Run",
+    "HTTP Request.auth-test | Test Successful User Login (1).executor": "Run",
+    "HTTP Request.auth-test | Test Successful User Login.executor": "Run",
+    "HTTP Request.login-test | #1.executor": "Run",
+    "HTTP Request.register-test | #1.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.BackendApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "feature/login-register",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ],
+    "RunConfigurationTargetLRU": [
+      "bd435ee4-682f-42cd-8596-3c282c428df4"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\IdeaProjects\final-project-oop-final-project-tm\backend" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationStatuses">
+      <map>
+        <entry key="HttpClient.HttpRequestRunConfigurationType">
+          <value>
+            <map>
+              <entry key="All in auth-test" value="STOPPED" />
+              <entry key="auth-test | #2" value="STOPPED" />
+              <entry key="auth-test | Test Successful User Login" value="STOPPED" />
+              <entry key="auth-test | Test Successful User Login (1)" value="STOPPED" />
+              <entry key="login-test | #1" value="STOPPED" />
+              <entry key="register-test | #1" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.BackendApplication">
+    <configuration name="V1__Create_users_table.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/backend/src/main/resources/db/migration/V1__Create_users_table.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="bd435ee4-682f-42cd-8596-3c282c428df4" />
+      <method v="2" />
+    </configuration>
+    <configuration name="V2__Create_service_table.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/backend/src/main/resources/db/migration/V2__Create_service_table.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="bd435ee4-682f-42cd-8596-3c282c428df4" />
+      <method v="2" />
+    </configuration>
+    <configuration name="V3__Create_booking_table.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/backend/src/main/resources/db/migration/V3__Create_booking_table.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="bd435ee4-682f-42cd-8596-3c282c428df4" />
+      <method v="2" />
+    </configuration>
+    <configuration name="V4__Insert_base_data.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/backend/src/main/resources/db/migration/V4__Insert_base_data.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="bd435ee4-682f-42cd-8596-3c282c428df4" />
+      <method v="2" />
+    </configuration>
+    <configuration name="auth-test | Test Successful User Login (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/backend/auth-test.http" executionIdentifier="Test Successful User Login" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="auth-test | Test Successful User Login" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/backend/src/test/auth-test.http" executionIdentifier="Test Successful User Login" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="auth-test | #2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/backend/src/test/auth-test.http" executionIdentifier="#2" index="2" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="login-test | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/backend/src/main/java/com/finalproject/backend/controllers/login-test.http" executionIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="register-test | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/backend/src/main/java/com/finalproject/backend/controllers/register-test.http" executionIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="BackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="backend" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.finalproject.backend.BackendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.register-test | #1" />
+        <item itemvalue="HTTP Request.login-test | #1" />
+        <item itemvalue="HTTP Request.auth-test | Test Successful User Login (1)" />
+        <item itemvalue="HTTP Request.auth-test | Test Successful User Login" />
+        <item itemvalue="HTTP Request.auth-test | #2" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="398de10a-de99-4411-b67f-96374d1cce39" name="Changes" comment="" />
+      <created>1782310835354</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1782310835354</updated>
+      <workItem from="1782310836458" duration="2876000" />
+      <workItem from="1782330136239" duration="4879000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/final_project_oop_final_project_tm$BackendApplication.ic" NAME="BackendApplication Coverage Results" MODIFIED="1782331250562" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+  </component>
+</project>

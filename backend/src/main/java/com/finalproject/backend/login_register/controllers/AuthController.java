@@ -1,7 +1,7 @@
-package com.finalproject.backend.controllers;
+package com.finalproject.backend.login_register.controllers;
 
-import com.finalproject.backend.DTO.LoginRequest;
-import com.finalproject.backend.DTO.RegisterRequest;
+import com.finalproject.backend.login_register.DTO.LoginRequest;
+import com.finalproject.backend.login_register.DTO.RegisterRequest;
 import com.finalproject.backend.entities.Users;
 import com.finalproject.backend.repositories.UserRepository;
 import org.springframework.http.HttpStatus;

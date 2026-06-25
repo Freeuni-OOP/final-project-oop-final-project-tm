@@ -1,4 +1,4 @@
-package com.finalproject.backend.DTO;
+package com.finalproject.backend.login_register.DTO;
 
 public class RegisterRequest {
     private String email;

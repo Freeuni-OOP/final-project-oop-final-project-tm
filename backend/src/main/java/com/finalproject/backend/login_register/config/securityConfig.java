@@ -1,4 +1,4 @@
-package com.finalproject.backend.config;
+package com.finalproject.backend.login_register.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

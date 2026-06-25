@@ -10,19 +10,23 @@ public class listingFilterDto {
     public String getText(){
         return text;
     }
+    public String getCategory(){
+        return category;
+    }
     public Double getMin(){
         return min;
     }
     public Double getMax(){
         return max;
     }
-    public String getCategory(){
-        return category;
-    }
+
 
     //setters
     public void setText(String text){
         this.text = text;
+    }
+    public void setCategory(String category){
+        this.category = category;
     }
     public void setMin(Double min){
         this.min = min;
@@ -30,7 +34,5 @@ public class listingFilterDto {
     public void setMax(Double max){
         this.max = max;
     }
-    public void setCategory(String category){
-        this.category = category;
-    }
+
 }

@@ -7,6 +7,9 @@ CREATE TABLE services (
                     bio TEXT,
                     picture_url TEXT,
                     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    price DECIMAL(20, 4) NOT NULL,
+                    category TEXT,
+                    address TEXT,
 
                     CONSTRAINT fk_provider_with_service
                     FOREIGN KEY (provider_id) REFERENCES users(user_id)

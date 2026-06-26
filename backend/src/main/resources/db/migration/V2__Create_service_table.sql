@@ -1,4 +1,7 @@
-DROP table IF EXISTS services;
+USE book_to;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS services;
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE services (
                     service_id INT AUTO_INCREMENT PRIMARY KEY,

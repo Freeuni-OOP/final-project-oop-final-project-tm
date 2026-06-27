@@ -1,12 +1,14 @@
-INSERT INTO users(first_name, last_name, email, password_hash, about_me, picture_url) VALUES
-('Elene', 'Enukidze', 'elene@gmail.com',  '123', 'CS student at freeuni', NULL),
-('Giorgi', 'Giorgidze', 'giorgi125giorgi@gmail.com', '1234','math tutor', NULL),
-('Ana', 'anashvili', 'anaanashvili7@gmail.com', '12345','Certified Tbilisi tour guide', NULL),
-('Tim', 'Tom', 'TimaTom555@gmail.com', '123456','...', NULL),
-('Lizi', 'Nanava', 'Lizi@gmail.com', '1234567','CS student', NULL),
-('Davit', 'Palelashvili', 'davit@gmail.com', '12345678','Coding', NULL),
-('Ato', 'Babilodze', 'ato@gmail.com', '123456789','savardzelimdivani', NULL),
-('Saba', 'Makhniashvili', 'saba@gmail.com', '1234567890','Codeforces', NULL);
+INSERT INTO users (first_name, last_name, email,
+                   password_hash, about_me, picture_url,
+                   is_enabled, verification_code) VALUES
+                                                          ('Elene', 'Enukidze', 'elene@gmail.com',  '{bcrypt}$2a$10$T.LVw3y7H/qZM76BJuZ0G.SEPSNa9JSc.FerJH.KFbtgjEx7T5V56', 'CS student at freeuni', NULL, 1, NULL),
+                                                          ('Giorgi', 'Giorgidze', 'giorgi125giorgi@gmail.com', '{bcrypt}$2a$10$MACVc9HU6CmCAQH0iOfryOc8ifcnA8NDRHfBpSBhIfWIAZgwzZBrm','math tutor', NULL, 1, NULL),
+                                                          ('Ana', 'anashvili', 'anaanashvili7@gmail.com', '{bcrypt}$2a$10$8QvDfni0jK7iujf14YZkheizru3nZdOAnToEBdQiVh9zMOTkKhZ6G','Certified Tbilisi tour guide', NULL, 1, NULL),
+                                                          ('Tim', 'Tom', 'TimaTom555@gmail.com', '{bcrypt}$2a$10$8QvDfni0jK7iujf14YZkheizru3nZdOAnToEBdQiVh9zMOTkKhZ6G','...', NULL, 1, NULL),
+                                                          ('Lizi', 'Nanava', 'Lizi@gmail.com', '{bcrypt}$2a$10$8QvDfni0jK7iujf14YZkheizru3nZdOAnToEBdQiVh9zMOTkKhZ6G','CS student', NULL, 1, NULL),
+                                                          ('Davit', 'Palelashvili', 'davit@gmail.com', '{bcrypt}$2a$10$8QvDfni0jK7iujf14YZkheizru3nZdOAnToEBdQiVh9zMOTkKhZ6G','Coding', NULL, 1, NULL),
+                                                          ('Ato', 'Babilodze', 'ato@gmail.com', '{bcrypt}$2a$10$8QvDfni0jK7iujf14YZkheizru3nZdOAnToEBdQiVh9zMOTkKhZ6G','savardzelimdivani', NULL, 1, NULL),
+                                                          ('Saba', 'Makhniashvili', 'saba@gmail.com', '{bcrypt}$2a$10$8QvDfni0jK7iujf14YZkheizru3nZdOAnToEBdQiVh9zMOTkKhZ6G','Codeforces', NULL, 1, NULL);
 
 
 

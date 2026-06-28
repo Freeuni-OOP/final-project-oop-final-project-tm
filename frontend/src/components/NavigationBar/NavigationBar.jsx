@@ -10,12 +10,6 @@ function NavigationBar() {
                     <span className="navigation-link-item">Home</span>
                 </div>
             </div>
-            <button className="login-button">
-                Log In
-            </button>
-            <button className="SignUp-button">
-                Sign Up
-            </button>
             <div className="search-container">
                 <span className="search-icon">⌕</span>
                 <input
@@ -23,6 +17,14 @@ function NavigationBar() {
                     placeholder="Search..."
                     className="search-input"
                 />
+            </div>
+            <div className={"Login-register"}>
+                <button className="login-button">
+                    Log In
+                </button>
+                <button className="SignUp-button">
+                    Sign Up
+                </button>
             </div>
         </nav>
     );

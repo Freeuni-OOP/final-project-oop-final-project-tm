@@ -1,9 +1,0 @@
-{
-  "id": 1,
-  "firstName": "Elene",
-  "lastName": "Enukidze",
-  "email": "elene@gmail.com",
-  "aboutMe": "CS student at freeuni",
-  "passHash": "{bcrypt}$2a$10$T.LVw3y7H/qZM76BJuZ0G.SEPSNa9JSc.FerJH.KFbtgjEx7T5V56",
-  "picUrl": null
-}

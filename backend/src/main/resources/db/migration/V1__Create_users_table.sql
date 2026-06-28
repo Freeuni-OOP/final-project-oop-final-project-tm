@@ -10,7 +10,7 @@ CREATE TABLE users (
                        email VARCHAR(100) NOT NULL UNIQUE,
                        password_hash VARCHAR(255) NOT NULL,
                        about_me TEXT,
-                       picture_url TEXT,
+                       image_path TEXT,
 
     -- New columns for email verification
                        is_enabled BOOLEAN DEFAULT FALSE,

@@ -1,5 +1,5 @@
 INSERT INTO users (first_name, last_name, email,
-                   password_hash, about_me, picture_url,
+                   password_hash, about_me, image_path,
                    is_enabled, verification_code) VALUES
                                                           ('Elene', 'Enukidze', 'elene@gmail.com',  '{bcrypt}$2a$10$T.LVw3y7H/qZM76BJuZ0G.SEPSNa9JSc.FerJH.KFbtgjEx7T5V56', 'CS student at freeuni', NULL, 1, NULL),
                                                           ('Giorgi', 'Giorgidze', 'giorgi125giorgi@gmail.com', '{bcrypt}$2a$10$MACVc9HU6CmCAQH0iOfryOc8ifcnA8NDRHfBpSBhIfWIAZgwzZBrm','math tutor', NULL, 1, NULL),
@@ -12,7 +12,7 @@ INSERT INTO users (first_name, last_name, email,
 
 
 
-INSERT INTO services(provider_id, title, bio, picture_url, price) VALUES
+INSERT INTO services(provider_id, title, bio, image_path, price) VALUES
 (1, 'Basics of pottery', 'Learn with hands-on experience', NULL, 5),
 (1, 'How to train a puppy?', '', NULL, 10),
 (2, 'Learn Game Development', 'Join us as we learn C#', NULL, 15),

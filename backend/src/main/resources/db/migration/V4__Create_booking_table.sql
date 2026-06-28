@@ -9,7 +9,7 @@ CREATE TABLE bookings (
     PRIMARY KEY (taker_id, slot_id),
 
     CONSTRAINT fk_slot_with_booking
-    FOREIGN KEY (slot_id) REFERENCES services(service_id)
+    FOREIGN KEY (slot_id) REFERENCES slots(slot_id)
     ON DELETE CASCADE,
 
 

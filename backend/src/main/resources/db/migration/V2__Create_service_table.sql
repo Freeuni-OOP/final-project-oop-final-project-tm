@@ -8,11 +8,12 @@ CREATE TABLE services (
                     provider_id INT NOT NULL,
                     title TEXT NOT NULL,
                     bio TEXT,
-                    picture_url TEXT,
+                    image_path TEXT,
                     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     price DECIMAL(20, 4) NOT NULL,
                     category TEXT,
                     address TEXT,
+                    max_capacity INT DEFAULT 1,
 
                     CONSTRAINT fk_provider_with_service
                     FOREIGN KEY (provider_id) REFERENCES users(user_id)

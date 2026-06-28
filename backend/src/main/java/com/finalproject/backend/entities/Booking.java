@@ -15,12 +15,29 @@ public class Booking {
     @ManyToOne
     @MapsId("takerId")
     @JoinColumn(name = "taker_id")
-    private Users user;
+    private User user;
 
     @ManyToOne
-    @MapsId("serviceId")
-    @JoinColumn(name = "service_id")
-    private Services service;
+    @MapsId("slotId")
+    @JoinColumn(name = "slot_id")
+
+    private Slot slot;
+
+    public void setId(BookingID id) {
+        this.id = id;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setSlot(Slot slot) {
+        this.slot = slot;
+    }
 
     public BookingID getId() {
         return id;
@@ -30,11 +47,11 @@ public class Booking {
         return status;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public Services getService() {
-        return service;
+    public Slot getSlot() {
+        return slot;
     }
 }

@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class Users {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -26,10 +26,16 @@ public class Users {
     @Column(name = "password_hash")
     private String passHash;
 
-    @Column(name = "picture_url")
-    private String picUrl;
+    @Column(name = "image_path")
+    private String imagePath;
 
-    public int getId() {
+    @Column(name = "is_enabled", columnDefinition = "boolean default false")
+    private Boolean isEnabled;
+
+    @Column(name = "verification_code")
+    private String verificationCode;
+
+    public Integer getId() {
         return id;
     }
 
@@ -49,8 +55,8 @@ public class Users {
         return aboutMe;
     }
 
-    public String getPicUrl() {
-        return picUrl;
+    public String getImagePath() {
+        return imagePath;
     }
 
     public String getPassHash() { return passHash; }
@@ -79,7 +85,27 @@ public class Users {
         this.passHash = passHash;
     }
 
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public Boolean getEnabled() {
+        return isEnabled;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

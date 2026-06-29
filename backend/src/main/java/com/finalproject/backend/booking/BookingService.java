@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Booking slot operations backed by the `booking_slots` table.
- */
 @Service
 public class BookingService {
 

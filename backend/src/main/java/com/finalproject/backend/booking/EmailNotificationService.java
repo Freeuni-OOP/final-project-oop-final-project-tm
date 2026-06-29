@@ -20,14 +20,11 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class EmailNotificationService {
 
-    /** Injected by Spring; null if spring.mail.* properties are not configured. */
     private final JavaMailSender mailSender;
 
-    /** Clinic owner's inbox – set in application.properties */
     @Value("${clinic.owner.email:owner@clinic.com}")
     private String clinicOwnerEmail;
 
-    /** Base URL used to build confirm / reject deep-links */
     @Value("${app.base-url:http://localhost:8080}")
     private String appBaseUrl;
 

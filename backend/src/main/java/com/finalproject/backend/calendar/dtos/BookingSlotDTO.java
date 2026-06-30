@@ -1,32 +1,22 @@
-package com.finalproject.backend.booking;
+package com.finalproject.backend.calendar.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
-/**
- * Outbound DTO – sent to the React frontend to represent one calendar slot.
- *
- * Uses String for status so the frontend receives a plain "FREE" / "PENDING" /
- * "BOOKED" string without needing to know about the Java enum.
- */
 public class BookingSlotDTO {
 
-    private Long          id;
+    private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime slotDateTime;
-    private String        status;       // "FREE" | "PENDING" | "BOOKED"
-
-    // ── Constructors ──────────────────────────────────────────────────────────
+    private String status;
 
     public BookingSlotDTO() {}
 
     public BookingSlotDTO(Long id, LocalDateTime slotDateTime, String status) {
-        this.id          = id;
+        this.id = id;
         this.slotDateTime = slotDateTime;
-        this.status       = status;
+        this.status = status;
     }
-
-    // ── Getters & Setters ─────────────────────────────────────────────────────
 
     public Long getId()                             { return id; }
     public void setId(Long id)                      { this.id = id; }

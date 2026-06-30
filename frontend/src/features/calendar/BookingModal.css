@@ -1,5 +1,3 @@
-/* BookingModal.css – lives in features/calendar/ */
-
 .modal-backdrop { position:fixed; inset:0; background:rgba(10,20,50,.55); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:1000; padding:16px; animation:backdrop-in .2s ease both; }
 @keyframes backdrop-in { from{opacity:0} to{opacity:1} }
 

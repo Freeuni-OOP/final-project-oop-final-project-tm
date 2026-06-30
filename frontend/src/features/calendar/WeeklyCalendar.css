@@ -1,5 +1,3 @@
-/* WeeklyCalendar.css – lives in features/calendar/ */
-
 :root {
   --cal-bg:           #ffffff;
   --cal-border:       #e8eaf0;
@@ -75,7 +73,6 @@
   .slot-block { min-height:42px; }
 }
 
-/* ── Week navigation bar ───────────────────────────────────────────────────── */
 .week-nav {
   display: flex;
   align-items: center;

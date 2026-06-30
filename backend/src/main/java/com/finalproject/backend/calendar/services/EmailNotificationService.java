@@ -1,4 +1,6 @@
-package com.finalproject.backend.booking;
+package com.finalproject.backend.calendar.services;
+
+import com.finalproject.backend.calendar.dtos.BookingSlotDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,50 +11,32 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.internet.MimeMessage;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Sends HTML email notifications to the clinic owner whenever a client
- * submits a new booking request.
- *
- * The JavaMailSender bean is injected as optional (@Autowired required=false)
- * so the application starts correctly even when mail properties are not yet
- * configured – it simply logs a warning instead of crashing.
- */
 @Service
 public class EmailNotificationService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${clinic.owner.email:owner@clinic.com}")
-    private String clinicOwnerEmail;
-
     @Value("${app.base-url:http://localhost:8080}")
     private String appBaseUrl;
 
-    // Constructor injection with required=false so missing SMTP config is non-fatal
     public EmailNotificationService(@Autowired(required = false) JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-    // ── Public API ────────────────────────────────────────────────────────────
-
-    /**
-     * Sends a rich HTML email to the clinic owner with booking details and
-     * one-click Confirm / Reject action links.
-     *
-     * Errors are swallowed and logged so that a mail failure never rolls back
-     * a successful booking request.
-     *
-     * @param slot        Updated slot (status = PENDING)
-     * @param clientName  Name provided by the client
-     * @param clientEmail Email provided by the client
-     */
     public void sendBookingRequestNotification(
+            String ownerEmail,
             BookingSlotDTO slot,
+            Integer takerId,
             String clientName,
             String clientEmail) {
 
         if (mailSender == null) {
-            System.out.println("[EmailService] Mail sender not configured – notification skipped.");
+            System.out.println("[EmailService] Mail sender not configured - notification skipped.");
+            return;
+        }
+
+        if (ownerEmail == null || ownerEmail.isBlank()) {
+            System.out.println("[EmailService] No owner email resolved - notification skipped.");
             return;
         }
 
@@ -60,20 +44,17 @@ public class EmailNotificationService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setTo(clinicOwnerEmail);
-            helper.setSubject("📅 New Booking Request – " + formatDateTime(slot));
-            helper.setText(buildHtmlBody(slot, clientName, clientEmail), /* isHtml= */ true);
+            helper.setTo(ownerEmail);
+            helper.setSubject("New Booking Request - " + formatDateTime(slot));
+            helper.setText(buildHtmlBody(slot, takerId, clientName, clientEmail), true);
 
             mailSender.send(message);
-            System.out.println("[EmailService] Notification sent to " + clinicOwnerEmail);
+            System.out.println("[EmailService] Notification sent to " + ownerEmail);
 
         } catch (Exception e) {
-            // Log and continue – email failure must NOT break the booking flow
             System.err.println("[EmailService] Failed to send notification: " + e.getMessage());
         }
     }
-
-    // ── Private helpers ───────────────────────────────────────────────────────
 
     private String formatDateTime(BookingSlotDTO slot) {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy 'at' h:mm a");
@@ -82,12 +63,12 @@ public class EmailNotificationService {
 
     private String buildHtmlBody(
             BookingSlotDTO slot,
+            Integer takerId,
             String clientName,
             String clientEmail) {
 
-        // Mock confirmation / rejection links (replace with real auth-token URLs later)
-        String confirmUrl = appBaseUrl + "/api/bookings/confirm/" + slot.getId();
-        String rejectUrl  = appBaseUrl + "/api/bookings/reject/"  + slot.getId();
+        String confirmUrl = appBaseUrl + "/api/bookings/confirm/" + slot.getId() + "/" + takerId;
+        String rejectUrl  = appBaseUrl + "/api/bookings/reject/"  + slot.getId() + "/" + takerId;
 
         return "<!DOCTYPE html>"
             + "<html><head><meta charset='UTF-8'>"
@@ -119,14 +100,13 @@ public class EmailNotificationService {
             + "  <p class='value'>" + formatDateTime(slot) + "</p>"
             + "  <hr class='divider'>"
             + "  <p style='color:#555;'>Click an action below to update the booking:</p>"
-            + "  <a href='" + confirmUrl + "' class='btn btn-confirm'>✅ Confirm Booking</a>"
-            + "  <a href='" + rejectUrl  + "' class='btn btn-reject' >❌ Reject Booking</a>"
+            + "  <a href='" + confirmUrl + "' class='btn btn-confirm'>Confirm Booking</a>"
+            + "  <a href='" + rejectUrl  + "' class='btn btn-reject' >Reject Booking</a>"
             + "  <p class='footer'>Sent automatically by the Service Clinic Booking System.</p>"
             + "</div>"
             + "</body></html>";
     }
 
-    /** Basic HTML-escaping to prevent injection in email body. */
     private String escapeHtml(String input) {
         if (input == null) return "";
         return input.replace("&", "&amp;")

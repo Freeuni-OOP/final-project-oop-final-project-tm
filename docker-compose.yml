@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: project_db
+      MYSQL_DATABASE: book_to
       MYSQL_USER: student
       MYSQL_PASSWORD: password
     ports:

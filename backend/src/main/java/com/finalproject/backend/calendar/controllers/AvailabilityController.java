@@ -1,4 +1,7 @@
-package com.finalproject.backend.booking;
+package com.finalproject.backend.calendar.controllers;
+
+import com.finalproject.backend.calendar.services.BookingService;
+import com.finalproject.backend.calendar.dtos.BookingSlotDTO;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import BookingModal from './BookingModal';
 import './WeeklyCalendar.css';
 
-const API_BASE        = '';
+const API_BASE        = 'http://localhost:8080';
 const DAY_NAMES_FULL  = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const DAY_NAMES_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const HOUR_RANGE      = [9,10,11,12,13,14,15,16,17];
@@ -14,7 +15,6 @@ function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-/** Returns the Monday of the week that is `offset` weeks from today. */
 function getWeekMonday(offset = 0) {
   const d = new Date();
   const dow = d.getDay();
@@ -29,15 +29,17 @@ function dayColIndex(iso) {
 }
 function hourOf(iso) { return new Date(iso).getHours(); }
 
-/** Formats a Date as "June 9 – 15, 2026" for the week label */
 function formatWeekRange(monday) {
   const sunday = new Date(monday);
   sunday.setDate(monday.getDate() + 6);
   const opts = { month: 'long', day: 'numeric' };
-  return `${monday.toLocaleDateString('en-US', opts)} – ${sunday.toLocaleDateString('en-US', { day: 'numeric' })}, ${sunday.getFullYear()}`;
+  return `${monday.toLocaleDateString('en-US', opts)} - ${sunday.toLocaleDateString('en-US', { day: 'numeric' })}, ${sunday.getFullYear()}`;
 }
 
-function WeeklyCalendar({ serviceId = 1 }) {
+function WeeklyCalendar({ serviceId: serviceIdProp }) {
+  const params = useParams();
+  const serviceId = serviceIdProp ?? params.serviceId ?? 1;
+
   const [weekOffset,   setWeekOffset]   = useState(0);
   const [slots,        setSlots]        = useState([]);
   const [loading,      setLoading]      = useState(true);
@@ -45,7 +47,6 @@ function WeeklyCalendar({ serviceId = 1 }) {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [modalOpen,    setModalOpen]    = useState(false);
 
-  // Re-fetch whenever the week changes
   useEffect(() => {
     const loadSlots = async () => {
       setLoading(true);
@@ -62,18 +63,18 @@ function WeeklyCalendar({ serviceId = 1 }) {
       }
     };
     loadSlots();
-  }, [weekOffset]); // ← re-runs every time weekOffset changes
+  }, [weekOffset, serviceId]);
 
   useEffect(() => {
     const poll = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/slots?serviceId=${serviceId}&weekOffset=${weekOffset}`);
         if (res.ok) setSlots(await res.json());
-      } catch { /* ignore transient network errors */ }
+      } catch {}
     };
     const timer = setInterval(poll, 5000);
     return () => clearInterval(timer);
-  }, [weekOffset]);
+  }, [weekOffset, serviceId]);
 
   const handleSlotClick = useCallback((slot) => {
     if (slot.status !== 'FREE') return;
@@ -81,12 +82,13 @@ function WeeklyCalendar({ serviceId = 1 }) {
     setModalOpen(true);
   }, []);
 
-  const handleBookingConfirm = useCallback(async (clientName, clientEmail) => {
+  const handleBookingConfirm = useCallback(async () => {
     if (!selectedSlot) return;
     const res = await fetch(`${API_BASE}/api/bookings/request`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slotId: selectedSlot.id, clientName, clientEmail }),
+      credentials: 'include',
+      body: JSON.stringify({ slotId: selectedSlot.id }),
     });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
@@ -123,7 +125,6 @@ function WeeklyCalendar({ serviceId = 1 }) {
   return (
     <div className="calendar-wrapper">
 
-      {/* ── Header ─────────────────────────────────────────────────────── */}
       <div className="calendar-header">
         <h2 className="calendar-title">Weekly Schedule</h2>
         <div className="calendar-legend">
@@ -133,10 +134,9 @@ function WeeklyCalendar({ serviceId = 1 }) {
         </div>
       </div>
 
-      {/* ── Week navigation bar ─────────────────────────────────────────── */}
       <div className="week-nav">
         <button className="week-nav-btn" onClick={() => setWeekOffset(w => w - 1)}>
-          ← Prev
+          Prev
         </button>
 
         <div className="week-nav-center">
@@ -149,23 +149,20 @@ function WeeklyCalendar({ serviceId = 1 }) {
         </div>
 
         <button className="week-nav-btn" onClick={() => setWeekOffset(w => w + 1)}>
-          Next →
+          Next
         </button>
       </div>
 
-      {/* ── Loading / Error ─────────────────────────────────────────────── */}
       {loading && (
-        <div className="calendar-loading"><div className="spinner" /><p>Loading schedule…</p></div>
+        <div className="calendar-loading"><div className="spinner" /><p>Loading schedule...</p></div>
       )}
       {fetchError && !loading && (
-        <div className="calendar-error" role="alert"><span className="error-icon">⚠️</span><p>{fetchError}</p></div>
+        <div className="calendar-error" role="alert"><p>{fetchError}</p></div>
       )}
 
-      {/* ── Calendar grid ────────────────────────────────────────────────── */}
       {!loading && !fetchError && (
         <div className="calendar-grid" role="grid">
 
-          {/* Day headers */}
           <div className="grid-row header-row" role="row">
             <div className="time-label-cell" aria-hidden="true" />
             {dayHeaders.map((d) => (
@@ -176,7 +173,6 @@ function WeeklyCalendar({ serviceId = 1 }) {
             ))}
           </div>
 
-          {/* Time rows */}
           {HOUR_RANGE.map((hour, rowIdx) => (
             <div key={hour} className="grid-row" role="row">
               <div className="time-label-cell">{hourLabel(hour)}</div>
@@ -190,7 +186,7 @@ function WeeklyCalendar({ serviceId = 1 }) {
                       title={slot.status === 'FREE' ? 'Click to request' : slot.status === 'PENDING' ? 'Awaiting confirmation' : 'Already booked'}
                     >
                       <span className="slot-status-label">
-                        {slot.status === 'FREE' ? '+ Available' : slot.status === 'PENDING' ? '⏳ Pending' : '✓ Booked'}
+                        {slot.status === 'FREE' ? 'Available' : slot.status === 'PENDING' ? 'Pending' : 'Booked'}
                       </span>
                     </button>
                   ) : (
@@ -203,7 +199,6 @@ function WeeklyCalendar({ serviceId = 1 }) {
         </div>
       )}
 
-      {/* ── Booking modal ─────────────────────────────────────────────────── */}
       {modalOpen && selectedSlot && (
         <BookingModal
           slot={selectedSlot}

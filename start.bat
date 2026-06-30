@@ -10,13 +10,14 @@ echo.
 
 :: ── 1. Database ───────────────────────────────────────────────────────────────
 echo 📦 Starting MySQL (Docker)...
+docker compose down -v >nul 2>&1
 docker compose up -d
 
 echo ⏳ Waiting for MySQL to be ready (15s)...
 timeout /t 15 /nobreak >nul
 
 echo 🗑️  Resetting database...
-docker exec project_db mysql -ustudent -ppassword project_db -e "SET FOREIGN_KEY_CHECKS=0; DROP TABLE IF EXISTS slots, bookings, services, users, flyway_schema_history; SET FOREIGN_KEY_CHECKS=1;" 2>nul
+docker exec project_db mysql -ustudent -ppassword book_to -e "SET FOREIGN_KEY_CHECKS=0; DROP TABLE IF EXISTS booking_slots, bookings, service, services, slots, users, flyway_schema_history; SET FOREIGN_KEY_CHECKS=1;" 2>nul
 
 :: ── 2. Backend ────────────────────────────────────────────────────────────────
 echo.

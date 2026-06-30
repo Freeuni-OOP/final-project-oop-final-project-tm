@@ -1,4 +1,4 @@
-.register-container {
+.login-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,7 +6,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.register-card {
+.login-card {
     background-color: #ffffff;
     padding: 2.5rem;
     border-radius: 8px;
@@ -16,11 +16,19 @@
     box-sizing: border-box;
 }
 
-.register-card h2 {
+.login-card h2 {
     margin-top: 0;
     margin-bottom: 1.5rem;
     color: #333333;
     text-align: center;
+}
+
+.login-card p {
+    font-size: 0.9rem;
+    color: #666666;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    line-height: 1.4;
 }
 
 .input-group {
@@ -47,13 +55,24 @@
 
 .input-group input:focus {
     outline: none;
-    border-color: #28a745;
+    border-color: #007bff;
 }
 
-.register-btn {
+.input-group input#verificationCode {
+    text-align: center;
+    letter-spacing: 6px;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.input-group input#verificationCode:focus {
+    border-color: #007bff;
+}
+
+.login-btn {
     width: 100%;
     padding: 0.75rem;
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
@@ -64,11 +83,10 @@
     margin-top: 0.5rem;
 }
 
-.register-btn:hover {
-    background-color: #218838;
+.login-btn:hover {
+    background-color: #0056b3;
 }
 
-/* Alert Banners */
 .alert {
     padding: 0.75rem;
     border-radius: 4px;

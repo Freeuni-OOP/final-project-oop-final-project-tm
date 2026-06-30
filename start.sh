@@ -15,7 +15,7 @@ cleanup() {
     echo "🗑️  Wiping database..."
     docker exec project_db mysql -ustudent -ppassword project_db -e "
         SET FOREIGN_KEY_CHECKS=0;
-        DROP TABLE IF EXISTS booking_slots, bookings, services, users, flyway_schema_history;
+        DROP TABLE IF EXISTS slots, bookings, services, users, flyway_schema_history;
         SET FOREIGN_KEY_CHECKS=1;
     " 2>/dev/null
     docker compose stop
@@ -35,7 +35,7 @@ sleep 15
 echo "🗑️  Resetting database..."
 docker exec project_db mysql -ustudent -ppassword project_db -e "
     SET FOREIGN_KEY_CHECKS=0;
-    DROP TABLE IF EXISTS booking_slots, bookings, services, users, flyway_schema_history;
+    DROP TABLE IF EXISTS slots, bookings, services, users, flyway_schema_history;
     SET FOREIGN_KEY_CHECKS=1;
 " 2>/dev/null
 

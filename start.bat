@@ -16,7 +16,7 @@ echo ⏳ Waiting for MySQL to be ready (15s)...
 timeout /t 15 /nobreak >nul
 
 echo 🗑️  Resetting database...
-docker exec project_db mysql -ustudent -ppassword project_db -e "SET FOREIGN_KEY_CHECKS=0; DROP TABLE IF EXISTS booking_slots, bookings, services, users, flyway_schema_history; SET FOREIGN_KEY_CHECKS=1;" 2>nul
+docker exec project_db mysql -ustudent -ppassword project_db -e "SET FOREIGN_KEY_CHECKS=0; DROP TABLE IF EXISTS slots, bookings, services, users, flyway_schema_history; SET FOREIGN_KEY_CHECKS=1;" 2>nul
 
 :: ── 2. Backend ────────────────────────────────────────────────────────────────
 echo.

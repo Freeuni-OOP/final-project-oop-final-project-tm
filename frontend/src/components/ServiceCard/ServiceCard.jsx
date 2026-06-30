@@ -1,9 +1,15 @@
 import 'react';
+import { useNavigate } from 'react-router-dom';
 import './ServiceCard.css';
 
 function ServiceCard({ service }) {
+    const navigate = useNavigate();
+
     return (
-        <div className="service-card">
+        <div
+            className="service-card"
+            onClick={() => navigate(`/services/${service.service_id}`)}
+        >
             <img
                 src={service.picture_url || 'https://via.placeholder.com/80'}
                 alt={service.title}

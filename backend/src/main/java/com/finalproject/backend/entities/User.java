@@ -108,4 +108,22 @@ public class User {
     public void setVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
     }
+
+    public User() {
+        isEnabled = false;
+    }
+
+    public User(Integer id, String firstName, String lastName, String email, String aboutMe, String passHash, String imagePath, Boolean isEnabled, String verificationCode) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.aboutMe = aboutMe;
+        this.passHash = passHash;
+        this.imagePath = imagePath;
+        this.isEnabled = isEnabled;
+        this.verificationCode = verificationCode;
+    }
+
+
 }

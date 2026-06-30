@@ -2,7 +2,7 @@ package com.finalproject.backend.login_register.controllers;
 
 import com.finalproject.backend.login_register.DTO.LoginRequest;
 import com.finalproject.backend.login_register.DTO.RegisterRequest;
-import com.finalproject.backend.entities.Users;
+import com.finalproject.backend.entities.User;
 import com.finalproject.backend.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +27,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Optional<Users> userOptional = userRepository.findByEmail(loginRequest.getEmail());
+        Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
         System.out.println("works??");
         if (userOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
-        Users user = userOptional.get();
+        User user = userOptional.get();
         boolean matches = passwordEncoder.matches(loginRequest.getPassword(), user.getPassHash());
         System.out.println("Valid DB Hash for 123: " + passwordEncoder.encode("123"));
         System.out.println("Valid DB Hash for 124: " + passwordEncoder.encode("124"));
@@ -48,7 +48,7 @@ public class AuthController {
         if(userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Entered Email is already in use");
         }
-        Users user = new Users();
+        User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setFirstName(registerRequest.getFirst_name());
         user.setLastName(registerRequest.getLast_name());
@@ -56,7 +56,7 @@ public class AuthController {
         String passHash = passwordEncoder.encode(registerRequest.getPassword());
         user.setPassHash(passHash);
 
-        Users savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }

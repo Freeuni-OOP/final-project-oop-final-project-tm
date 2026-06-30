@@ -31,8 +31,14 @@ public class UserService {
         System.out.println("here");
         System.out.println(profileDTO.getFirstName());
         user.setAboutMe(profileDTO.getAboutMe());
-        user.setImagePath(profileDTO.getImagePath());
 
+        userRepository.save(user);
+    }
+
+    public void updateProfilePicture(Integer id, String imagePath) {
+        User user = userRepository.findById(id).orElseThrow();
+
+        user.setImagePath(imagePath);
         userRepository.save(user);
     }
 }

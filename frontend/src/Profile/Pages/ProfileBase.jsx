@@ -7,13 +7,13 @@ import {Link} from "react-router-dom";
 
 function ProfileBase({profileData, isPublic}) {
     const [isExpanded, setIsExpanded] = useState(false);
-    const {firstName, lastName, aboutMe, picUrl} = profileData;
+    const {firstName, lastName, aboutMe, imagePath} = profileData;
     const fullBio = aboutMe || "";
     const fullName = firstName + " " + lastName;
     const shortBio = fullBio.substring(0, 450) + "...";
 
     console.log("Full profileData: ", profileData);
-    console.log("Image Path from Backend: ", picUrl);
+    console.log("Image Path from Backend: ", imagePath);
 
     return (
         <div>
@@ -21,7 +21,7 @@ function ProfileBase({profileData, isPublic}) {
                 <NavigationBar />
                 <div className= "profile-header">
                     <div className="profile-picture">
-                        <ProfilePicture image={picUrl}/>
+                        <ProfilePicture image={imagePath}/>
                     </div>
                     <div className="profile-text">
                         <h1 className="name"> {fullName}

@@ -2,24 +2,35 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import PrivateProfile from './Profile/Pages/PrivateProfile.jsx'
-import PageNotFound from "./PageNotFound/PageNotFound.jsx";
-import PublicProfile from "./Profile/Pages/PublicProfile.jsx";
-
-
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import ProfileEdit from "./Profile/Pages/ProfileEdit.jsx";
+import Profile from './Profile/Pages/Profile.jsx'
+import PageNotFound from "./PageNotFound/PageNotFound.jsx"
+import Login from './components/Register_Login/Login.jsx'
+import Register from './components/Register_Login/Register.jsx'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LandingPage from "./Pages/LandingPage.jsx";
+import MainLayout from './Pages/MainLayout.jsx';
 
 const routers = createBrowserRouter([
-    {path: "/", element: <App/>},
-    {path: "/profile/:userId", element: <PublicProfile/>},
-    {path: "*", element: <PageNotFound/>},
-    {path: "/profile", element:<PrivateProfile/>},
-    {path: "/profile/edit", element:<ProfileEdit/>}
+    {
+        path: "/",
+        element: <App />,
+        children: [
+            {
+                element: <MainLayout />,
+                children: [
+                    { path: "", element: <LandingPage /> },
+                    { path: "profile/:userId", element: <Profile /> },
+                ]
+            },
+            { path: "login", element: <Login /> },
+            { path: "register", element: <Register /> },
+        ]
+    },
+    { path: "*", element: <PageNotFound /> }
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={routers} />
-  </StrictMode>,
+    <StrictMode>
+        <RouterProvider router={routers} />
+    </StrictMode>,
 )

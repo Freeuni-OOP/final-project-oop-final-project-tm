@@ -2,9 +2,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #eade9f;
+    background-color: #81A6C6;
     padding: 12px 40px;
-    border-bottom: 1px solid #d1c47f;
+    border-bottom: 1px solid #698dac;
 }
 
 .navigation-left {
@@ -13,7 +13,16 @@
     gap: 8px;
     font-weight: bold;
     font-size: 20px;
-    color: #817db9;
+    color: #fffbf6;
+}
+
+.Login-register {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #fffbf6;
 }
 
 .navigation-links {
@@ -22,11 +31,12 @@
     margin-left: 40px;
     font-size: 14px;
     font-weight: normal;
-    color: #64748b;
+    color: #fffbf6;
 }
 
 .navigation-link-item {
-    color: #817db9;
+    color: #fffbf6;
+    cursor: pointer;
 }
 
 .search-container {
@@ -47,26 +57,14 @@
 .search-icon {
     position: absolute;
     left: 14px;
-    top: 11px;
-    color: #817db9;
-    font-size: 14px;
+    color: #81A6C6;
+    font-size: 25px;
 }
 
-.login-button {
-    background-color: #817db9;
-    color: #ffffff;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-}
-
+.login-button,
 .SignUp-button {
-    background-color: #817db9;
-    color: #ffffff;
+    background-color: #fffbf6;
+    color: #81A6C6;
     border: none;
     padding: 10px 24px;
     border-radius: 8px;
@@ -76,9 +74,54 @@
     transition: background-color 0.2s;
 }
 
+.login-button:hover,
 .SignUp-button:hover {
-    background-color: #aaa4d7;
+    background-color: #fffbf6;
 }
-.login-button:hover {
-    background-color: #aaa4d7;
+
+.profile-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-icon-btn {
+    width: 38px;
+    height: 38px;
+    background-color: #fffbf6;
+    color: #81A6C6;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s, background-color 0.2s;
+    user-select: none;
+}
+
+.profile-icon-btn:hover {
+    transform: scale(1.05);
+    background-color: #fffbf6;
+}
+
+.logout-button {
+    background: none;
+    border: 2px solid #fffbf6;
+    color: #fffbf6;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.logout-button:hover {
+    background-color: #f8d7da;
+    color: #845d60;
+    border-color: #866d70;
 }

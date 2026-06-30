@@ -1,2 +1,4 @@
-.idea
-./.idea
+# Ignore the root node_modules and IDE configurations
+node_modules/
+.idea/
+*.iml

@@ -1,11 +1,20 @@
 package com.finalproject.backend.login_register.DTO;
 
 public class RegisterRequest {
-    private String email;
-    private String password;
     private String first_name;
     private String last_name;
+    private String email;
+    private String password;
 
+    public String getFirst_name() { return first_name;}
+    public void setFirst_name(String firstName) {
+        this.first_name = firstName;
+    }
+
+    public String getLast_name() { return last_name;}
+    public void setLast_name(String lastName) {
+        this.last_name = lastName;
+    }
 
     public String getEmail() { return email;}
     public void setEmail(String email) {
@@ -17,13 +26,4 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public String getFirst_name() { return first_name;}
-    public void setFirst_name(String firstName) {
-        this.first_name = firstName;
-    }
-
-    public String getLast_name() { return last_name;}
-    public void setLast_name(String lastName) {
-        this.last_name = lastName;
-    }
 }

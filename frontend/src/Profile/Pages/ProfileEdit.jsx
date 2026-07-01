@@ -59,7 +59,6 @@ function ProfileEditBody({profileData}) {
 
     return (
         <div className={"edit-block"}>
-            <NavigationBar/>
             <div className={"go-back-div"}>
                 <Link to={"/profile"} className={"go-back-link"}>
                     <button className={"go-back-button"}> Go Back </button>

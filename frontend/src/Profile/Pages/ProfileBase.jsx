@@ -18,7 +18,6 @@ function ProfileBase({profileData, isPublic}) {
     return (
         <div>
             <div className="personal-profile-page">
-                <NavigationBar />
                 <div className= "profile-header">
                     <div className="profile-picture">
                         <ProfilePicture image={imagePath}/>

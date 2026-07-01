@@ -1,38 +1,40 @@
 package com.finalproject.backend.profile;
 
 
-import org.springframework.core.io.ClassPathResource;
+import com.finalproject.backend.login_register.config.TokenCreator;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/images")
 public class PictureController {
     private PictureService pictureService;
     private UserService userService;
-    public PictureController(PictureService pictureService, UserService userService) {
+    private final TokenCreator tokenCreator;
+
+    public PictureController(PictureService pictureService, UserService userService, TokenCreator tokenCreator) {
         this.pictureService = pictureService;
         this.userService = userService;
+        this.tokenCreator = tokenCreator;
     }
 
 
     @PostMapping
     public ResponseEntity<String> uploadImage(@RequestParam("picUrl") MultipartFile file,
-                                              @CookieValue(value = "userId", required = false) Integer userIdCookie) {
+                                              @CookieValue(value = "jwt_token", required = false) String userCookie) {
         String savedFile = pictureService.saveImage(file);
-        userService.updateProfilePicture(userIdCookie, savedFile);
+
+        if(userCookie == null || userCookie.isEmpty()) {
+            throw new Error("Cookie Missing");
+        }
+
+        String email = tokenCreator.validateTokenAndGetEmail(userCookie);
+        Integer id = userService.getIdByEmail(email);
+
+        userService.updateProfilePicture(id, savedFile);
 
         return ResponseEntity.ok(savedFile);
     }

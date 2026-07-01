@@ -1,0 +1,4 @@
+Notes:
+
+1. profiles are saved with their id
+2. uploads file must be one

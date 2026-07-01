@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class LoginCheck {
 
+
     // 1. Your fetch command hits this exact method
     @GetMapping("/verify")
     public ResponseEntity<String> verifyUser(
+
+
             // 2. Spring automatically grabs the cookie named "auth_token" from the request
             @CookieValue(name = "auth_token", required = false) String token) {
 

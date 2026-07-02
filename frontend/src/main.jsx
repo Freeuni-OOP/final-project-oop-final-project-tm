@@ -8,7 +8,7 @@ import Register from './components/Register_Login/Register.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LandingPage from "./Pages/LandingPage.jsx";
 import MainLayout from './Pages/MainLayout.jsx';
-import ServicePage from './ServicePage/ServicePage.jsx'
+import ServiceBase from './serviceUrl/pages/ServiceBase.jsx'
 
 const routers = createBrowserRouter([
     {
@@ -19,7 +19,7 @@ const routers = createBrowserRouter([
                 element: <MainLayout />,
                 children: [
                     { path: "", element: <LandingPage /> },
-                    { path: "services/:serviceId", element: <ServicePage /> },
+                    { path: "services/:serviceId", element: <ServiceBase /> },
                 ]
             },
             { path: "login", element: <Login /> },

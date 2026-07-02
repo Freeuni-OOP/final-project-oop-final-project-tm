@@ -1,0 +1,41 @@
+package com.finalproject.backend.service.logic;
+
+import com.finalproject.backend.entities.Service;
+import com.finalproject.backend.repositories.ServiceRepository;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+@org.springframework.stereotype.Service
+public class ServiceManager {
+
+    private final ServiceRepository serviceRepository;
+
+    // Constructor injection matching your AuthController style
+    public ServiceManager(ServiceRepository serviceRepository) {
+        this.serviceRepository = serviceRepository;
+    }
+
+    public  Map<String, Object> getServiceInformation(int serviceId) {
+        // 1. Fetch from the database
+        Optional<Service> serviceOptional = serviceRepository.findById(serviceId);
+
+        // 2. Handle the case where the service isn't found (returns a 404)
+        if (serviceOptional.isEmpty()) {
+            return null;
+        }
+
+        // 3. Get the actual Service object
+        Service service = serviceOptional.get();
+
+        // 4. Create a custom JSON response with only the fields you requested
+        Map<String, Object> responseJson = new HashMap<>();
+
+        responseJson.put("serviceId", service.getId());
+        responseJson.put("serviceBio", service.getBio());
+        responseJson.put("serviceImage", service.getImagePath());
+
+        return responseJson;
+    }
+}

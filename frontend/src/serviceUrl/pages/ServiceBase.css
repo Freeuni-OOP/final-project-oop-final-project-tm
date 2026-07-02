@@ -1,0 +1,190 @@
+/* Main Page Wrapper */
+.service-page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 60px; /* Increased overall padding */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1600px; /* Increased max-width to fill more of large monitors */
+    margin: 0 auto;
+}
+
+.service-nav-bar {
+    margin-bottom: 40px;
+}
+
+/* Base styling for your home button so it matches the larger scale */
+.service-return-home-button {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+/* --- TOP HALF (Image & Info) --- */
+.service-top-half {
+    display: flex;
+    flex-direction: row;
+    gap: 80px; /* Massive gap for great breathing room */
+    padding-bottom: 60px;
+    border-bottom: 2px solid #eaeaea;
+}
+
+/* Bumped up to 400x400 */
+.service-profile-picture-large {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    background-color: #f0f0f0;
+}
+
+.service-info-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center; /* Vertically centers the text next to the giant image */
+}
+
+/* Much larger title */
+.service-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 3.5rem;
+    color: #222;
+}
+
+/* --- Stats Row --- */
+.service-stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Wider gap between badges */
+    margin-bottom: 40px;
+}
+
+/* Bigger, punchier stat pills */
+.stat-badge {
+    background-color: #f6f8fa;
+    border: 1px solid #d0d7de;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+}
+
+.stat-badge strong {
+    color: #222;
+    margin: 0 6px;
+    font-size: 1.25rem; /* Makes the numbers stand out more */
+}
+
+/* --- Description --- */
+.service-description-label {
+    margin: 0 0 15px 0;
+    font-size: 1.6rem; /* Larger sub-heading */
+    color: #444;
+}
+
+.service-description-text {
+    margin: 0;
+    font-size: 1.25rem; /* Much easier to read on big screens */
+    line-height: 1.8;
+    color: #555;
+    max-width: 900px; /* Keeps lines from getting infinitely long, which makes reading hard */
+}
+
+/* --- BOTTOM HALF (Two Calendars) --- */
+.service-bottom-half {
+    margin-top: 60px; /* Pushes the calendars further down */
+    display: flex;
+    flex-direction: row;
+    gap: 60px; /* Creates a very distinct space between the two calendars */
+}
+
+.calendar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.8rem; /* Larger calendar headers */
+}
+
+/* Bigger reserved space */
+.calendar-placeholder {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px; /* Ensures tall calendar spaces */
+    background-color: #fafafa;
+    border: 3px dashed #cbd5e1; /* Slightly thicker dashed line */
+    border-radius: 16px;
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 1.3rem;
+}
+/* --- Action Buttons --- */
+.service-actions-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px; /* Space between buttons and description */
+}
+
+.action-btn {
+    padding: 12px 28px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+}
+
+/* Default Star Button (Unstarred) */
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid #cbd5e1;
+    color: #475569;
+}
+.btn-outline:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+}
+
+/* Active Star Button (Starred) */
+.btn-starred {
+    background-color: #fffbeb;
+    border: 2px solid #fcd34d;
+    color: #b45309;
+}
+
+/* Default Follow Button (Unfollowed) */
+.btn-primary {
+    background-color: #2563eb; /* A strong, clickable blue */
+    border: 2px solid #2563eb;
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+/* Active Follow Button (Following) */
+.btn-followed {
+    background-color: #f1f5f9;
+    border: 2px solid #e2e8f0;
+    color: #475569;
+}

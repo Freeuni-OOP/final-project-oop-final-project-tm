@@ -10,12 +10,11 @@ INSERT INTO users(first_name, last_name, email, about_me, picture_url) VALUES
 
 
 
-INSERT INTO services(provider_id, title, bio, picture_url) VALUES
-(1, 'Basics of pottery', 'Learn with hands-on experience', NULL),
-(1, 'How to train a puppy?', '', NULL),
-(2, 'Learn Game Development', 'Join us as we learn C#', NULL),
-(5, 'Dog walker', 'Walking dogs', NULL);
-
+INSERT INTO services(provider_id, title, bio, picture_url, category, price) VALUES
+                                                                                (1, 'Basics of pottery', 'Learn with hands-on experience', NULL, 'Math & Physics', 200.00),
+                                                                                (1, 'How to train a puppy?', 'lalala', NULL, 'Biology & Chemistry', 100.00),
+                                                                                (2, 'Learn Game Development', 'Join us as we learn C#', NULL, 'IT & Programming', 50.00),
+                                                                                (5, 'Dog walker', 'Walking dogs', NULL, 'Music & Arts', 500.00);
 
 INSERT INTO bookings(taker_id, service_id) VALUES
 (1, 3),

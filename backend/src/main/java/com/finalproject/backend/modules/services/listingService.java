@@ -27,7 +27,7 @@ public class listingService {
     }
 
     public List<listingResponseDto> getAllListings() {
-        return findListings(null);
+        return mapToDtoList(repository.findAll());
     }
 
     private List<listingResponseDto> mapToDtoList(List<listing> listings) {
@@ -40,7 +40,9 @@ public class listingService {
 
     private listingResponseDto convertToDto(listing list) {
         return new listingResponseDto(
+                list.getServiceId(),
                 list.getTitle(),
+                list.getCategory(),
                 list.getBio(),
                 list.getPrice(),
                 list.getPictureUrl()

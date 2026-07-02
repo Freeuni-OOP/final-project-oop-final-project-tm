@@ -23,7 +23,7 @@ export default function MiniSearch() {
                 <button type="submit">search</button>
             </form>
 
-            {filteredResults.length > 0 && (
+            {filteredResults?.length > 0 && (
                 <ul
                     style={dropdownListStyle}>
                     {filteredResults.map((item) => (
@@ -32,7 +32,7 @@ export default function MiniSearch() {
                             onClick={() => itemClick(item.id)}
                             style={itemStyle}
                         >
-                            {item.name} - ({item.subject})
+                            {item.title} - ({item.category})
                         </li>
                     ))}
                 </ul>

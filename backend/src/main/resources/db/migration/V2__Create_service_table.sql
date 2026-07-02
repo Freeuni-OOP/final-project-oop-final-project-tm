@@ -6,6 +6,8 @@ CREATE TABLE services (
                     title TEXT NOT NULL,
                     bio TEXT,
                     picture_url TEXT,
+                    category VARCHAR(100),
+                    price DECIMAL(10, 2),
                     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
                     CONSTRAINT fk_provider_with_service

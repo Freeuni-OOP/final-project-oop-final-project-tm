@@ -1,5 +1,15 @@
-import { categories } from "./mockData";
+import React from 'react';
 import { useSearch } from "./useSearch";
+
+const categories = [
+    "All",
+    "Math & Physics",
+    "Foreign Languages",
+    "Language & Literature",
+    "Biology & Chemistry",
+    "IT & Programming",
+    "Music & Arts",
+];
 
 export default function SearchPage() {
     const {
@@ -19,7 +29,7 @@ export default function SearchPage() {
                 <h1 style={styles.title}>Find a Tutor</h1>
                 <input
                     type="text"
-                    placeholder="Search by name or subject"
+                    placeholder="Search by title or description..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     style={styles.searchInput}
@@ -64,8 +74,8 @@ export default function SearchPage() {
                 </div>
             ) : (
                 <div style={styles.grid}>
-                    {filteredListings.map((listing) => (
-                        <ListingCard key={listing.id} listing={listing} />
+                    {filteredListings.map((listing, index) => (
+                        <ListingCard key={index} listing={listing} />
                     ))}
                 </div>
             )}
@@ -78,183 +88,46 @@ function ListingCard({ listing }) {
         <div style={styles.card}>
             <div style={styles.cardHeader}>
                 <div style={styles.avatar}>
-                    {listing.name.charAt(0)}
+                    {listing.title ? listing.title.charAt(0).toUpperCase() : "T"}
                 </div>
                 <div>
-                    <h3 style={styles.cardName}>{listing.name}</h3>
-                    <span style={styles.subject}>{listing.subject}</span>
+                    <h3 style={styles.cardName}>{listing.title || "Untitled Service"}</h3>
                 </div>
             </div>
 
-            <p style={styles.description}>{listing.description}</p>
+            <p style={styles.description}>
+                {listing.description || "No description provided."}
+            </p>
 
             <div style={styles.cardFooter}>
-                <span style={styles.location}> {listing.location}</span>
                 <div style={styles.ratingPrice}>
-                    <span style={styles.rating}>⭐ {listing.rating} ({listing.reviewCount})</span>
-                    <span style={styles.price}>${listing.price}/hr</span>
+                    <span style={styles.price}>
+                        {listing.price ? `$${listing.price}/hr` : "Price not set"}
+                    </span>
                 </div>
             </div>
-
-            <div style={styles.categoryTag}>{listing.category}</div>
         </div>
     );
 }
 
 const styles = {
-    page: {
-        maxWidth: "1100px",
-        margin: "0 auto",
-        padding: "24px 16px",
-        fontFamily: "'Segoe UI', sans-serif",
-    },
-    searchSection: {
-        background: "#f8f9fa",
-        borderRadius: "12px",
-        padding: "24px",
-        marginBottom: "24px",
-    },
-    title: {
-        fontSize: "28px",
-        fontWeight: "700",
-        marginBottom: "16px",
-        color: "#1a1a2e",
-    },
-    searchInput: {
-        width: "100%",
-        padding: "12px 16px",
-        fontSize: "16px",
-        border: "2px solid #e0e0e0",
-        borderRadius: "8px",
-        outline: "none",
-        boxSizing: "border-box",
-        marginBottom: "12px",
-    },
-    filters: {
-        display: "flex",
-        gap: "12px",
-        flexWrap: "wrap",
-    },
-    select: {
-        padding: "10px 14px",
-        fontSize: "14px",
-        border: "2px solid #e0e0e0",
-        borderRadius: "8px",
-        background: "white",
-        cursor: "pointer",
-    },
-    priceInput: {
-        padding: "10px 14px",
-        fontSize: "14px",
-        border: "2px solid #e0e0e0",
-        borderRadius: "8px",
-        width: "150px",
-    },
-    clearBtn: {
-        padding: "10px 18px",
-        background: "#6c757d",
-        color: "white",
-        border: "none",
-        borderRadius: "8px",
-        cursor: "pointer",
-        fontSize: "14px",
-    },
-    resultsCount: {
-        color: "#555",
-        marginBottom: "16px",
-        fontSize: "14px",
-    },
-    grid: {
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-        gap: "20px",
-    },
-    empty: {
-        textAlign: "center",
-        padding: "60px",
-        color: "#888",
-        fontSize: "16px",
-    },
-    card: {
-        background: "white",
-        border: "1px solid #e8e8e8",
-        borderRadius: "12px",
-        padding: "20px",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-        position: "relative",
-        transition: "box-shadow 0.2s",
-        cursor: "pointer",
-    },
-    cardHeader: {
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-        marginBottom: "12px",
-    },
-    avatar: {
-        width: "48px",
-        height: "48px",
-        borderRadius: "50%",
-        background: "#4a90d9",
-        color: "white",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "20px",
-        fontWeight: "bold",
-        flexShrink: 0,
-    },
-    cardName: {
-        margin: 0,
-        fontSize: "16px",
-        fontWeight: "600",
-        color: "#1a1a2e",
-    },
-    subject: {
-        fontSize: "13px",
-        color: "#4a90d9",
-        fontWeight: "500",
-    },
-    description: {
-        fontSize: "13px",
-        color: "#666",
-        lineHeight: "1.5",
-        marginBottom: "14px",
-    },
-    cardFooter: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexWrap: "wrap",
-        gap: "8px",
-    },
-    location: {
-        fontSize: "12px",
-        color: "#888",
-    },
-    ratingPrice: {
-        display: "flex",
-        gap: "12px",
-        alignItems: "center",
-    },
-    rating: {
-        fontSize: "12px",
-        color: "#555",
-    },
-    price: {
-        fontWeight: "700",
-        fontSize: "16px",
-        color: "#2d6a4f",
-    },
-    categoryTag: {
-        position: "absolute",
-        top: "12px",
-        right: "12px",
-        background: "#f0f4ff",
-        color: "#4a6fa5",
-        fontSize: "11px",
-        padding: "3px 8px",
-        borderRadius: "20px",
-        fontWeight: "500",
-    },
+    page: { maxWidth: "1100px", margin: "0 auto", padding: "24px 16px", fontFamily: "'Segoe UI', sans-serif" },
+    searchSection: { background: "#f8f9fa", borderRadius: "12px", padding: "24px", marginBottom: "24px" },
+    title: { fontSize: "28px", fontWeight: "700", marginBottom: "16px", color: "#1a1a2e" },
+    searchInput: { width: "100%", padding: "12px 16px", fontSize: "16px", border: "2px solid #e0e0e0", borderRadius: "8px", outline: "none", boxSizing: "border-box", marginBottom: "12px" },
+    filters: { display: "flex", gap: "12px", flexWrap: "wrap" },
+    select: { padding: "10px 14px", fontSize: "14px", border: "2px solid #e0e0e0", borderRadius: "8px", background: "white", cursor: "pointer" },
+    priceInput: { padding: "10px 14px", fontSize: "14px", border: "2px solid #e0e0e0", borderRadius: "8px", width: "150px" },
+    clearBtn: { padding: "10px 18px", background: "#6c757d", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontSize: "14px" },
+    resultsCount: { color: "#555", marginBottom: "16px", fontSize: "14px" },
+    grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" },
+    empty: { textAlign: "center", padding: "60px", color: "#888", fontSize: "16px" },
+    card: { background: "white", border: "1px solid #e8e8e8", borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", position: "relative" },
+    cardHeader: { display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" },
+    avatar: { width: "48px", height: "48px", borderRadius: "50%", background: "#4a90d9", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "bold", flexShrink: 0 },
+    cardName: { margin: 0, fontSize: "16px", fontWeight: "600", color: "#1a1a2e" },
+    description: { fontSize: "13px", color: "#666", lineHeight: "1.5", marginBottom: "14px" },
+    cardFooter: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" },
+    ratingPrice: { display: "flex", gap: "12px", alignItems: "center" },
+    price: { fontWeight: "700", fontSize: "16px", color: "#2d6a4f" },
 };

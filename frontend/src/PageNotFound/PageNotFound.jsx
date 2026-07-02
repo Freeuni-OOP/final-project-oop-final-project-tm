@@ -1,24 +1,18 @@
 import 'react'
 import {Link} from "react-router-dom";
-import {useEffect} from "react";
+import './PageNotFound.css'
 
 function PageNotFound() {
 
-    useEffect(() => {
-        fetch('http://localhost:8080/api/login', {
-            method: 'Post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include'
-        })
-    }, []);
     return (
-        <div>
-        <h1> Page Not Found </h1>
-        <Link to={"/"}>
-            <button>Go to Home Page</button>
-        </Link>
+        <div className="not-found-container">
+            <div className="not-found-card">
+                <div className="error-code">404</div>
+                <h1 className="not-found-title">Page Not Found</h1>
+                <Link to="/" className="home-link">
+                    <button className="home-button">Go to Home Page</button>
+                </Link>
+            </div>
         </div>
     );
 }

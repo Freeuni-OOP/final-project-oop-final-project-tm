@@ -41,4 +41,9 @@ public class UserService {
         user.setImagePath(imagePath);
         userRepository.save(user);
     }
+
+    public Integer getIdByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Email not Found"));
+        return user.getId();
+    }
 }

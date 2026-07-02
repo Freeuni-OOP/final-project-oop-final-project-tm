@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Service
 public class PictureService {
-    private final Path directory = Paths.get("Profile-pictures");
+    private final Path directory = Paths.get("backend/Profile-pictures");
 
     private String fileExt(String s) {
         if(s != null && s.contains(".")) {

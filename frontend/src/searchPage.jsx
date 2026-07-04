@@ -17,9 +17,15 @@ export default function SearchPage() {
         setSearchQuery,
         selectedCategory,
         setSelectedCategory,
+        minPrice,
+        setMinPrice,
         maxPrice,
         setMaxPrice,
         filteredListings,
+        paginatedListings,
+        currentPage,
+        setCurrentPage,
+        totalPages,
         clearFilters
     } = useSearch();
 
@@ -50,6 +56,14 @@ export default function SearchPage() {
 
                     <input
                         type="number"
+                        placeholder="Min price ($)"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                        style={styles.priceInput}
+                    />
+
+                    <input
+                        type="number"
                         placeholder="Max price ($)"
                         value={maxPrice}
                         onChange={(e) => setMaxPrice(e.target.value)}
@@ -73,11 +87,50 @@ export default function SearchPage() {
                     <p>No listings found. Try a different search term.</p>
                 </div>
             ) : (
-                <div style={styles.grid}>
-                    {filteredListings.map((listing, index) => (
-                        <ListingCard key={index} listing={listing} />
-                    ))}
-                </div>
+                <>
+                    <div style={styles.grid}>
+                        {paginatedListings.map((listing, index) => (
+                            <ListingCard key={index} listing={listing} />
+                        ))}
+                    </div>
+
+                    {totalPages > 1 && (
+                        <div style={styles.paginationContainer}>
+                            <button
+                                style={{ ...styles.pageBtn, ...(currentPage === 1 ? styles.disabledBtn : {}) }}
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                            >
+                                <span style={styles.icon}>&#x23EE;</span> Prev
+                            </button>
+
+                            {[...Array(totalPages)].map((_, i) => {
+                                const pageNumber = i + 1;
+                                return (
+                                    <button
+                                        key={pageNumber}
+                                        style={{
+                                            ...styles.pageNumberBtn,
+                                            ...(currentPage === pageNumber ? styles.activePageBtn : {})
+                                        }}
+                                        onClick={() => setCurrentPage(pageNumber)}
+                                    >
+                                        {pageNumber}
+                                    </button>
+                                );
+                            })}
+
+                            <button
+                                style={{ ...styles.pageBtn, ...(currentPage === totalPages ? styles.disabledBtn : {}) }}
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                            >
+                                Next <span style={styles.icon}>&#x23ED;</span>
+                            </button>
+
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
@@ -91,7 +144,7 @@ function ListingCard({ listing }) {
                     {listing.title ? listing.title.charAt(0).toUpperCase() : "T"}
                 </div>
                 <div>
-                    <h3 style={styles.cardName}>{listing.title || "Untitled Service"}</h3>
+                    <h3 style={styles.cardName}>{listing.title || "Untitled Service"} </h3>
                 </div>
             </div>
 
@@ -130,4 +183,52 @@ const styles = {
     cardFooter: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" },
     ratingPrice: { display: "flex", gap: "12px", alignItems: "center" },
     price: { fontWeight: "700", fontSize: "16px", color: "#2d6a4f" },
+
+    paginationContainer: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "8px",
+        marginTop: "40px",
+        padding: "16px",
+        background: "#08101a",
+        borderRadius: "8px",
+    },
+    pageBtn: {
+        display: "flex",
+        alignItems: "center",
+        gap: "4px",
+        background: "transparent",
+        border: "none",
+        color: "#6b8ab0",
+        fontSize: "14px",
+        cursor: "pointer",
+        padding: "8px 12px",
+    },
+    pageNumberBtn: {
+        background: "transparent",
+        border: "none",
+        color: "#6b8ab0",
+        fontSize: "14px",
+        cursor: "pointer",
+        width: "32px",
+        height: "32px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: "50%",
+        transition: "all 0.2s",
+    },
+    activePageBtn: {
+        background: "#007bff",
+        color: "white",
+        fontWeight: "bold",
+    },
+    disabledBtn: {
+        opacity: 0.5,
+        cursor: "not-allowed",
+    },
+    icon: {
+        fontSize: "10px",
+    }
 };

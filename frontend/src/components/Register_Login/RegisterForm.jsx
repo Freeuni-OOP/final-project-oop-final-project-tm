@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 const RegisterForm = ({first_name, setFirst_name,
                           last_name, setLast_name,
                           email, setEmail,

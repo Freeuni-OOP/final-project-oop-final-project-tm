@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useOutletContext, useNavigate } from 'react-router-dom';
+import {useOutletContext, useNavigate, Link} from 'react-router-dom';
 import VerifyForm from './VerifyForm';
 import './Login.css';
 
@@ -82,6 +82,11 @@ const Login = () => {
 
     return (
         <div className="login-container">
+            <div className={"go-back-div"}>
+                <Link to={"/"} className={"go-back-link"}>
+                    <button className={"go-back-button"}> ← </button>
+                </Link>
+            </div>
             <div className="login-card">
                 {errorMessage && <div className="alert error">{errorMessage}</div>}
                 {successMessage && <div className="alert success">{successMessage}</div>}

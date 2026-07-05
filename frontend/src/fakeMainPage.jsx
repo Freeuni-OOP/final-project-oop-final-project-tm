@@ -1,14 +1,23 @@
 import React from 'react';
-import MiniSearch from './miniSearch';
+import { useNavigate } from 'react-router-dom';
 
 export default function FakeMainPage() {
+    const navigate = useNavigate();
+
     return (
-        <div
-            style={{ textAlign: 'right', marginRight: '30px'}}>
-            <div
-                style={{ display: 'inline-block', marginTop: '20px' }}>
-                <MiniSearch />
-            </div>
+        <div>
+
+            <button
+                onClick={() => navigate('/profile')}
+            >
+                Go to Profile
+            </button>
+
+            <button
+                onClick={() => navigate('/search')}
+            >
+                Go to Search
+            </button>
         </div>
     );
 }

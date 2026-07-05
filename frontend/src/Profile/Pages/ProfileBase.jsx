@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import {FollowingManagement} from "../Services/FollowingManagement.js";
 import {GetFollowerCount} from "../Services/GetFollowerCount.js";
 import {GetFollowingCount} from "../Services/GetFollowingCount.js";
+import {IsViewerFollowing} from "../Services/IsViewerFollowing.js";
 
 function ProfileBase({profileData, isPublic}) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -34,6 +35,11 @@ function ProfileBase({profileData, isPublic}) {
                 const count2 = await GetFollowingCount(publicId);
                 setFollowingCount(count2);
                 console.log("FOLLOWING:   ", count2);
+
+                const isViewerFollowing = await IsViewerFollowing(publicId);
+                if(isViewerFollowing) {
+                    setIsFollowing(true);
+                }
 
 
             } catch(error) {

@@ -7,6 +7,5 @@ export const GetFollowerCount = async (profileId) => {
     if(!response.ok) {
         throw new Error("Failed to fetch follower count from backend");
     }
-    console.error(response.data);
     return response.json();
 }

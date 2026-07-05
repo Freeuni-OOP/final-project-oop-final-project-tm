@@ -35,13 +35,17 @@ public class FollowService {
 
     public void follow(Integer followerId, Integer followingId) {
         Follower follower1 = new Follower();
-        System.out.println("Before \n");
         follower1.setFollower(userRepository.findById(followerId).orElseThrow(()->new RuntimeException("User Not Found")));
         follower1.setFollowing(userRepository.findById(followingId).orElseThrow(()->new RuntimeException("User Not Found")));
-        System.out.println("after stuff \n");
         FollowerID id = new FollowerID(followerId, followingId);
         follower1.setFollowID(id);
 
         followerRepository.save(follower1);
+    }
+
+    public Boolean isAFollower(Integer viewId, Integer vieweeid) {
+        System.out.println("HERE");
+        FollowerID id = new FollowerID(viewId, vieweeid);
+        return followerRepository.existsById(id);
     }
 }

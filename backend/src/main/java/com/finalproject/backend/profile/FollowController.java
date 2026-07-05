@@ -1,6 +1,7 @@
 package com.finalproject.backend.profile;
 
 import com.finalproject.backend.login_register.config.TokenCreator;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,21 +22,14 @@ public class FollowController {
     public ResponseEntity<Integer> getFollowerCount(@PathVariable Integer id) {
         Integer count = new Integer(followService.getFollowers(id));
         System.out.println(count + '\n');
-        System.out.println("ndhgiadhgiudrg  dgfd dgfg vf ");
         return ResponseEntity.ok(count);
     }
 
     @PostMapping("/new/{id}")
     public ResponseEntity<Integer> newFollow(@CookieValue(value = "jwt_token") String userCookie,
                           @PathVariable Integer id) {
-        System.out.println("In CONTROLLER");
-        if(userCookie == null || userCookie.isEmpty()) {
-            throw new RuntimeException("Cookie Missing");
-        }
 
-        String mail = tokenCreator.validateTokenAndGetEmail(userCookie);
-        System.out.println("HERE:  " + mail);
-        Integer followerId = userService.getIdByEmail(mail);
+        Integer followerId =  checkCookie(userCookie);
         System.out.println("HERE:  " + followerId);
         followService.follow(followerId, id);
 
@@ -53,18 +47,32 @@ public class FollowController {
     @PostMapping("/delete/{id}")
     public ResponseEntity<Integer> loseFollow(@CookieValue(value = "jwt_token") String userCookie,
                            @PathVariable Integer id) {
-        if(userCookie == null || userCookie.isEmpty()) {
-            throw new RuntimeException("Cookie Missing");
-        }
 
-        String mail = tokenCreator.validateTokenAndGetEmail(userCookie);
-        Integer followerId = userService.getIdByEmail(mail);
+        Integer followerId = checkCookie(userCookie);
 
         followService.unfollow(followerId, id);
 
         Integer updatedCount = new Integer(followService.getFollowers(id));
         return ResponseEntity.ok(updatedCount);
 
+    }
+
+    @GetMapping("/isfollowing/{id}")
+    public ResponseEntity<Boolean> isFollowingViewer(@CookieValue(value = "jwt_token") String userCookie,
+                                                     @PathVariable Integer id) {
+        Integer viewId = checkCookie(userCookie);
+        System.out.println("Checking is Following \n");
+        Boolean isFollowing = followService.isAFollower(viewId, id);
+        return ResponseEntity.ok(isFollowing);
+    }
+
+    private Integer checkCookie(String userCookie) {
+        if(userCookie == null || userCookie.isEmpty()) {
+            throw new RuntimeException("Cookie Missing");
+        }
+
+        String mail = tokenCreator.validateTokenAndGetEmail(userCookie);
+        return userService.getIdByEmail(mail);
     }
 
 }

@@ -14,12 +14,15 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [isRegistered, setIsRegistered] = useState(false);
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         setErrorMessage('');
         setSuccessMessage('');
 
@@ -38,6 +41,7 @@ const Register = () => {
             setIsRegistered(true);
         } catch (error) {
             setErrorMessage(error.message);
+            setIsSubmitting(false);
         }
     };
 
@@ -83,6 +87,7 @@ const Register = () => {
                         last_name={last_name} setLast_name={setLast_name}
                         email={email} setEmail={setEmail}
                         password={password} setPassword={setPassword}
+                        isSubmitting={isSubmitting}
                         onSubmit={handleRegisterSubmit}
                     />
                 ) :(

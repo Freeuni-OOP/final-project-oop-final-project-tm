@@ -44,15 +44,16 @@ public class ServiceController {
         return ResponseEntity.ok(Collections.singletonMap("anyKey", "anyValue"));
     }
 
-    @GetMapping("/{serviceId}/follow")
-    public ResponseEntity<?> followService(@PathVariable("serviceId") int serviceId) {
+    @GetMapping("profile/{serviceId}")
+    public ResponseEntity<?> getServiceByProfileId(@PathVariable("serviceId") int serviceId) {
 
-        return ResponseEntity.ok(Collections.singletonMap("anyKey", "anyValue"));
-    }
+        Map<String, Object> serviceInfo = serviceManager.getServiceImagePath(serviceId);
 
-    @DeleteMapping("/{serviceId}/follow")
-    public ResponseEntity<?> unfollowService(@PathVariable("serviceId") int serviceId) {
-        return ResponseEntity.ok(Collections.singletonMap("anyKey", "anyValue"));
+        if(serviceInfo == null) {
+            return ResponseEntity.notFound().build();
+        }
+        // Return the map, which Spring Boot will convert to JSON!
+        return ResponseEntity.ok(serviceInfo);
     }
 
 }

@@ -38,4 +38,25 @@ public class ServiceManager {
 
         return responseJson;
     }
+
+    public Map<String, Object> getServiceImagePath(int serviceId) {
+        // 1. Fetch from the database
+        Optional<Service> serviceOptional = serviceRepository.findById(serviceId);
+
+        // 2. Handle the case where the service isn't found (returns a 404)
+        if (serviceOptional.isEmpty()) {
+            return null;
+        }
+
+        // 3. Get the actual Service object
+        Service service = serviceOptional.get();
+
+        // 4. Create a custom JSON response with ONLY the image path
+        Map<String, Object> responseJson = new HashMap<>();
+
+        // CRITICAL: The key must be "imagePath" to match your React frontend!
+        responseJson.put("imagePath", service.getImagePath());
+
+        return responseJson;
+    }
 }

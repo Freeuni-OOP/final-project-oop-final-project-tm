@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import ProfilePicture from './ProfilePicture'; // <-- Make sure to import this!
 import './ServiceBase.css';
 
 function ServiceBase() {
-    const { serviceId } = useParams();
+    const { serviceId, userId } = useParams();
 
     // Data States
     const [service, setService] = useState(null);
+    const [providerImage, setProviderImage] = useState(null);
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -14,6 +16,7 @@ function ServiceBase() {
     const [isStarred, setIsStarred] = useState(false);
     const [isFollowed, setIsFollowed] = useState(false);
 
+    // --- API CALL FOR SERVICE DATA ---
     useEffect(() => {
         const fetchService = async () => {
             setLoading(true);
@@ -25,12 +28,6 @@ function ServiceBase() {
                 }
                 const data = await response.json();
                 setService(data);
-
-                // If your backend returns whether the current user has already
-                // starred/followed this service, you would set it here:
-                // setIsStarred(data.hasUserStarred);
-                // setIsFollowed(data.hasUserFollowed);
-
             } catch (error) {
                 setErrorMessage(error.message);
             } finally {
@@ -40,39 +37,37 @@ function ServiceBase() {
         fetchService();
     }, [serviceId]);
 
+    // --- API CALL FOR PROVIDER PROFILE PICTURE ---
+    useEffect(() => {
+        const fetchProfilePic = async () => {
+            if (!userId) return;
+            try {
+                const response = await fetch(`http://localhost:8080/api/services/profile/${userId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setProviderImage(data.imagePath);
+                }
+            } catch (error) {
+                console.error("Failed to fetch profile picture", error);
+            }
+        };
+        fetchProfilePic();
+    }, [userId]);
+
     // --- API CALL FOR STARRING ---
     const handleStarClick = async () => {
         try {
-            // If already starred, we send a DELETE request. If not, a POST request.
             const method = isStarred ? 'DELETE' : 'POST';
             const response = await fetch(`http://localhost:8080/api/services/${serviceId}/star`, {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },
-                // headers: { 'Authorization': `Bearer ${userToken}` } // <-- Add this later for Auth
             });
 
             if (response.ok) {
-                setIsStarred(!isStarred); // Toggle the UI state on success
+                setIsStarred(!isStarred);
             }
         } catch (error) {
             console.error("Failed to update star status", error);
-        }
-    };
-
-    // --- API CALL FOR FOLLOWING ---
-    const handleFollowClick = async () => {
-        try {
-            const method = isFollowed ? 'DELETE' : 'POST';
-            const response = await fetch(`http://localhost:8080/api/services/${serviceId}/follow`, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (response.ok) {
-                setIsFollowed(!isFollowed);
-            }
-        } catch (error) {
-            console.error("Failed to update follow status", error);
         }
     };
 
@@ -84,46 +79,56 @@ function ServiceBase() {
             {/* TOP HALF: Image, Title, Stats, and Bio */}
             <div className="service-top-half">
                 <div className="service-profile-container">
-                    <Link to="/user-profile">
-                        <img
-                            src={service.profilePic || "/default-profile.png"}
-                            alt={`${service.name} profile`}
-                            className="service-profile-picture-large"
-                        />
-                    </Link>
+                    <ProfilePicture image={providerImage} />
                 </div>
 
                 <div className="service-info-container">
-                    <h1 className="service-title">{service.name}</h1>
+
+                    {/* NEW: Category and Address Grouped with Title */}
+                    <div className="service-header-group">
+                        <span className="service-category">
+                            🏷️ {service?.category || "Uncategorized"}
+                        </span>
+                        <h1 className="service-title">{service?.name}</h1>
+                        <p className="service-address">
+                            📍 {service?.address || "Remote / No location specified"}
+                        </p>
+                    </div>
 
                     <div className="service-stats-row">
-                        <div className="stat-badge">⭐ <strong>4.9</strong> (120 Reviews)</div>
-                        <div className="stat-badge">👥 <strong>1.5k</strong> Followers</div>
+                        <div className="stat-badge">⭐ <strong>4.9</strong></div>
                         <div className="stat-badge">✅ <strong>340</strong> Completed</div>
                         <div className="stat-badge">⚡ <strong>1 hr</strong> Response Time</div>
                     </div>
 
-                    {/* NEW: Action Buttons */}
-                    <div className="service-actions-row">
-                        <button
-                            className={`action-btn ${isStarred ? 'btn-starred' : 'btn-outline'}`}
-                            onClick={handleStarClick}
-                        >
-                            {isStarred ? '⭐ Starred' : '☆ Star'}
-                        </button>
+                    {/* NEW: Price integrated with Action Buttons */}
+                    <div className="service-price-and-actions">
+                        <div className="service-price">
+                            <h2>${service?.price || "0.00"}</h2>
+                            <span className="price-subtitle">per service</span>
+                        </div>
 
-                        <button
-                            className={`action-btn ${isFollowed ? 'btn-followed' : 'btn-primary'}`}
-                            onClick={handleFollowClick}
-                        >
-                            {isFollowed ? 'Following' : 'Follow'}
-                        </button>
+                        <div className="service-actions-row">
+                            <button
+                                className={`action-btn ${isStarred ? 'btn-starred' : 'btn-outline'}`}
+                                onClick={handleStarClick}
+                            >
+                                {isStarred ? '⭐ Starred' : '☆ Star'}
+                            </button>
+
+                            <div className="service-action-btn">
+                                {/* Gently corrected: Use relative path and dynamic userId */}
+                                <Link to={`/profile/${userId || 1}`} className="action-btn">
+                                    Creator Profile
+                                </Link>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="service-description">
                         <h3 className="service-description-label">About this service</h3>
                         <p className="service-description-text">
-                            {service.serviceBio || "No description provided for this service."}
+                            {service?.serviceBio || "No description provided for this service."}
                         </p>
                     </div>
                 </div>
@@ -139,7 +144,7 @@ function ServiceBase() {
                 </div>
 
                 <div className="calendar-container">
-                    <h3 className="calendar-title">Bookings</h3>
+                    <h3 className="calendar-title">Your Calendar</h3>
                     <div className="calendar-placeholder">
                         <p>Calendar 2 will go here</p>
                     </div>

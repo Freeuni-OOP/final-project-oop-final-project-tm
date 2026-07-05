@@ -12,7 +12,7 @@ CREATE TABLE followers (
                                   ON DELETE CASCADE,
 
 
-                          CONSTRAINT fk_taker_with_service
+                          CONSTRAINT fk_followers_taker_with_service
                               FOREIGN KEY (following) REFERENCES users(user_id)
                                   ON DELETE CASCADE
 );

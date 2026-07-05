@@ -2,8 +2,11 @@ package com.finalproject.backend.entities;
 
 import jakarta.persistence.Embeddable;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 @Embeddable
-public class FollowerID {
+public class FollowerID implements Serializable {
     private Integer follower;
     private Integer following;
 
@@ -29,5 +32,17 @@ public class FollowerID {
 
     public void setFollowing(Integer following) {
         this.following = following;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null || getClass() != o.getClass()) return false;
+        FollowerID tmp = (FollowerID) o;
+        return follower.equals(tmp.follower) && following.equals(tmp.following);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(follower, following);
     }
 }

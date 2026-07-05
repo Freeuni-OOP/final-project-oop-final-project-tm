@@ -4,6 +4,10 @@ import {useEffect, useState} from "react";
 import NavigationBar from "../../components/NavigationBar/NavigationBar.jsx";
 import ProfilePicture from "./ProfilePicture.jsx";
 import {Link} from "react-router-dom";
+import {FollowingManagement} from "../Services/FollowingManagement.js";
+import {GetFollowerCount} from "../Services/GetFollowerCount.js";
+import {GetFollowingCount} from "../Services/GetFollowingCount.js";
+import {IsViewerFollowing} from "../Services/IsViewerFollowing.js";
 
 function ProfileBase({profileData, isPublic}) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -12,8 +16,53 @@ function ProfileBase({profileData, isPublic}) {
     const fullName = firstName + " " + lastName;
     const shortBio = fullBio.substring(0, 450) + "...";
 
+    const[followerCount, setFollowerCount] = useState(0);
+    const[followingCount, setFollowingCount] = useState(0);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const publicId = profileData.id;
+
+
     console.log("Full profileData: ", profileData);
     console.log("Image Path from Backend: ", imagePath);
+
+    useEffect(() => {
+        const fetchCount = async () => {
+            try {
+                const count = await GetFollowerCount(publicId);
+                setFollowerCount(count);
+                console.log("FOLLOWERS:   ", count);
+
+                const count2 = await GetFollowingCount(publicId);
+                setFollowingCount(count2);
+                console.log("FOLLOWING:   ", count2);
+
+                const isViewerFollowing = await IsViewerFollowing(publicId);
+                if(isViewerFollowing) {
+                    setIsFollowing(true);
+                }
+
+
+            } catch(error) {
+                console.error("Error Fetching Followers: ", error);
+            }
+        }
+        fetchCount();
+    }, [publicId])
+
+    const handleFollowing = async() => {
+        const nextIsFollowing = !isFollowing;
+        setIsFollowing(!isFollowing);
+
+        try {
+            const count = await FollowingManagement(nextIsFollowing, publicId);
+            console.log("FOLLOWERS:   ", count);
+            setFollowerCount(count);
+        } catch (error) {
+            console.log("error in following: ", error);
+        }
+
+
+    }
 
     return (
         <div>
@@ -33,6 +82,12 @@ function ProfileBase({profileData, isPublic}) {
                         </h2>
                         {!isPublic && <Link to={"/profile/edit"}> <button className="edit-button" >Edit Profile</button> </Link>
                         }
+
+                        <div className={"follow-requests"}>
+                            <h2 className={"followers-text"}> Followers: {followerCount} </h2>
+                            <h2 className={"following-text"}> Following: {followingCount}</h2>
+                        </div>
+
                     </div>
                 </div>
 
@@ -40,12 +95,31 @@ function ProfileBase({profileData, isPublic}) {
 
             <div className={"dashboard-section"}>
                 <div className={"buttons-div"}>
-                    <button className={"offered-services"}> Offered Services </button>
+                    {
+                        isPublic && (
+                            <button className={"follow-button"}
+                            onClick={
+                                handleFollowing
+                            }
+                            > {isFollowing ? "Following" : "Follow" } </button>
+                        )
+                    }
+                    <Link to ="/service/services/offered" className = {"link-to-offered-serv"}>
+                        <button className={"offered-services"}> Offered Services </button>
+                    </Link>
                     {
                     !isPublic && (
                     <div className={"additional-buttons"}>
-                        <button className={"registered-services"}> Registered Services</button>
-                        <button className={"upload-new-services"}> Upload New Service</button>
+                        <Link to ="/service/services/registered" className = {"link-to-registered-serv"}>
+                            <button className={"registered-services"}> Registered Services</button>
+                        </Link>
+                        {
+                            // SABA here is the link, url has to match
+                        }
+                        <Link to ="/service/creation" className = {"link-to-upload-serv"}>
+                            <button className={"upload-new-services"}> Upload New Service</button>
+                        </Link>
+
 
                         <div className={"mock-calendar"}> calendar </div>
                     </div>

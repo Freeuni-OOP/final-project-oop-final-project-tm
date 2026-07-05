@@ -23,7 +23,7 @@ public class UserController {
     ) {
 
         if(userCookie == null || userCookie.isEmpty()) {
-            throw new Error("Cookie Missing");
+            throw new RuntimeException("Cookie Missing");
         }
 
         String email = tokenCreator.validateTokenAndGetEmail(userCookie);
@@ -45,13 +45,13 @@ public class UserController {
                                   ) {
         System.out.println("In Controller");
         if(userCookie == null || userCookie.isEmpty()) {
-            throw new Error("Cookie Missing");
+            throw new RuntimeException("Cookie Missing");
         }
         String email = tokenCreator.validateTokenAndGetEmail(userCookie);
 
         Integer id = userService.getIdByEmail(email);
         if(!profileDTO.getId().equals(id)) {
-            throw new Error("Cookie Mismatch");
+            throw new RuntimeException("Cookie Mismatch");
         }
         System.out.println(profileDTO.getAboutMe());
         userService.UpdatePublicUser(profileDTO);

@@ -4,7 +4,7 @@ import React from 'react';
 function ProfilePicture({ image }) {
     // 1. Determine the filename. If no valid image string is passed, default it.
     const imageName = (image && typeof image === 'string' && image.trim() !== "")
-        ? image
+        ? image.split(/[/\\]/).pop()
         : "default.png";
 
     // 2. Construct the full URL to your Spring Boot backend.

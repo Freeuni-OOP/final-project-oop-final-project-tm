@@ -4,7 +4,7 @@ import ProfilePicture from './ProfilePicture'; // <-- Make sure to import this!
 import './ServiceBase.css';
 
 function ServiceBase() {
-    const { serviceId, userId } = useParams();
+    const { serviceId } = useParams();
 
     // Data States
     const [service, setService] = useState(null);
@@ -14,8 +14,6 @@ function ServiceBase() {
 
     // User Action States
     const [isStarred, setIsStarred] = useState(false);
-    const [isFollowed, setIsFollowed] = useState(false);
-
     // --- API CALL FOR SERVICE DATA ---
     useEffect(() => {
         const fetchService = async () => {
@@ -40,10 +38,10 @@ function ServiceBase() {
     // --- API CALL FOR PROVIDER PROFILE PICTURE ---
     useEffect(() => {
         const fetchProfilePic = async () => {
-            if (!userId) return;
             try {
-                const response = await fetch(`http://localhost:8080/api/services/profile/${userId}`);
+                const response = await fetch(`http://localhost:8080/api/services/profile/${serviceId}`);
                 if (response.ok) {
+                    console.log("Profile picture response:", response);
                     const data = await response.json();
                     setProviderImage(data.imagePath);
                 }
@@ -52,7 +50,7 @@ function ServiceBase() {
             }
         };
         fetchProfilePic();
-    }, [userId]);
+    }, []);
 
     // --- API CALL FOR STARRING ---
     const handleStarClick = async () => {
@@ -84,15 +82,18 @@ function ServiceBase() {
 
                 <div className="service-info-container">
 
-                    {/* NEW: Category and Address Grouped with Title */}
+                    {/* UPDATED: Title first, then Location and Category grouped side-by-side */}
                     <div className="service-header-group">
-                        <span className="service-category">
-                            🏷️ {service?.category || "Uncategorized"}
-                        </span>
-                        <h1 className="service-title">{service?.name}</h1>
-                        <p className="service-address">
-                            📍 {service?.address || "Remote / No location specified"}
-                        </p>
+                        <h1 className="service-title">{service?.serviceTitle}</h1>
+
+                        <div className="service-location-meta">
+                            <p className="service-address">
+                                📍 {service?.serviceAddress || "Remote / No location specified"}
+                            </p>
+                            <span className="service-category">
+                                🏷️ {service?.serviceCategory || "Uncategorized"}
+                            </span>
+                        </div>
                     </div>
 
                     <div className="service-stats-row">
@@ -104,7 +105,7 @@ function ServiceBase() {
                     {/* NEW: Price integrated with Action Buttons */}
                     <div className="service-price-and-actions">
                         <div className="service-price">
-                            <h2>${service?.price || "0.00"}</h2>
+                            <h2>${service?.servicePrice || "0.00"}</h2>
                             <span className="price-subtitle">per service</span>
                         </div>
 
@@ -117,8 +118,7 @@ function ServiceBase() {
                             </button>
 
                             <div className="service-action-btn">
-                                {/* Gently corrected: Use relative path and dynamic userId */}
-                                <Link to={`/profile/${userId || 1}`} className="action-btn">
+                                <Link to={`/profile/${service?.serviceProfileId || 1}`} className="action-btn">
                                     Creator Profile
                                 </Link>
                             </div>

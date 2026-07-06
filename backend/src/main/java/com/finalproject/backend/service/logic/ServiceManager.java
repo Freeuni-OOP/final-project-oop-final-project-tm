@@ -35,6 +35,11 @@ public class ServiceManager {
         responseJson.put("serviceId", service.getId());
         responseJson.put("serviceBio", service.getBio());
         responseJson.put("serviceImage", service.getImagePath());
+        responseJson.put("serviceTitle", service.getTitle());
+        responseJson.put("servicePrice", service.getPrice());
+        responseJson.put("serviceCategory", service.getCategory());
+        responseJson.put("serviceAddress", service.getAddress());
+        responseJson.put("serviceProfileId", service.getProviderId().getId());
 
         return responseJson;
     }

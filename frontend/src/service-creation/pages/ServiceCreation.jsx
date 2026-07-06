@@ -1,18 +1,25 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ServiceCreation.css'; // Uses the same CSS we built previously!
 
 function ServiceCreation() {
     // --- FORM STATES ---
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
-    const [place, setPlace] = useState('');
     const [price, setPrice] = useState('');
+    const [maxCapacity, setMaxCapacity] = useState(''); // New State Variable
+    const [place, setPlace] = useState('');
     const [bio, setBio] = useState('');
 
     // --- IMAGE UPLOAD STATES ---
     const [selectedFile, setSelectedFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+
+    // --- SUBMISSION STATES ---
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const navigate = useNavigate();
 
     // --- HANDLE IMAGE SELECTION ---
     const handleImageChange = (e) => {
@@ -24,31 +31,64 @@ function ServiceCreation() {
         }
     };
 
-    // --- HANDLE INSTANT SUBMISSION ---
-    const handleCreateClick = async () => {
-        // We do NOT use e.preventDefault() here because we want the <Link> to navigate instantly.
+    // --- HANDLE CAPACITY CHANGE (Enforces Max 100 constraint safely) ---
+    const handleCapacityChange = (e) => {
+        const value = e.target.value;
+        // Allows empty string (clearing input) or numbers strictly between 0 and 100
+        if (value === '' || (Number(value) >= 0 && Number(value) <= 100)) {
+            setMaxCapacity(value);
+        }
+    };
+
+    // --- HANDLE SUBMISSION (waits for DB write before navigating) ---
+    const handleCreateClick = async (e) => {
+        e.preventDefault(); // stop <Link> from navigating instantly
+
+        if (isSubmitting) return; // avoid double-submits from double-clicks
+
+        setErrorMessage('');
+        setIsSubmitting(true);
 
         const formData = new FormData();
         formData.append('title', title);
         formData.append('category', category);
-        formData.append('place', place);
         formData.append('price', price);
+        formData.append('maxCapacity', maxCapacity); // Appended to payload
+        formData.append('place', place);
         formData.append('bio', bio);
+        formData.append('date', new Date().toISOString());
 
         if (selectedFile) {
             formData.append('profilePicture', selectedFile);
         }
 
         try {
-            // This fetch will fire in the background while the page navigates away!
-            fetch('http://localhost:8080/api/services/create', {
+            const response = await fetch('http://localhost:8080/api/service-creation', {
                 method: 'POST',
                 body: formData,
+                credentials: 'include',
             });
-            // Note: We don't handle errors here because the component will likely
-            // unmount before the server responds.
+
+            if (!response.ok) {
+                if (response.status === 400) {
+                    const errorData = await response.json();
+                    setErrorMessage(errorData.message || "Failed to create service. Please check your inputs.");
+                    return;
+                }
+                throw new Error(`Server responded with status ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Only navigate now that the backend confirms the DB write is done.
+            navigate('/service-creation/service-calendar', {
+                state: { serviceId: data.serviceId },
+            });
         } catch (error) {
-            console.error("Failed to start upload:", error);
+            console.error("Failed to create service:", error);
+            setErrorMessage("Something went wrong while creating your service. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -59,7 +99,6 @@ function ServiceCreation() {
                 <p className="service-address">Fill out the details below to set up your new service.</p>
             </div>
 
-            {/* Replaced <form> with a standard <div> since <Link> handles the click */}
             <div className="service-top-half creation-form-layout">
 
                 {/* LEFT SIDE: Image Upload System */}
@@ -97,16 +136,18 @@ function ServiceCreation() {
                         />
                     </div>
 
+                    <div className="input-group">
+                        <label>Category</label>
+                        <input
+                            type="text"
+                            placeholder="e.g., Pet Care"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        />
+                    </div>
+
+                    {/* NEW ROW: Pairs Price and Max Capacity cleanly side-by-side */}
                     <div className="input-row">
-                        <div className="input-group flex-1">
-                            <label>Category</label>
-                            <input
-                                type="text"
-                                placeholder="e.g., Pet Care"
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                            />
-                        </div>
                         <div className="input-group flex-1">
                             <label>Price ($)</label>
                             <input
@@ -116,6 +157,17 @@ function ServiceCreation() {
                                 placeholder="0.00"
                                 value={price}
                                 onChange={(e) => setPrice(e.target.value)}
+                            />
+                        </div>
+                        <div className="input-group flex-1">
+                            <label>Max Capacity</label>
+                            <input
+                                type="number"
+                                min="1"
+                                max="100"
+                                placeholder="Max 100 clients"
+                                value={maxCapacity}
+                                onChange={handleCapacityChange}
                             />
                         </div>
                     </div>
@@ -139,15 +191,25 @@ function ServiceCreation() {
                         ></textarea>
                     </div>
 
-                    {/* NEW: The Link component replacing the submit button */}
+                    {errorMessage && (
+                        <p className="form-error-text" style={{ color: 'crimson', marginTop: '0.5rem' }}>
+                            {errorMessage}
+                        </p>
+                    )}
+
                     <div className="submit-row">
                         <Link
-                            to="/after_Profile_Creation_page"
-                            className="action-btn btn-primary submit-btn"
+                            to="/service-creation/service-calendar"
+                            className={`action-btn btn-primary submit-btn ${isSubmitting ? 'is-disabled' : ''}`}
                             onClick={handleCreateClick}
-                            style={{ textDecoration: 'none' }} // Keeps it looking exactly like a button
+                            aria-disabled={isSubmitting}
+                            style={{
+                                textDecoration: 'none',
+                                pointerEvents: isSubmitting ? 'none' : 'auto',
+                                opacity: isSubmitting ? 0.6 : 1,
+                            }}
                         >
-                            Create Profile
+                            {isSubmitting ? 'Creating...' : 'Create Profile'}
                         </Link>
                     </div>
 

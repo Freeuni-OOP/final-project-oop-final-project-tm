@@ -47,8 +47,10 @@ public class ServiceController {
     @GetMapping("profile/{serviceId}")
     public ResponseEntity<?> getServiceByProfileId(@PathVariable("serviceId") int serviceId) {
 
+        System.out.println("Getting service by profile id");
         Map<String, Object> serviceInfo = serviceManager.getServiceImagePath(serviceId);
 
+        System.out.println(serviceInfo);
         if(serviceInfo == null) {
             return ResponseEntity.notFound().build();
         }

@@ -69,6 +69,7 @@
 .input-row {
     display: flex;
     gap: 20px;
+    width: 100%;
 }
 
 .flex-1 {

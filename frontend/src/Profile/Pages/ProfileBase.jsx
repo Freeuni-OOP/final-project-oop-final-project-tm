@@ -115,8 +115,9 @@ function ProfileBase({profileData, isPublic}) {
                         </Link>
                         {
                             // SABA here is the link, url has to match
+                            // thank you ELENE ;D
                         }
-                        <Link to ="/service/creation" className = {"link-to-upload-serv"}>
+                        <Link to ="/service-creation" className = {"link-to-upload-serv"}>
                             <button className={"upload-new-services"}> Upload New Service</button>
                         </Link>
 

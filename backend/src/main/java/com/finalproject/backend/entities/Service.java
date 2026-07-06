@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "services")
 public class Service {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_id")
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "provider_id")
@@ -48,7 +49,7 @@ public class Service {
         this.maxCapacity = maxCapacity;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -80,7 +81,7 @@ public class Service {
         this.address = address;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

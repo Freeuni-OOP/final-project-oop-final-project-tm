@@ -2,6 +2,7 @@ package com.finalproject.backend.profile;
 
 import com.finalproject.backend.login_register.config.TokenCreator;
 import com.finalproject.backend.profile.DTO.ProfileDTO;
+import com.finalproject.backend.services.CookieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,24 +11,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/profile")
 public class UserController {
     private final UserService userService;
-    private final TokenCreator tokenCreator;
+    private final CookieService cookieService;
 
-    public UserController(UserService userService, TokenCreator tokenCreator) {
+    public UserController(UserService userService, CookieService cookieService) {
         this.userService = userService;
-        this.tokenCreator = tokenCreator;
+        this.cookieService = cookieService;
     }
 
     @GetMapping("/")
     public ResponseEntity<ProfileDTO> getPersonalProfile(
             @CookieValue(value = "jwt_token") String userCookie
     ) {
-
-        if(userCookie == null || userCookie.isEmpty()) {
-            throw new RuntimeException("Cookie Missing");
-        }
-
-        String email = tokenCreator.validateTokenAndGetEmail(userCookie);
-        Integer id = userService.getIdByEmail(email);
+        Integer id = cookieService.checkCookie(userCookie);
 
         return ResponseEntity.ok(userService.getUser(id));
     }
@@ -43,13 +38,8 @@ public class UserController {
     public void updateUserProfile(@CookieValue(value = "jwt_token", required = false) String userCookie,
                                   @RequestBody ProfileDTO profileDTO
                                   ) {
-        System.out.println("In Controller");
-        if(userCookie == null || userCookie.isEmpty()) {
-            throw new RuntimeException("Cookie Missing");
-        }
-        String email = tokenCreator.validateTokenAndGetEmail(userCookie);
 
-        Integer id = userService.getIdByEmail(email);
+        Integer id = cookieService.checkCookie(userCookie);
         if(!profileDTO.getId().equals(id)) {
             throw new RuntimeException("Cookie Mismatch");
         }

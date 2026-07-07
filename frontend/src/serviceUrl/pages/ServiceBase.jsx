@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ProfilePicture from './ProfilePicture'; // <-- Make sure to import this!
 import './ServiceBase.css';
+import MinPrivateCalendar from '../../features/calendar/MinPrivateCalendar.jsx'
+import MinServiceCalendar from '../../features/calendar/MinServiceCalendar.jsx'
 
 function ServiceBase() {
     const { serviceId } = useParams();
@@ -14,6 +16,9 @@ function ServiceBase() {
 
     // User Action States
     const [isStarred, setIsStarred] = useState(false);
+
+    const [isRegistered, setIsRegistered] = useState(true);
+
     // --- API CALL FOR SERVICE DATA ---
     useEffect(() => {
         const fetchService = async () => {
@@ -34,6 +39,28 @@ function ServiceBase() {
         };
         fetchService();
     }, [serviceId]);
+
+    useEffect(() => {
+        const fetchRegistration = async () => {
+            setLoading(true);
+            setErrorMessage('');
+            try {
+                const response = await fetch('http://localhost:8080/api/auth/verify-session', {
+                    credentials: 'include'
+                });
+                if (!response.ok) {
+                    //console.log("Session verification failed");
+                    setIsRegistered(false);
+                }
+            } catch (error) {
+                console.error("Failed to verify session", error);
+                setErrorMessage(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchRegistration();
+    }, []);
 
     // --- API CALL FOR PROVIDER PROFILE PICTURE ---
     useEffect(() => {
@@ -135,20 +162,22 @@ function ServiceBase() {
             </div>
 
             {/* BOTTOM HALF: Two Calendars */}
-            <div className="service-bottom-half">
+            <div className={`service-bottom-half ${isRegistered ? 'single-calendar' : ''}`}>
                 <div className="calendar-container">
                     <h3 className="calendar-title">Availability</h3>
                     <div className="calendar-placeholder">
-                        <p>Calendar 1 will go here</p>
+                        <MinServiceCalendar serviceId={serviceId} />
                     </div>
                 </div>
 
-                <div className="calendar-container">
-                    <h3 className="calendar-title">Your Calendar</h3>
-                    <div className="calendar-placeholder">
-                        <p>Calendar 2 will go here</p>
+                {isRegistered && (
+                    <div className="calendar-container">
+                        <h3 className="calendar-title">Your Calendar</h3>
+                        <div className="calendar-placeholder">
+                            <MinPrivateCalendar serviceId={serviceId} />
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

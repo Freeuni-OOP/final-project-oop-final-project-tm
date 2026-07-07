@@ -217,3 +217,18 @@
     font-style: italic;
     font-size: 1.3rem;
 }
+
+service-bottom-half {
+    display: flex;
+    justify-content: space-between; /* your existing two-column layout */
+    gap: 24px;
+}
+
+.service-bottom-half.single-calendar {
+    justify-content: center;
+}
+
+.service-bottom-half.single-calendar .calendar-container {
+    max-width: 480px; /* prevents it from stretching full-width when alone */
+    width: 100%;
+}

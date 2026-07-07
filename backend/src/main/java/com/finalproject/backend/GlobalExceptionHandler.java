@@ -27,4 +27,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleBusinessErrors(RuntimeException ex) {
         return ResponseEntity.status(400).body(Map.of("message", ex.getMessage()));
     }
+
 }

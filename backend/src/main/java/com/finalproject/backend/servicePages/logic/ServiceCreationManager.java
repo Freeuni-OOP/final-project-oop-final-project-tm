@@ -1,12 +1,12 @@
-package com.finalproject.backend.service.logic;
+package com.finalproject.backend.servicePages.logic;
 
 import com.finalproject.backend.entities.Service;
 import com.finalproject.backend.entities.User;
 import com.finalproject.backend.repositories.ServiceRepository;
 import com.finalproject.backend.repositories.UserRepository;
-import com.finalproject.backend.service.model.ServiceCreationRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.finalproject.backend.servicePages.model.ServiceCreationRequest;
+import com.finalproject.backend.services.NotificationService;
+import com.finalproject.backend.services.NotificationService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,12 +27,14 @@ public class ServiceCreationManager {
     // Where uploaded images get stored on disk. Adjust to wherever your
     // static/uploads folder actually lives.
     private static final Path uploadPath = Paths.get("backend/Profile-pictures");
-
+    private final NotificationService notService;
     private final UserRepository userRepository;
 
-    public ServiceCreationManager(ServiceRepository serviceRepository, UserRepository userRepository) {
+    public ServiceCreationManager(ServiceRepository serviceRepository, UserRepository userRepository,
+                                    NotificationService notService) {
         this.serviceRepository = serviceRepository;
         this.userRepository = userRepository;
+        this.notService = notService;
     }
 
     public int postServiceInformation(ServiceCreationRequest request, Integer userId) throws IOException {
@@ -57,6 +59,7 @@ public class ServiceCreationManager {
         service.setAddress(request.getPlace());
         service.setBio(request.getBio());
         service.setImagePath(uploadPath + "/" + imagePath);
+        service.setActive(true);
 
         // Date parsing logic
         String date = request.getDate();
@@ -76,6 +79,10 @@ public class ServiceCreationManager {
         // 3. Persist to the database — save() blocks until the write completes,
         // so by the time this method returns, the row is committed.
         Service savedService = serviceRepository.save(service);
+
+        String not = "New Service Posted. You can view it here\n .../services/" + savedService.getId();
+
+        notService.addNotification(userId, not);
 
         // 4. Return the generated id so the controller can hand it back to the frontend
         return savedService.getId();

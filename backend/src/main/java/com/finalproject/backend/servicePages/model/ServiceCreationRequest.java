@@ -1,4 +1,4 @@
-package com.finalproject.backend.service.model;
+package com.finalproject.backend.servicePages.model;
 
 import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;

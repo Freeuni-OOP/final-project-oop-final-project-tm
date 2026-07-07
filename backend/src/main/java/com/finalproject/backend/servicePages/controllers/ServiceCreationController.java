@@ -1,19 +1,16 @@
-package com.finalproject.backend.service.controllers;
+package com.finalproject.backend.servicePages.controllers;
 
 import com.finalproject.backend.profile.UserService;
-import com.finalproject.backend.service.logic.ServiceCreationManager;
-import com.finalproject.backend.service.model.ServiceCreationRequest;
+import com.finalproject.backend.servicePages.exception.AuthException;
+import com.finalproject.backend.servicePages.logic.ServiceCreationManager;
+import com.finalproject.backend.servicePages.model.ServiceCreationRequest;
+import com.finalproject.backend.services.NotificationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import com.finalproject.backend.login_register.config.TokenCreator;
-import com.finalproject.backend.profile.UserService;
+
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -33,10 +30,13 @@ public class ServiceCreationController {
     private Integer checkCookie(String userCookie) {
         if(userCookie == null || userCookie.isEmpty()) {
             System.out.println("Cookie Missing");
-            throw new RuntimeException("Cookie Missing");
+            throw new AuthException("Cookie Missing", "AUTH_COOKIE_MISSING");
         }
         String mail = tokenCreator.validateTokenAndGetEmail(userCookie);
         System.out.println("Email: " + mail + "\n");
+        if (mail == null) {
+            throw new AuthException("Invalid Token", "AUTH_TOKEN_INVALID");
+        }
         return userService.getIdByEmail(mail);
     }
 
@@ -53,6 +53,11 @@ public class ServiceCreationController {
             return ResponseEntity.ok(Map.of(
                     "message", "Service created successfully",
                     "serviceId", newServiceId
+            ));
+        } catch (AuthException e) {
+            return ResponseEntity.status(401).body(Map.of(
+                    "error", e.getMessage(),
+                    "errorCode", e.getErrorCode()
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.status(401).body(Map.of("error", e.getMessage()));

@@ -1,4 +1,4 @@
-package com.finalproject.backend.service.logic;
+package com.finalproject.backend.servicePages.logic;
 
 import com.finalproject.backend.entities.Service;
 import com.finalproject.backend.repositories.ServiceRepository;

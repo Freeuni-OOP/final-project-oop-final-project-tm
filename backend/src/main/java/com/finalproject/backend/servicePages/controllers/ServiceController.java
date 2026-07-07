@@ -1,6 +1,6 @@
-package com.finalproject.backend.service.controllers;
+package com.finalproject.backend.servicePages.controllers;
 
-import com.finalproject.backend.service.logic.ServiceManager;
+import com.finalproject.backend.servicePages.logic.ServiceManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

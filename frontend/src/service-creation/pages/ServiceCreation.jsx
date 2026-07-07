@@ -53,7 +53,7 @@ function ServiceCreation() {
         formData.append('title', title);
         formData.append('category', category);
         formData.append('price', price);
-        formData.append('maxCapacity', maxCapacity); // Appended to payload
+        formData.append('maxCapacity', maxCapacity);
         formData.append('place', place);
         formData.append('bio', bio);
         formData.append('date', new Date().toISOString());
@@ -75,15 +75,28 @@ function ServiceCreation() {
                     setErrorMessage(errorData.message || "Failed to create service. Please check your inputs.");
                     return;
                 }
+
+                if (response.status === 401) {
+                    const errorData = await response.json();
+                    switch (errorData.errorCode) {
+                        case "AUTH_COOKIE_MISSING":
+                            navigate('/login');
+                            return;
+                        case "AUTH_TOKEN_INVALID":
+                            setErrorMessage("Your session has expired. Please log in again.");
+                            return;
+                        default:
+                            setErrorMessage("Authorization failed. Please log in again.");
+                            return;
+                    }
+                }
+
                 throw new Error(`Server responded with status ${response.status}`);
             }
 
             const data = await response.json();
 
-            // Only navigate now that the backend confirms the DB write is done.
-            navigate('/service-creation/service-calendar', {
-                state: { serviceId: data.serviceId, maxCapacity: maxCapacity },
-            });
+            navigate(`/calendar/${data.serviceId}`);
         } catch (error) {
             console.error("Failed to create service:", error);
             setErrorMessage("Something went wrong while creating your service. Please try again.");
@@ -181,6 +194,7 @@ function ServiceCreation() {
                             onChange={(e) => setPlace(e.target.value)}
                         />
                     </div>
+
 
                     <div className="input-group flex-grow-textarea">
                         <label>About this service</label>

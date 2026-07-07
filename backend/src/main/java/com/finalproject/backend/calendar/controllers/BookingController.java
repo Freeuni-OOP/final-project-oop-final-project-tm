@@ -1,9 +1,9 @@
 package com.finalproject.backend.calendar.controllers;
 
 import com.finalproject.backend.calendar.dtos.BookingRequestDTO;
-import com.finalproject.backend.calendar.dtos.BookingSlotDTO;
 import com.finalproject.backend.calendar.services.BookingService;
 import com.finalproject.backend.calendar.services.BookingService.BookingActionResult;
+import com.finalproject.backend.calendar.services.BookingService.BookingCreated;
 import com.finalproject.backend.calendar.services.EmailNotificationService;
 import com.finalproject.backend.entities.User;
 import com.finalproject.backend.repositories.UserRepository;
@@ -35,6 +35,9 @@ public class BookingController {
         this.userRepository = userRepository;
     }
 
+    //takerId comes from a raw, unsigned cookie value - not a verified session
+    //notification failures are swallowed here so a broken mail step never undoes an already-created booking
+    //validation errors become 400; a fully-booked slot (empty result) becomes 409, not the same failure mode
     @PostMapping("/request")
     public ResponseEntity<?> requestBooking(
             @CookieValue(value = "userId", required = false) Integer takerId,
@@ -45,26 +48,40 @@ public class BookingController {
                     .body(Map.of("error", "You must be logged in to book."));
         }
 
-        Optional<BookingSlotDTO> result = bookingService.requestBooking(dto.getSlotId(), takerId);
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("error", "This slot is no longer available."));
+        Optional<BookingCreated> result;
+        try {
+            result = bookingService.requestBooking(
+                    dto.getServiceId(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), takerId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
         }
 
-        BookingSlotDTO updatedSlot = result.get();
+        if (result.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", "That time is fully booked. Please pick another."));
+        }
+
+        BookingCreated created = result.get();
         try {
             User booker = userRepository.findById(takerId).orElse(null);
             String name = booker != null ? booker.getFirstName() + " " + booker.getLastName() : "Unknown";
             String email = booker != null ? booker.getEmail() : "";
-            String ownerEmail = bookingService.getServiceOwnerEmail(dto.getSlotId()).orElse(null);
-            emailService.sendBookingRequestNotification(ownerEmail, updatedSlot, takerId, name, email);
+            String ownerEmail = bookingService.getServiceOwnerEmail(created.slotId()).orElse(null);
+            emailService.sendBookingRequestNotification(
+                    ownerEmail, created.slotId(), takerId, created.start(), created.end(), name, email);
         } catch (Exception e) {
             System.err.println("[BookingController] Notification step failed: " + e.getMessage());
         }
 
-        return ResponseEntity.ok(updatedSlot);
+        return ResponseEntity.ok(Map.of(
+                "slotId", created.slotId(),
+                "status", "PENDING"));
     }
 
+    //GET endpoint that mutates state with no auth token, meant to be opened directly from the email link
+    //returns full HTML instead of JSON since a browser opens it directly, not a fetch call
+    //"not found" and "already processed" are indistinguishable here since confirmBooking's empty result covers both
     @GetMapping(value = "/confirm/{slotId}/{takerId}", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> confirmBooking(@PathVariable Integer slotId, @PathVariable Integer takerId) {
         Optional<BookingActionResult> result = bookingService.confirmBooking(slotId, takerId);
@@ -83,6 +100,8 @@ public class BookingController {
                         booking.clientName(), formatSlot(booking.slotDateTime())));
     }
 
+    //same unauthenticated GET-link pattern as confirmBooking, but destructive
+    //rejecting deletes the booking row (and the slot too if nothing else references it), not just a status flip
     @GetMapping(value = "/reject/{slotId}/{takerId}", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> rejectBooking(@PathVariable Integer slotId, @PathVariable Integer takerId) {
         Optional<BookingActionResult> result = bookingService.rejectBooking(slotId, takerId);
@@ -101,10 +120,13 @@ public class BookingController {
                         booking.clientName(), formatSlot(booking.slotDateTime())));
     }
 
+    //formats a slot's start time for display on the confirm/reject result pages
     private String formatSlot(LocalDateTime slotDateTime) {
         return slotDateTime.format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy 'at' h:mm a"));
     }
 
+    //unlike EmailNotificationService.escapeHtml, clientName is interpolated here with no escaping
+    //a user-controlled name containing markup would render/execute on this page
     private String buildPage(String heading, String color,
                              String message, String clientName, String slotTime) {
         StringBuilder sb = new StringBuilder();

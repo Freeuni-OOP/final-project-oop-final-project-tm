@@ -94,7 +94,7 @@ export default function SearchPage() {
                         <option value="DESC">High to Low (DESC)</option>
                     </select>
 
-                    <button onClick={clearFilters} style={styles.clearBtn}>
+                    <button onClick={clearFilters} style={styles.clearButton}>
                         Clear
                     </button>
                 </div>
@@ -121,7 +121,7 @@ export default function SearchPage() {
                     {totalPages > 1 && (
                         <div style={styles.paginationContainer}>
                             <button
-                                style={{ ...styles.pageBtn, ...(currentPage === 1 ? styles.disabledBtn : {}) }}
+                                style={{ ...styles.pageButton, ...(currentPage === 1 ? styles.disabledButton : {}) }}
                                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                 disabled={currentPage === 1}
                             >
@@ -134,8 +134,8 @@ export default function SearchPage() {
                                     <button
                                         key={pageNumber}
                                         style={{
-                                            ...styles.pageNumberBtn,
-                                            ...(currentPage === pageNumber ? styles.activePageBtn : {})
+                                            ...styles.pageNumberButton,
+                                            ...(currentPage === pageNumber ? styles.activePageButton : {})
                                         }}
                                         onClick={() => setCurrentPage(pageNumber)}
                                     >
@@ -145,7 +145,7 @@ export default function SearchPage() {
                             })}
 
                             <button
-                                style={{ ...styles.pageBtn, ...(currentPage === totalPages ? styles.disabledBtn : {}) }}
+                                style={{ ...styles.pageButton, ...(currentPage === totalPages ? styles.disabledButton : {}) }}
                                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                 disabled={currentPage === totalPages}
                             >
@@ -161,6 +161,13 @@ export default function SearchPage() {
 }
 
 function ListingCard({ listing }) {
+    const [isExpanded, setIsExpanded] = React.useState(false);
+
+    const text = listing.bio || listing.description || "No description provided.";
+    const isLongText = text.length > 100;
+
+    const displayText = isExpanded ? text : text.substring(0, 100) + (isLongText ? "..." : "");
+
     return (
         <div style={styles.card}>
             <div style={styles.cardHeader}>
@@ -173,8 +180,17 @@ function ListingCard({ listing }) {
             </div>
 
             <p style={styles.description}>
-                {listing.description || "No description provided."}
+                {displayText}
             </p>
+
+            {isLongText && (
+                <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    style={styles.readMoreButton}
+                >
+                    {isExpanded ? "Read Less" : "Read More"}
+                </button>
+            )}
 
             <div style={styles.cardFooter}>
                 <div style={styles.ratingPrice}>
@@ -188,25 +204,139 @@ function ListingCard({ listing }) {
 }
 
 const styles = {
-    page: { maxWidth: "1100px", margin: "0 auto", padding: "24px 16px", fontFamily: "'Segoe UI', sans-serif" },
-    searchSection: { background: "#f8f9fa", borderRadius: "12px", padding: "24px", marginBottom: "24px" },
-    title: { fontSize: "28px", fontWeight: "700", marginBottom: "16px", color: "#1a1a2e" },
-    searchInput: { width: "100%", padding: "12px 16px", fontSize: "16px", border: "2px solid #e0e0e0", borderRadius: "8px", outline: "none", boxSizing: "border-box", marginBottom: "12px" },
-    filters: { display: "flex", gap: "12px", flexWrap: "wrap" },
-    select: { padding: "10px 14px", fontSize: "14px", border: "2px solid #e0e0e0", borderRadius: "8px", background: "white", cursor: "pointer" },
-    priceInput: { padding: "10px 14px", fontSize: "14px", border: "2px solid #e0e0e0", borderRadius: "8px", width: "150px" },
-    clearBtn: { padding: "10px 18px", background: "#6c757d", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontSize: "14px" },
-    resultsCount: { color: "#555", marginBottom: "16px", fontSize: "14px" },
-    grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" },
-    empty: { textAlign: "center", padding: "60px", color: "#888", fontSize: "16px" },
-    card: { background: "white", border: "1px solid #e8e8e8", borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", position: "relative" },
-    cardHeader: { display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" },
-    avatar: { width: "48px", height: "48px", borderRadius: "50%", background: "#4a90d9", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "bold", flexShrink: 0 },
-    cardName: { margin: 0, fontSize: "16px", fontWeight: "600", color: "#1a1a2e" },
-    description: { fontSize: "13px", color: "#666", lineHeight: "1.5", marginBottom: "14px" },
-    cardFooter: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" },
-    ratingPrice: { display: "flex", gap: "12px", alignItems: "center" },
-    price: { fontWeight: "700", fontSize: "16px", color: "#2d6a4f" },
+    page: {
+        maxWidth: "1100px",
+        margin: "0 auto",
+        padding: "24px 16px",
+        fontFamily: "'Segoe UI', sans-serif"
+    },
+    searchSection: {
+        background: "#f8f9fa",
+        borderRadius: "12px",
+        padding: "24px",
+        marginBottom: "24px"
+    },
+    title: {
+        fontSize: "28px",
+        fontWeight: "700",
+        marginBottom: "16px",
+        color: "#1a1a2e"
+    },
+    searchInput: {
+        width: "100%",
+        padding: "12px 16px",
+        fontSize: "16px",
+        border: "2px solid #e0e0e0",
+        borderRadius: "8px",
+        outline: "none",
+        boxSizing: "border-box",
+        marginBottom: "12px"
+    },
+    filters: {
+        display: "flex",
+        gap: "12px",
+        flexWrap: "wrap"
+    },
+    select: {
+        padding: "10px 14px",
+        fontSize: "14px",
+        border: "1px solid #ced4da",
+        borderRadius: "8px",
+        background: "white",
+        color: "#333",
+        cursor: "pointer",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+        outline: "none"
+    },
+    priceInput: {
+        padding: "10px 14px",
+        fontSize: "14px",
+        border: "2px solid #e0e0e0",
+        borderRadius: "8px",
+        width: "150px",
+        background: "white",
+        color: "#333"
+    },
+    clearButton: {
+        padding: "10px 18px",
+        background: "#6c757d",
+        color: "white",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+        fontSize: "14px" },
+    resultsCount: {
+        color: "#555",
+        marginBottom: "16px",
+        fontSize: "14px"
+    },
+    grid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+        gap: "20px"
+    },
+    empty: {
+        textAlign: "center",
+        padding: "60px",
+        color: "#888",
+        fontSize: "16px"
+    },
+    card: {
+        background: "white",
+        border: "1px solid #e8e8e8",
+        borderRadius: "12px",
+        padding: "20px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+        position: "relative"
+    },
+    cardHeader: {
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+        marginBottom: "12px"
+    },
+    avatar: {
+        width: "48px",
+        height: "48px",
+        borderRadius: "50%",
+        background: "#4a90d9",
+        color: "white",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "20px",
+        fontWeight: "bold",
+        flexShrink: 0
+    },
+    cardName: {
+        margin: 0,
+        fontSize: "16px",
+        fontWeight: "600",
+        color: "#1a1a2e"
+    },
+    description: {
+        fontSize: "13px",
+        color: "#666",
+        lineHeight: "1.5",
+        marginBottom: "14px"
+    },
+    cardFooter: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: "8px"
+    },
+    ratingPrice: {
+        display: "flex",
+        gap: "12px",
+        alignItems: "center"
+    },
+    price: {
+        fontWeight: "700",
+        fontSize: "16px",
+        color: "#2d6a4f"
+    },
 
     paginationContainer: {
         display: "flex",
@@ -219,7 +349,7 @@ const styles = {
         border: "1px solid #e0e0e0",
         borderRadius: "8px",
     },
-    pageBtn: {
+    pageButton: {
         display: "flex",
         alignItems: "center",
         gap: "4px",
@@ -230,7 +360,7 @@ const styles = {
         cursor: "pointer",
         padding: "8px 12px",
     },
-    pageNumberBtn: {
+    pageNumberButton: {
         background: "transparent",
         border: "none",
         color: "#6b8ab0",
@@ -244,16 +374,26 @@ const styles = {
         borderRadius: "50%",
         transition: "all 0.2s",
     },
-    activePageBtn: {
+    activePageButton: {
         background: "#007bff",
         color: "white",
         fontWeight: "bold",
     },
-    disabledBtn: {
+    disabledButton: {
         opacity: 0.5,
         cursor: "not-allowed",
     },
     icon: {
         fontSize: "10px",
-    }
+    },
+    readMoreButton: {
+        background: "none",
+        border: "none",
+        color: "#007bff",
+        cursor: "pointer",
+        fontSize: "12px",
+        padding: "0",
+        fontWeight: "600",
+        marginBottom: "10px"
+    },
 };

@@ -46,4 +46,8 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Email not Found"));
         return user.getId();
     }
+
+    public String getName(Integer id) {
+        return userRepository.findById(id).orElse(new User()).getFirstName() + " " + userRepository.findById(id).orElse(new User()).getLastName();
+    }
 }

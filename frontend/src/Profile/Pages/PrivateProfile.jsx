@@ -1,6 +1,7 @@
 import 'react';
 import {useEffect, useState} from "react";
 import ProfileBase from "./ProfileBase.jsx";
+import {Navigate} from "react-router-dom";
 function PrivateProfile() {
     const [data, setData] = useState(null);
     useEffect(() => {
@@ -10,6 +11,11 @@ function PrivateProfile() {
     }, []);
 
     if(!data) return <div> Loading ... </div>
+
+    if(data.id === null || data.id === undefined) {
+        return <Navigate to="/register" replace />
+    }
+
 
     return <ProfileBase profileData={data} isPublic={false} />
 }

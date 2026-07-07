@@ -1,6 +1,9 @@
 package com.finalproject.backend.profile;
 
+import com.finalproject.backend.constants.NotificationMessages;
 import com.finalproject.backend.login_register.config.TokenCreator;
+import com.finalproject.backend.services.CookieService;
+import com.finalproject.backend.services.NotificationService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,14 +11,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/profile/follow")
 public class FollowController {
-    private final TokenCreator tokenCreator;
-    private final UserService userService;
+    private final CookieService cookieService;
     private final FollowService followService;
-
-    public FollowController(TokenCreator tokenCreator, UserService userService, FollowService followService) {
-        this.tokenCreator = tokenCreator;
-        this.userService = userService;
+    private final NotificationService notificationService;
+    private final UserService userService;
+    public FollowController(CookieService cookieService, FollowService followService, NotificationService notificationService, UserService userService) {
+        this.cookieService = cookieService;
         this.followService = followService;
+        this.notificationService = notificationService;
+        this.userService = userService;
     }
 
     @GetMapping("/follower/count/{id}")
@@ -29,11 +33,14 @@ public class FollowController {
     public ResponseEntity<Integer> newFollow(@CookieValue(value = "jwt_token") String userCookie,
                           @PathVariable Integer id) {
 
-        Integer followerId =  checkCookie(userCookie);
+        Integer followerId =  cookieService.checkCookie(userCookie);
         System.out.println("HERE:  " + followerId);
         followService.follow(followerId, id);
 
+
         Integer updatedCount = new Integer(followService.getFollowers(id));
+        notificationService.addNotification(id, (NotificationMessages.newFollower + getName(followerId)));
+        notificationService.addNotification(followerId, (NotificationMessages.newFollowing + getName(id)));
         return ResponseEntity.ok(updatedCount);
     }
 
@@ -48,11 +55,15 @@ public class FollowController {
     public ResponseEntity<Integer> loseFollow(@CookieValue(value = "jwt_token") String userCookie,
                            @PathVariable Integer id) {
 
-        Integer followerId = checkCookie(userCookie);
+        Integer followerId = cookieService.checkCookie(userCookie);
 
         followService.unfollow(followerId, id);
 
         Integer updatedCount = new Integer(followService.getFollowers(id));
+
+        notificationService.addNotification(id, (NotificationMessages.gotUnfollowed + getName(followerId)));
+        notificationService.addNotification(followerId, (NotificationMessages.unfollow + getName(id)));
+
         return ResponseEntity.ok(updatedCount);
 
     }
@@ -60,19 +71,14 @@ public class FollowController {
     @GetMapping("/isfollowing/{id}")
     public ResponseEntity<Boolean> isFollowingViewer(@CookieValue(value = "jwt_token") String userCookie,
                                                      @PathVariable Integer id) {
-        Integer viewId = checkCookie(userCookie);
+        Integer viewId = cookieService.checkCookie(userCookie);
         System.out.println("Checking is Following \n");
         Boolean isFollowing = followService.isAFollower(viewId, id);
         return ResponseEntity.ok(isFollowing);
     }
 
-    private Integer checkCookie(String userCookie) {
-        if(userCookie == null || userCookie.isEmpty()) {
-            throw new RuntimeException("Cookie Missing");
-        }
-
-        String mail = tokenCreator.validateTokenAndGetEmail(userCookie);
-        return userService.getIdByEmail(mail);
+    private String getName(Integer id) {
+        return userService.getName(id);
     }
 
 }

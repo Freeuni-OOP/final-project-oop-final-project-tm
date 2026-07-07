@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export function useSearch() {
@@ -13,6 +13,30 @@ export function useSearch() {
     const [allListings, setAllListings] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 50;
+    const [sortBy, setSortBy] = useState("serviceId");
+    const [direction, setDirection] = useState("DESC");
+
+
+    const fetchListings = useCallback(() => {
+        const url = `http://localhost:8080/api/listings?sortType=${sortBy}&direction=${direction}`;
+
+        fetch(url).then(res => {
+                if (!res.ok){
+                    throw new Error(`http error`);
+                }
+                return res.json();
+            }).then(data => {
+                if (Array.isArray(data)){
+                    setAllListings(data);
+                }else{
+                    setAllListings([]);
+                }
+            }).catch(err => setAllListings([]));
+    }, [sortBy, direction]);
+
+    useEffect(() => {
+        fetchListings();
+    }, [fetchListings]);
 
     useEffect(() => {
         setSearchQuery(initialQuery);
@@ -73,17 +97,28 @@ export function useSearch() {
         setSelectedCategory("All");
         setMinPrice("");
         setMaxPrice("");
+        setSortBy("serviceId");
+        setDirection("DESC");
         setCurrentPage(1);
     };
 
     return {
-        searchQuery, setSearchQuery,
-        selectedCategory, setSelectedCategory,
-        minPrice, setMinPrice,
-        maxPrice, setMaxPrice,
+        searchQuery,
+        setSearchQuery,
+        selectedCategory,
+        setSelectedCategory,
+        minPrice,
+        setMinPrice,
+        maxPrice,
+        setMaxPrice,
+        sortBy,
+        setSortBy,
+        direction,
+        setDirection,
         filteredListings,
         paginatedListings,
-        currentPage, setCurrentPage,
+        currentPage,
+        setCurrentPage,
         totalPages,
         clearFilters
     };

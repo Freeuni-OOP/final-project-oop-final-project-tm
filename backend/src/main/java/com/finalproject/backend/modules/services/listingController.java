@@ -17,13 +17,13 @@ public class listingController {
     }
 
     @GetMapping
-    public List<listingResponseDto> getListings(listingFilterDto filter) {
+    public List<listingResponseDto> getListings(listingFilterDto filter, String sortType, String direction) {
         listingFilterDto filterToUse;
         if (filter != null) {
             filterToUse = filter;
         } else {
             filterToUse = new listingFilterDto();
         }
-        return listingService.findListings(filterToUse);
+        return listingService.findListings(filterToUse, sortType, direction);
     }
 }

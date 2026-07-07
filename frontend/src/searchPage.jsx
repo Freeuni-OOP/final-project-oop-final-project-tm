@@ -21,6 +21,11 @@ export default function SearchPage() {
         setMinPrice,
         maxPrice,
         setMaxPrice,
+        sortBy,
+        setSortBy,
+        direction,
+        setDirection,
+        handleSortChange,
         filteredListings,
         paginatedListings,
         currentPage,
@@ -69,6 +74,25 @@ export default function SearchPage() {
                         onChange={(e) => setMaxPrice(e.target.value)}
                         style={styles.priceInput}
                     />
+
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        style={styles.select}
+                    >
+                        <option value="serviceId">Newest</option>
+                        <option value="price">Sort by Price</option>
+                        <option value="title">Sort by Title</option>
+                    </select>
+
+                    <select
+                        value={direction}
+                        onChange={(e) => setDirection(e.target.value)}
+                        style={styles.select}
+                    >
+                        <option value="ASC">Low to High (ASC)</option>
+                        <option value="DESC">High to Low (DESC)</option>
+                    </select>
 
                     <button onClick={clearFilters} style={styles.clearBtn}>
                         Clear
@@ -191,7 +215,8 @@ const styles = {
         gap: "8px",
         marginTop: "40px",
         padding: "16px",
-        background: "#08101a",
+        background: "#f8f9fa",
+        border: "1px solid #e0e0e0",
         borderRadius: "8px",
     },
     pageBtn: {

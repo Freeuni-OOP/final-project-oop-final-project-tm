@@ -2,6 +2,7 @@ package com.finalproject.backend.modules.services;
 import com.finalproject.backend.modules.services.dtos.listingFilterDto;
 import com.finalproject.backend.modules.services.dtos.listingResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +13,24 @@ public class listingService {
     @Autowired
     private listingRepository repository;
 
-    public List<listingResponseDto> findListings(listingFilterDto filter) {
+    public List<listingResponseDto> findListings(listingFilterDto filter, String sortType, String direction) {
         if (filter == null) {
             return getAllListings();
+        }
+
+        Sort sort;
+        if (direction.equalsIgnoreCase("DESC")) {
+            sort = Sort.by(sortType).descending();
+        } else {
+            sort = Sort.by(sortType).ascending();
         }
 
         List<listing> listings = repository.findByFilters(
                 filter.getText(),
                 filter.getCategory(),
                 filter.getMin(),
-                filter.getMax()
+                filter.getMax(),
+                sort
         );
         return mapToDtoList(listings);
     }

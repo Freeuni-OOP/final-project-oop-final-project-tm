@@ -82,7 +82,7 @@ function ServiceCreation() {
 
             // Only navigate now that the backend confirms the DB write is done.
             navigate('/service-creation/service-calendar', {
-                state: { serviceId: data.serviceId },
+                state: { serviceId: data.serviceId, maxCapacity: maxCapacity },
             });
         } catch (error) {
             console.error("Failed to create service:", error);

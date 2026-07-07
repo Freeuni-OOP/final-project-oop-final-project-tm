@@ -5,9 +5,7 @@
     min-height: 100vh;
     background-color: #f4f5f7;
 }
-.edit-block > :first-child {
-    grid-column: 1 / -1;
-}
+
 
 .go-back-div {
     grid-column: 1 / 2;

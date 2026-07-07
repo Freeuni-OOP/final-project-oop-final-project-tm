@@ -1,6 +1,9 @@
 package com.finalproject.backend.profile;
 
+import com.finalproject.backend.login_register.config.TokenCreator;
 import com.finalproject.backend.profile.DTO.ProfileDTO;
+import com.finalproject.backend.services.CookieService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,15 +11,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/profile")
 public class UserController {
     private final UserService userService;
-    public UserController(UserService userService) {
+    private final CookieService cookieService;
+
+    public UserController(UserService userService, CookieService cookieService) {
         this.userService = userService;
+        this.cookieService = cookieService;
     }
 
     @GetMapping("/")
     public ResponseEntity<ProfileDTO> getPersonalProfile(
-            @CookieValue(value = "userId") Integer userIdCookie
+            @CookieValue(value = "jwt_token") String userCookie
     ) {
-        return ResponseEntity.ok(userService.getUser(userIdCookie));
+        Integer id = cookieService.checkCookie(userCookie);
+
+        return ResponseEntity.ok(userService.getUser(id));
     }
 
     @GetMapping("/{id}")
@@ -27,12 +35,13 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public void updateUserProfile(@CookieValue(value = "userId", required = false) Integer userIdCookie,
+    public void updateUserProfile(@CookieValue(value = "jwt_token", required = false) String userCookie,
                                   @RequestBody ProfileDTO profileDTO
                                   ) {
-        System.out.println("In Controller");
-        if(!profileDTO.getId().equals(userIdCookie)) {
-            throw new Error("Cookie Mismatch");
+
+        Integer id = cookieService.checkCookie(userCookie);
+        if(!profileDTO.getId().equals(id)) {
+            throw new RuntimeException("Cookie Mismatch");
         }
         System.out.println(profileDTO.getAboutMe());
         userService.UpdatePublicUser(profileDTO);

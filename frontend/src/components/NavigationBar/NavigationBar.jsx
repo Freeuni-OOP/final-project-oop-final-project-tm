@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './NavigationBar.css';
+import NotificationButton from "../Notification/NotificationButton.jsx";
 
 function NavigationBar({ user, onLogout }) {
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ function NavigationBar({ user, onLogout }) {
             </div>
             {user ? (
                 <div className="profile-area">
+                    <NotificationButton />
                     <button
                         className="profile-icon-btn"
                         onClick={() => navigate(`/profile/${user.id}`)}

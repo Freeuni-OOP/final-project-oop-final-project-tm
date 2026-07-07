@@ -20,7 +20,6 @@ public class Booking {
     @ManyToOne
     @MapsId("slotId")
     @JoinColumn(name = "slot_id")
-
     private Slot slot;
 
     public void setId(BookingID id) {

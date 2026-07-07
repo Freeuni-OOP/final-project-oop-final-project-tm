@@ -9,6 +9,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LandingPage from "./Pages/LandingPage.jsx";
 import MainLayout from './Pages/MainLayout.jsx';
 import ServicePage from './ServicePage/ServicePage.jsx'
+import PublicProfile from "./Profile/Pages/PublicProfile.jsx";
+import PrivateProfile from "./Profile/Pages/PrivateProfile.jsx";
+import ProfileEdit from "./Profile/Pages/ProfileEdit.jsx";
 
 const routers = createBrowserRouter([
     {
@@ -19,6 +22,9 @@ const routers = createBrowserRouter([
                 element: <MainLayout />,
                 children: [
                     { path: "", element: <LandingPage /> },
+                    { path: "profile/:userId", element: <PublicProfile /> },
+                    { path: "profile/", element: <PrivateProfile /> },
+                    { path: "profile/edit", element: <ProfileEdit />}
                     { path: "services/:serviceId", element: <ServicePage /> },
                 ]
             },

@@ -1,7 +1,5 @@
 package com.finalproject.backend.calendar.services;
 
-import com.finalproject.backend.calendar.dtos.BookingSlotDTO;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,6 +7,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -23,10 +22,14 @@ public class EmailNotificationService {
         this.mailSender = mailSender;
     }
 
+    //mailSender can be null when no mail config is present; logs and no-ops instead of failing
+    //send failures are swallowed so a broken mail server never breaks the booking flow
     public void sendBookingRequestNotification(
             String ownerEmail,
-            BookingSlotDTO slot,
+            Integer slotId,
             Integer takerId,
+            LocalDateTime start,
+            LocalDateTime end,
             String clientName,
             String clientEmail) {
 
@@ -45,8 +48,8 @@ public class EmailNotificationService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(ownerEmail);
-            helper.setSubject("New Booking Request - " + formatDateTime(slot));
-            helper.setText(buildHtmlBody(slot, takerId, clientName, clientEmail), true);
+            helper.setSubject("New Booking Request - " + formatRange(start, end));
+            helper.setText(buildHtmlBody(slotId, takerId, start, end, clientName, clientEmail), true);
 
             mailSender.send(message);
             System.out.println("[EmailService] Notification sent to " + ownerEmail);
@@ -56,19 +59,27 @@ public class EmailNotificationService {
         }
     }
 
-    private String formatDateTime(BookingSlotDTO slot) {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy 'at' h:mm a");
-        return slot.getSlotDateTime().format(fmt);
+    //formats using only start's date; assumes start and end fall on the same calendar day
+    //a booking crossing midnight would print a misleading range
+    private String formatRange(LocalDateTime start, LocalDateTime end) {
+        DateTimeFormatter day = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy");
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("h:mm a");
+        return start.format(day) + " " + start.format(time) + " to " + end.format(time);
     }
 
+    //confirm/reject are plain GET links with no auth token
+    //merely fetching the URL (e.g. a mail client's link-preview/scanner) mutates booking state
+    //clientName/clientEmail are escaped to prevent HTML injection; the links aren't since they're server-built ids only
     private String buildHtmlBody(
-            BookingSlotDTO slot,
+            Integer slotId,
             Integer takerId,
+            LocalDateTime start,
+            LocalDateTime end,
             String clientName,
             String clientEmail) {
 
-        String confirmUrl = appBaseUrl + "/api/bookings/confirm/" + slot.getId() + "/" + takerId;
-        String rejectUrl  = appBaseUrl + "/api/bookings/reject/"  + slot.getId() + "/" + takerId;
+        String confirmUrl = appBaseUrl + "/api/bookings/confirm/" + slotId + "/" + takerId;
+        String rejectUrl  = appBaseUrl + "/api/bookings/reject/"  + slotId + "/" + takerId;
 
         return "<!DOCTYPE html>"
             + "<html><head><meta charset='UTF-8'>"
@@ -96,8 +107,8 @@ public class EmailNotificationService {
             + "  <p class='label'>Client Email</p>"
             + "  <p class='value'><a href='mailto:" + escapeHtml(clientEmail) + "'>"
             +      escapeHtml(clientEmail) + "</a></p>"
-            + "  <p class='label'>Requested Slot</p>"
-            + "  <p class='value'>" + formatDateTime(slot) + "</p>"
+            + "  <p class='label'>Requested Time</p>"
+            + "  <p class='value'>" + formatRange(start, end) + "</p>"
             + "  <hr class='divider'>"
             + "  <p style='color:#555;'>Click an action below to update the booking:</p>"
             + "  <a href='" + confirmUrl + "' class='btn btn-confirm'>Confirm Booking</a>"
@@ -107,11 +118,15 @@ public class EmailNotificationService {
             + "</body></html>";
     }
 
+    //escapes &, <, >, ", and '
+    //clientEmail is interpolated into a single-quoted href='mailto:...' attribute above
+    //so single quotes must be escaped too, or a value could break out and inject markup
     private String escapeHtml(String input) {
         if (input == null) return "";
         return input.replace("&", "&amp;")
                     .replace("<", "&lt;")
                     .replace(">", "&gt;")
-                    .replace("\"", "&quot;");
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#39;");
     }
 }

@@ -12,13 +12,18 @@ public interface listingRepository extends JpaRepository<listing, Integer> {
 
     @Query("""
         SELECT l FROM listing l
-        WHERE
-            (:text IS NULL OR
-                LOWER(l.title) LIKE LOWER(CONCAT('%', :text, '%')) OR
+        WHERE 
+            (:text IS NULL OR 
+                LOWER(l.title) LIKE LOWER(CONCAT('%', :text, '%')) OR 
                 LOWER(l.bio)   LIKE LOWER(CONCAT('%', :text, '%')))
         AND (:category IS NULL OR LOWER(l.category) = LOWER(:category))
         AND (:min IS NULL OR l.price >= :min)
         AND (:max IS NULL OR l.price <= :max)
+        AND (:favoriteUserId IS NULL OR EXISTS (
+                SELECT f FROM Favorite f 
+                WHERE f.service.serviceId = l.serviceId 
+                AND f.user.userId = :favoriteUserId
+            ))
     """)
-    List<listing> findByFilters(String text,String category, Double min, Double max, Sort sort);
+    List<listing> findByFilters(String text,String category, Double min, Double max, Long favoriteUserId, Sort sort);
 }

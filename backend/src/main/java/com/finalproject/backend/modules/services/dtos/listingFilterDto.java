@@ -5,6 +5,7 @@ public class listingFilterDto {
     private Double min;
     private Double max;
     private String category;
+    private Long favoriteUserId;
 
     //getters
     public String getText(){
@@ -18,6 +19,9 @@ public class listingFilterDto {
     }
     public Double getMax(){
         return max;
+    }
+    public Long getFavoriteUserId(){
+        return favoriteUserId;
     }
 
 
@@ -34,5 +38,7 @@ public class listingFilterDto {
     public void setMax(Double max){
         this.max = max;
     }
-
+    public void setFavoriteUserId(Long favoriteUserId){
+        this.favoriteUserId = favoriteUserId;
+    }
 }

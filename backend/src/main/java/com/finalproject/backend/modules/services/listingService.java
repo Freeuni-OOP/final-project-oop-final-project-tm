@@ -30,6 +30,7 @@ public class listingService {
                 filter.getCategory(),
                 filter.getMin(),
                 filter.getMax(),
+                filter.getFavoriteUserId(),
                 sort
         );
         return mapToDtoList(listings);

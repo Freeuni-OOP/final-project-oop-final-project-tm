@@ -2,7 +2,9 @@ package com.finalproject.backend.calendar.controllers;
 
 import com.finalproject.backend.calendar.dtos.WeekCalendarDTO;
 import com.finalproject.backend.calendar.services.CalendarService;
+import com.finalproject.backend.services.CookieService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +16,21 @@ import java.util.Map;
 public class CalendarController {
 
     private final CalendarService calendarService;
+    private final CookieService cookieService;
 
-    public CalendarController(CalendarService calendarService) {
+    public CalendarController(CalendarService calendarService, CookieService cookieService) {
         this.calendarService = calendarService;
+        this.cookieService = cookieService;
+    }
+
+    //returns null instead of throwing for a missing, invalid or expired token
+    private Integer resolveUserId(String userCookie) {
+        if (userCookie == null || userCookie.isEmpty()) return null;
+        try {
+            return cookieService.checkCookie(userCookie);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     //maps Optional.empty() (service doesn't exist) to 404
@@ -39,12 +53,20 @@ public class CalendarController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //no auth/ownership check - any caller can view any user's calendar by id
-    //now that this includes the user's own reservations too, it leaks what services they've booked elsewhere
+    //private calendar: a user may only view their own, since it exposes reservations they made elsewhere
+    //401 when the jwt_token cookie is missing or invalid, 403 when it resolves to a different user
     @GetMapping("/user/{userId}")
     public ResponseEntity<WeekCalendarDTO> getUserWeek(
+            @CookieValue(value = "jwt_token", required = false) String userCookie,
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") int weekOffset) {
+        Integer callerId = resolveUserId(userCookie);
+        if (callerId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (!callerId.equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(calendarService.getUserWeek(userId, weekOffset));
     }
 }

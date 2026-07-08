@@ -14,6 +14,7 @@ import PrivateProfile from "./Profile/Pages/PrivateProfile.jsx";
 import ProfileEdit from "./Profile/Pages/ProfileEdit.jsx";
 import ServiceCreation from "./service-creation/pages/ServiceCreation.jsx";
 import ServiceCalendarPage from "./features/calendar/ServiceCalendarPage.jsx";
+import PrivateWeeklyCalendar from "./features/calendar/PrivateWeeklyCalendar.jsx";
 
 const routers = createBrowserRouter([
     {
@@ -29,7 +30,8 @@ const routers = createBrowserRouter([
                     { path: "profile/", element: <PrivateProfile /> },
                     { path: "profile/edit", element: <ProfileEdit />},
                     { path: "service-creation", element: <ServiceCreation /> },
-                    { path: "calendar/:serviceId", element: <ServiceCalendarPage />}
+                    { path: "calendar/:serviceId", element: <ServiceCalendarPage />},
+                    { path: "profile/calendar/:userId", element: <PrivateWeeklyCalendar />}
                 ]
             },
             { path: "login", element: <Login /> },

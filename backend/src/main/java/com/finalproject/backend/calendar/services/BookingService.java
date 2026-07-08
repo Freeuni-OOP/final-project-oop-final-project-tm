@@ -53,15 +53,7 @@ public class BookingService {
     @Transactional
     public Optional<BookingCreated> requestBooking(Integer serviceId, LocalDate date,
                                                    LocalTime start, LocalTime end, Integer takerId) {
-        if (serviceId == null || date == null || start == null || end == null) {
-            throw new IllegalArgumentException("Missing booking details.");
-        }
-        if (!start.isBefore(end)) {
-            throw new IllegalArgumentException("Start time must be before end time.");
-        }
-        if (start.isBefore(CalendarHours.OPEN) || end.isAfter(CalendarHours.CLOSE)) {
-            throw new IllegalArgumentException("Requested time is outside working hours.");
-        }
+        validateRange(serviceId, date, start, end);
 
         int capacity = serviceRepository.lockAndGetCapacity(serviceId)
                 .orElseThrow(() -> new IllegalArgumentException("Service not found."));
@@ -123,6 +115,83 @@ public class BookingService {
             slotsRepository.deleteById(slotId);
         }
         return Optional.of(result);
+    }
+
+    //owner blocks a range by creating capacity slots, each booked by the owner
+    //fills concurrency to capacity so requestBooking rejects everyone else
+    //returns false when the caller isn't the service's provider
+    @Transactional
+    public boolean blockTime(Integer serviceId, LocalDate date,
+                             LocalTime start, LocalTime end, Integer ownerId) {
+        validateRange(serviceId, date, start, end);
+        if (!isOwner(serviceId, ownerId)) {
+            return false;
+        }
+
+        int capacity = serviceRepository.lockAndGetCapacity(serviceId).orElse(1);
+        LocalDateTime startDateTime = date.atTime(start);
+        LocalDateTime endDateTime = date.atTime(end);
+
+        for (int i = 0; i < capacity; i++) {
+            Slot slot = new Slot();
+            slot.setServiceId(entityManager.getReference(com.finalproject.backend.entities.Service.class, serviceId));
+            slot.setStartTime(startDateTime);
+            slot.setEndTime(endDateTime);
+            slot = slotsRepository.save(slot);
+
+            Booking booking = new Booking();
+            booking.setId(new BookingID(ownerId, slot.getSlotId()));
+            booking.setUser(entityManager.getReference(User.class, ownerId));
+            booking.setSlot(slot);
+            booking.setStatus(SlotStatus.BOOKED.name());
+            bookingRepository.save(booking);
+        }
+        return true;
+    }
+
+    //removes only bookings whose taker is the owner, so customer bookings survive
+    //matches by overlap, not exact range, since displayed segments get sliced at booking boundaries
+    //deletes each slot left with zero bookings, same cleanup as rejectBooking
+    @Transactional
+    public boolean unblockTime(Integer serviceId, LocalDate date,
+                               LocalTime start, LocalTime end, Integer ownerId) {
+        validateRange(serviceId, date, start, end);
+        if (!isOwner(serviceId, ownerId)) {
+            return false;
+        }
+
+        List<Booking> blocks = bookingRepository.findForServiceAndTakerOverlapping(
+                serviceId, ownerId, date.atTime(start), date.atTime(end));
+        for (Booking booking : blocks) {
+            Integer slotId = booking.getSlot().getSlotId();
+            bookingRepository.delete(booking);
+            if (bookingRepository.countBySlot_SlotId(slotId) == 0) {
+                slotsRepository.deleteById(slotId);
+            }
+        }
+        return true;
+    }
+
+    //throws for a missing service (400) but returns false for a wrong user (403)
+    //so the controller can tell the two cases apart
+    private boolean isOwner(Integer serviceId, Integer userId) {
+        Integer providerId = serviceRepository.findProviderIdByServiceId(serviceId)
+                .orElseThrow(() -> new IllegalArgumentException("Service not found."));
+        return providerId.equals(userId);
+    }
+
+    //shared input checks for requestBooking, blockTime and unblockTime
+    //throws IllegalArgumentException, which controllers translate to 400
+    private void validateRange(Integer serviceId, LocalDate date, LocalTime start, LocalTime end) {
+        if (serviceId == null || date == null || start == null || end == null) {
+            throw new IllegalArgumentException("Missing booking details.");
+        }
+        if (!start.isBefore(end)) {
+            throw new IllegalArgumentException("Start time must be before end time.");
+        }
+        if (start.isBefore(CalendarHours.OPEN) || end.isAfter(CalendarHours.CLOSE)) {
+            throw new IllegalArgumentException("Requested time is outside working hours.");
+        }
     }
 
     //builds the busy list requestBooking checks capacity against, for a single day

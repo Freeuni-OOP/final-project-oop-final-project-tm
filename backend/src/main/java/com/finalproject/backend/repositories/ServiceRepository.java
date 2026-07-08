@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ServiceRepository extends JpaRepository<Service, Integer> {
 
     //pessimistic row lock (FOR UPDATE); only actually locks inside a @Transactional caller
-    //this is what requestBooking relies on to serialize concurrent bookings for the same service
+    //this is what requestBooking and blockTime rely on to serialize concurrent bookings for the same service
     @Query(value = "SELECT COALESCE(max_capacity, 1) FROM services WHERE service_id = :serviceId FOR UPDATE",
            nativeQuery = true)
     Optional<Integer> lockAndGetCapacity(@Param("serviceId") Integer serviceId);
@@ -30,6 +30,11 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
     @Query(value = "SELECT COALESCE(max_capacity, 1) FROM services WHERE service_id = :serviceId",
            nativeQuery = true)
     Optional<Integer> findMaxCapacityByServiceId(@Param("serviceId") Integer serviceId);
+
+    //who owns a service; drives both the frontend calendar switch and the isOwner check
+    @Query(value = "SELECT provider_id FROM services WHERE service_id = :serviceId",
+           nativeQuery = true)
+    Optional<Integer> findProviderIdByServiceId(@Param("serviceId") Integer serviceId);
 
     //resolves slot -> service -> provider -> user in one join to get the owner's email
     @Query(value = "SELECT u.email FROM slots sl " +

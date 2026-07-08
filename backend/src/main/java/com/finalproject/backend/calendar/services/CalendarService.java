@@ -58,6 +58,12 @@ public class CalendarService {
         return Optional.of(buildWeek(monday, days));
     }
 
+    //thin passthrough so the controller doesn't touch repositories directly
+    @Transactional(readOnly = true)
+    public Optional<Integer> getServiceOwner(Integer serviceId) {
+        return serviceRepository.findProviderIdByServiceId(serviceId);
+    }
+
     //combines provider layers (per owned service) with a customer layer for the user's own bookings
     //customer layer always uses capacity 1, since a reservation fully occupies the user regardless of the service's capacity
     @Transactional(readOnly = true)

@@ -32,7 +32,19 @@ public interface BookingRepository extends JpaRepository<Booking, BookingID> {
                                       @Param("start") LocalDateTime start,
                                       @Param("end") LocalDateTime end);
 
+    //the owner's bookings on their own service that overlap [start, end)
+    //these are the availability blocks unblockTime deletes
+    @Query(value = "SELECT b.* FROM bookings b " +
+                   "JOIN slots s ON b.slot_id = s.slot_id " +
+                   "WHERE s.service_id = :serviceId AND b.taker_id = :takerId " +
+                   "AND s.start_time < :end AND s.end_time > :start",
+           nativeQuery = true)
+    List<Booking> findForServiceAndTakerOverlapping(@Param("serviceId") Integer serviceId,
+                                                    @Param("takerId") Integer takerId,
+                                                    @Param("start") LocalDateTime start,
+                                                    @Param("end") LocalDateTime end);
+
     //derived query, safe here since Booking is properly @Table-mapped (unlike Service)
-    //used by rejectBooking to check if a slot has no bookings left before deleting it
+    //used by rejectBooking and unblockTime to check if a slot has no bookings left before deleting it
     long countBySlot_SlotId(Integer slotId);
 }

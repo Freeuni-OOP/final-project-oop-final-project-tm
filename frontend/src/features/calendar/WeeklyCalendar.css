@@ -9,7 +9,7 @@
   --wc-booked-bg:     #ffe0e0;
   --wc-booked-br:     #dc3545;
   --wc-booked-tx:     #8f2029;
-  --wc-track-h:       620px;
+  --wc-track-h:       1240px;
 }
 
 .wc-wrapper { max-width:1120px; margin:0 auto; padding:28px 16px 40px; font-family:'Segoe UI',system-ui,-apple-system,sans-serif; color:var(--wc-text); }
@@ -69,5 +69,5 @@
   .wc-axis-spacer, .wc-axis { width:46px; }
   .wc-axis-label { font-size:.6rem; right:5px; }
   .wc-seg-label { display:none; }
-  :root { --wc-track-h:520px; }
+  :root { --wc-track-h:1040px; }
 }

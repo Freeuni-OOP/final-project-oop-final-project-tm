@@ -79,6 +79,46 @@ public class BookingController {
                 "status", "PENDING"));
     }
 
+    //same unsigned cookie auth as requestBooking, but ownership is verified server-side
+    @PostMapping("/block")
+    public ResponseEntity<?> blockTime(
+            @CookieValue(value = "userId", required = false) Integer ownerId,
+            @RequestBody BookingRequestDTO dto) {
+        return ownerAvailabilityAction(ownerId, dto, true);
+    }
+
+    //POST (unlike the email confirm/reject GET links), so nothing triggers it by prefetching a url
+    @PostMapping("/unblock")
+    public ResponseEntity<?> unblockTime(
+            @CookieValue(value = "userId", required = false) Integer ownerId,
+            @RequestBody BookingRequestDTO dto) {
+        return ownerAvailabilityAction(ownerId, dto, false);
+    }
+
+    //shared handler: 401 no cookie, 400 invalid input or missing service, 403 not the owner
+    private ResponseEntity<?> ownerAvailabilityAction(Integer ownerId, BookingRequestDTO dto, boolean block) {
+        if (ownerId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "You must be logged in."));
+        }
+        boolean allowed;
+        try {
+            allowed = block
+                    ? bookingService.blockTime(dto.getServiceId(), dto.getDate(),
+                            dto.getStartTime(), dto.getEndTime(), ownerId)
+                    : bookingService.unblockTime(dto.getServiceId(), dto.getDate(),
+                            dto.getStartTime(), dto.getEndTime(), ownerId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
+        }
+        if (!allowed) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Only the service owner can change availability."));
+        }
+        return ResponseEntity.ok(Map.of("status", "OK"));
+    }
+
     //GET endpoint that mutates state with no auth token, meant to be opened directly from the email link
     //returns full HTML instead of JSON since a browser opens it directly, not a fetch call
     //"not found" and "already processed" are indistinguishable here since confirmBooking's empty result covers both

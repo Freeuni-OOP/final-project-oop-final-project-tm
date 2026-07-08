@@ -19,7 +19,14 @@ function dayLabel(day) {
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
 }
 
-function BookingModal({ days, openTime, closeTime, onSubmit, onClose }) {
+function BookingModal({
+  days, openTime, closeTime, onSubmit, onClose,
+  title = 'Book an Appointment',
+  subtitle = 'Choose a day and the time range you would like to request.',
+  submitLabel = 'Request Booking',
+  successTitle = 'Request Sent!',
+  successMessage = 'Your booking request has been submitted. The provider will confirm shortly.',
+}) {
   const defaultEnd = fromMinutes(Math.min(toMinutes(openTime) + 60, toMinutes(closeTime)));
 
   const [date, setDate] = useState(days[0]?.date ?? '');
@@ -64,13 +71,13 @@ function BookingModal({ days, openTime, closeTime, onSubmit, onClose }) {
 
         {success ? (
           <div className="modal-success">
-            <h3>Request Sent!</h3>
-            <p>Your booking request has been submitted. The provider will confirm shortly.</p>
+            <h3>{successTitle}</h3>
+            <p>{successMessage}</p>
           </div>
         ) : (
           <>
-            <h3 className="modal-title">Book an Appointment</h3>
-            <p className="modal-subtitle">Choose a day and the time range you would like to request.</p>
+            <h3 className="modal-title">{title}</h3>
+            <p className="modal-subtitle">{subtitle}</p>
 
             <div className="modal-form">
               <div className="form-group">
@@ -101,7 +108,7 @@ function BookingModal({ days, openTime, closeTime, onSubmit, onClose }) {
             <div className="modal-actions">
               <button type="button" className="btn btn-cancel" onClick={onClose} disabled={submitting}>Cancel</button>
               <button type="button" className="btn btn-confirm" onClick={handleSubmit} disabled={submitting}>
-                {submitting ? 'Sending...' : 'Request Booking'}
+                {submitting ? 'Sending...' : submitLabel}
               </button>
             </div>
           </>

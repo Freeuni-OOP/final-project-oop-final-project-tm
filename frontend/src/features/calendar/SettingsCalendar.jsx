@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import BookingModal from './BookingModal';
 import PageNotFound from '../../PageNotFound/PageNotFound';
 import './WeeklyCalendar.css';
+import './SettingsCalendar.css';
 
 const API_BASE = 'http://localhost:8080';
 const DAY_NAMES_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -31,16 +32,16 @@ function formatRange(weekStart, weekEnd) {
   return `${s} - ${e}, ${new Date(weekEnd).getFullYear()}`;
 }
 
-function WeeklyCalendar({ serviceId: serviceIdProp }) {
+function SettingsCalendar({ serviceId: serviceIdProp }) {
   const params = useParams();
-  const serviceId = serviceIdProp ?? params.serviceId ?? 1;
+  const serviceId = serviceIdProp ?? params.serviceId;
 
   const [weekOffset, setWeekOffset] = useState(0);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState(null);
   const [notFound, setNotFound] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState(null);
 
   const loadWeek = useCallback(async (showSpinner) => {
     if (showSpinner) setLoading(true);
@@ -54,7 +55,7 @@ function WeeklyCalendar({ serviceId: serviceIdProp }) {
       setData(await res.json());
       setFetchError(null);
     } catch (err) {
-      console.error('[WeeklyCalendar] Failed to load calendar:', err);
+      console.error('[SettingsCalendar] Failed to load calendar:', err);
       setFetchError('Could not load the schedule. Please try again.');
     } finally {
       if (showSpinner) setLoading(false);
@@ -69,8 +70,9 @@ function WeeklyCalendar({ serviceId: serviceIdProp }) {
     return () => clearInterval(timer);
   }, [loadWeek, notFound]);
 
-  const handleBook = useCallback(async (form) => {
-    const res = await fetch(`${API_BASE}/api/bookings/request`, {
+  const handleAvailability = useCallback(async (form) => {
+    const endpoint = modalMode === 'block' ? 'block' : 'unblock';
+    const res = await fetch(`${API_BASE}/api/bookings/${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -81,7 +83,7 @@ function WeeklyCalendar({ serviceId: serviceIdProp }) {
       throw new Error(body.error || `Request failed (${res.status})`);
     }
     await loadWeek(false);
-  }, [serviceId, loadWeek]);
+  }, [serviceId, modalMode, loadWeek]);
 
   if (notFound) return <PageNotFound />;
 
@@ -103,15 +105,18 @@ function WeeklyCalendar({ serviceId: serviceIdProp }) {
   return (
     <div className="wc-wrapper">
       <div className="wc-header">
-        <h2 className="wc-title">Weekly Schedule</h2>
+        <h2 className="wc-title">Manage Your Schedule</h2>
         <div className="wc-header-right">
           <div className="wc-legend">
             <span className="wc-legend-item free">Available</span>
             <span className="wc-legend-item pending">Pending</span>
             <span className="wc-legend-item booked">Booked</span>
           </div>
-          <button className="wc-book-btn" onClick={() => setModalOpen(true)} disabled={!data}>
-            Book appointment
+          <button className="wc-book-btn sc-block-btn" onClick={() => setModalMode('block')} disabled={!data}>
+            Mark busy
+          </button>
+          <button className="wc-book-btn sc-unblock-btn" onClick={() => setModalMode('unblock')} disabled={!data}>
+            Unmark
           </button>
         </div>
       </div>
@@ -184,17 +189,26 @@ function WeeklyCalendar({ serviceId: serviceIdProp }) {
         </div>
       )}
 
-      {modalOpen && data && (
+      {modalMode && data && (
         <BookingModal
           days={data.days}
           openTime={data.openTime}
           closeTime={data.closeTime}
-          onSubmit={handleBook}
-          onClose={() => setModalOpen(false)}
+          onSubmit={handleAvailability}
+          onClose={() => setModalMode(null)}
+          title={modalMode === 'block' ? 'Mark Time as Busy' : 'Unmark Busy Time'}
+          subtitle={modalMode === 'block'
+            ? 'This time range will show as fully booked to everyone.'
+            : 'Busy marks you made in this range will be removed. Customer bookings are not affected.'}
+          submitLabel={modalMode === 'block' ? 'Mark busy' : 'Unmark'}
+          successTitle={modalMode === 'block' ? 'Time Blocked' : 'Time Freed'}
+          successMessage={modalMode === 'block'
+            ? 'This range now shows as booked for everyone else.'
+            : 'Your busy marks in this range have been removed.'}
         />
       )}
     </div>
   );
 }
 
-export default WeeklyCalendar;
+export default SettingsCalendar;

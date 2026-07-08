@@ -9,7 +9,7 @@ import PublicProfile from "./Profile/Pages/PublicProfile.jsx";
 
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ProfileEdit from "./Profile/Pages/ProfileEdit.jsx";
-import WeeklyCalendar from "./features/calendar/WeeklyCalendar.jsx";
+import ServiceCalendarPage from "./features/calendar/ServiceCalendarPage.jsx";
 
 const routers = createBrowserRouter([
     {path: "/", element: <App/>},
@@ -17,7 +17,7 @@ const routers = createBrowserRouter([
     {path: "*", element: <PageNotFound/>},
     {path: "/profile", element:<PrivateProfile/>},
     {path: "/profile/edit", element:<ProfileEdit/>},
-    {path: "/calendar/:serviceId", element:<WeeklyCalendar/>}
+    {path: "/calendar/:serviceId", element:<ServiceCalendarPage/>}
 ]);
 
 createRoot(document.getElementById('root')).render(

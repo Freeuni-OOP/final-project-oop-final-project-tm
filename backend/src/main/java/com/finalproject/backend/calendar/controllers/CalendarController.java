@@ -6,6 +6,8 @@ import com.finalproject.backend.calendar.services.CalendarService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/calendar")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
@@ -25,6 +27,15 @@ public class CalendarController {
             @RequestParam(defaultValue = "0") int weekOffset) {
         return calendarService.getServiceWeek(serviceId, weekOffset)
                 .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    //public by design: only reveals which user id owns a service, mirrors getServiceWeek's 404 for a missing one
+    //ServiceCalendarPage uses this to decide between the settings and booking calendars
+    @GetMapping("/service/{serviceId}/owner")
+    public ResponseEntity<Map<String, Integer>> getServiceOwner(@PathVariable Integer serviceId) {
+        return calendarService.getServiceOwner(serviceId)
+                .map(ownerId -> ResponseEntity.ok(Map.of("ownerId", ownerId)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 

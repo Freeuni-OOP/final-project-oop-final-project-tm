@@ -6,6 +6,7 @@ import com.finalproject.backend.entities.User;
 import com.finalproject.backend.login_register.services.EmailSender;
 import com.finalproject.backend.repositories.UserRepository;
 import com.finalproject.backend.login_register.config.TokenCreator;
+import com.finalproject.backend.services.NotificationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,12 +26,14 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final EmailSender emailSender;
     private final TokenCreator tokenCreator;
+    private final NotificationService notificationService;
 
-    public AuthController(UserRepository userRepository, EmailSender emailSender, TokenCreator tokenCreator) {
+    public AuthController(UserRepository userRepository, EmailSender emailSender, TokenCreator tokenCreator, NotificationService notif) {
         this.userRepository = userRepository;
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         this.emailSender = emailSender;
         this.tokenCreator = tokenCreator;
+        this.notificationService = notif;
     }
 
     @PostMapping("/login")
@@ -91,6 +94,7 @@ public class AuthController {
         }
 
         userRepository.save(user);
+        notificationService.addNotification(user.getId(), "You have successfully signed up, welcome to book to!");
         return ResponseEntity.status(HttpStatus.CREATED).body("Registration successful! Please check your email for verification code.");
     }
 

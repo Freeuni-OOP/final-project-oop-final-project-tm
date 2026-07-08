@@ -24,7 +24,7 @@ const routers = createBrowserRouter([
                     { path: "", element: <LandingPage /> },
                     { path: "profile/:userId", element: <PublicProfile /> },
                     { path: "profile/", element: <PrivateProfile /> },
-                    { path: "profile/edit", element: <ProfileEdit />}
+                    { path: "profile/edit", element: <ProfileEdit />},
                     { path: "services/:serviceId", element: <ServicePage /> },
                 ]
             },

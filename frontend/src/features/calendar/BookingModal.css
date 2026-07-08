@@ -12,12 +12,14 @@
 .modal-subtitle { font-size:.9rem; color:#555; text-align:center; margin:0 0 26px; line-height:1.65; }
 .modal-subtitle strong { color:#1a5fa8; }
 
-.modal-form   { display:flex; flex-direction:column; gap:16px; }
+.modal-form   { display:flex; flex-direction:column; gap:16px; margin-bottom:20px; }
+.form-row     { display:flex; gap:12px; }
+.form-row .form-group { flex:1; }
 .form-group   { display:flex; flex-direction:column; gap:6px; }
 .form-group label { font-size:.78rem; font-weight:700; color:#555; text-transform:uppercase; letter-spacing:.06em; }
-.form-group input { padding:11px 14px; font-size:.95rem; border:2px solid #e0e0e0; border-radius:8px; outline:none; background:#fafafa; transition:border-color .2s,background .2s; color:#1a1a2e; }
-.form-group input:focus    { border-color:#2c7be5; background:#fff; }
-.form-group input:disabled { opacity:.55; cursor:not-allowed; }
+.form-group input, .form-group select { padding:11px 14px; font-size:.95rem; border:2px solid #e0e0e0; border-radius:8px; outline:none; background:#fafafa; transition:border-color .2s,background .2s; color:#1a1a2e; }
+.form-group input:focus, .form-group select:focus { border-color:#2c7be5; background:#fff; }
+.form-group input:disabled, .form-group select:disabled { opacity:.55; cursor:not-allowed; }
 
 .modal-error { display:flex; align-items:flex-start; gap:8px; font-size:.85rem; color:#b91c1c; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px 14px; }
 

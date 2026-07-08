@@ -1,211 +1,195 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import BookingModal from './BookingModal';
+import PageNotFound from '../../PageNotFound/PageNotFound';
 import './WeeklyCalendar.css';
 
-const API_BASE        = 'http://localhost:8080';
-const DAY_NAMES_FULL  = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const DAY_NAMES_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const HOUR_RANGE      = [9,10,11,12,13,14,15,16,17];
+const API_BASE = 'http://localhost:8080';
+const DAY_NAMES_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-function formatTime(iso) {
-  return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-}
-function formatDate(iso) {
-  return new Date(iso).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+function toMinutes(hhmm) {
+  const [h, m] = hhmm.split(':').map(Number);
+  return h * 60 + m;
 }
 
-function getWeekMonday(offset = 0) {
-  const d = new Date();
-  const dow = d.getDay();
-  d.setDate(d.getDate() + (dow === 0 ? -6 : 1 - dow) + offset * 7);
-  d.setHours(0, 0, 0, 0);
-  return d;
+function labelHour(h) {
+  return h < 12 ? `${h} AM` : h === 12 ? '12 PM' : `${h - 12} PM`;
 }
 
-function dayColIndex(iso) {
-  const dow = new Date(iso).getDay();
-  return dow === 0 ? 6 : dow - 1;
+function labelTime(hhmm) {
+  const [h, m] = hhmm.split(':').map(Number);
+  const suffix = h < 12 ? 'AM' : 'PM';
+  const hour12 = h % 12 === 0 ? 12 : h % 12;
+  return `${hour12}:${String(m).padStart(2, '0')} ${suffix}`;
 }
-function hourOf(iso) { return new Date(iso).getHours(); }
 
-function formatWeekRange(monday) {
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
+function formatRange(weekStart, weekEnd) {
   const opts = { month: 'long', day: 'numeric' };
-  return `${monday.toLocaleDateString('en-US', opts)} - ${sunday.toLocaleDateString('en-US', { day: 'numeric' })}, ${sunday.getFullYear()}`;
+  const s = new Date(weekStart).toLocaleDateString('en-US', opts);
+  const e = new Date(weekEnd).toLocaleDateString('en-US', { day: 'numeric' });
+  return `${s} - ${e}, ${new Date(weekEnd).getFullYear()}`;
 }
 
 function WeeklyCalendar({ serviceId: serviceIdProp }) {
   const params = useParams();
   const serviceId = serviceIdProp ?? params.serviceId ?? 1;
 
-  const [weekOffset,   setWeekOffset]   = useState(0);
-  const [slots,        setSlots]        = useState([]);
-  const [loading,      setLoading]      = useState(true);
-  const [fetchError,   setFetchError]   = useState(null);
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  const [modalOpen,    setModalOpen]    = useState(false);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
+  const [notFound, setNotFound] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    const loadSlots = async () => {
-      setLoading(true);
-      setFetchError(null);
-      try {
-        const res = await fetch(`${API_BASE}/api/slots?serviceId=${serviceId}&weekOffset=${weekOffset}`);
-        if (!res.ok) throw new Error(`Server responded with status ${res.status}`);
-        setSlots(await res.json());
-      } catch (err) {
-        console.error('[WeeklyCalendar] Failed to load slots:', err);
-        setFetchError('Could not load the schedule. Please try again.');
-      } finally {
-        setLoading(false);
+  const loadWeek = useCallback(async (showSpinner) => {
+    if (showSpinner) setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/calendar/service/${serviceId}?weekOffset=${weekOffset}`, { cache: 'no-store' });
+      if (res.status === 404) {
+        setNotFound(true);
+        return;
       }
-    };
-    loadSlots();
-  }, [weekOffset, serviceId]);
+      if (!res.ok) throw new Error(`Server responded with status ${res.status}`);
+      setData(await res.json());
+      setFetchError(null);
+    } catch (err) {
+      console.error('[WeeklyCalendar] Failed to load calendar:', err);
+      setFetchError('Could not load the schedule. Please try again.');
+    } finally {
+      if (showSpinner) setLoading(false);
+    }
+  }, [serviceId, weekOffset]);
+
+  useEffect(() => { loadWeek(true); }, [loadWeek]);
 
   useEffect(() => {
-    const poll = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/api/slots?serviceId=${serviceId}&weekOffset=${weekOffset}`);
-        if (res.ok) setSlots(await res.json());
-      } catch {}
-    };
-    const timer = setInterval(poll, 5000);
+    if (notFound) return;
+    const timer = setInterval(() => loadWeek(false), 5000);
     return () => clearInterval(timer);
-  }, [weekOffset, serviceId]);
+  }, [loadWeek, notFound]);
 
-  const handleSlotClick = useCallback((slot) => {
-    if (slot.status !== 'FREE') return;
-    setSelectedSlot(slot);
-    setModalOpen(true);
-  }, []);
-
-  const handleBookingConfirm = useCallback(async () => {
-    if (!selectedSlot) return;
+  const handleBook = useCallback(async (form) => {
     const res = await fetch(`${API_BASE}/api/bookings/request`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ slotId: selectedSlot.id }),
+      body: JSON.stringify({ serviceId: Number(serviceId), ...form }),
     });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
       throw new Error(body.error || `Request failed (${res.status})`);
     }
-    const updatedSlot = await res.json();
-    setSlots((prev) => prev.map((s) => (s.id === updatedSlot.id ? updatedSlot : s)));
-  }, [selectedSlot]);
+    await loadWeek(false);
+  }, [serviceId, loadWeek]);
 
-  const handleModalClose = useCallback(() => {
-    setModalOpen(false);
-    setSelectedSlot(null);
-  }, []);
+  if (notFound) return <PageNotFound />;
 
-  const grid = HOUR_RANGE.map((hour) =>
-    DAY_NAMES_FULL.map((_, dayIdx) =>
-      slots.find((s) => dayColIndex(s.slotDateTime) === dayIdx && hourOf(s.slotDateTime) === hour) ?? null
-    )
-  );
+  const openMin = data ? toMinutes(data.openTime) : 0;
+  const closeMin = data ? toMinutes(data.closeTime) : 0;
+  const totalMin = closeMin - openMin;
 
-  const weekMonday = getWeekMonday(weekOffset);
-  const dayHeaders = DAY_NAMES_FULL.map((_, i) => {
-    const d = new Date(weekMonday);
-    d.setDate(d.getDate() + i);
-    return {
-      shortName: DAY_NAMES_SHORT[i],
-      dateNum:   d.getDate(),
-      isToday:   d.toDateString() === new Date().toDateString(),
-    };
-  });
+  const hourMarks = [];
+  if (data) {
+    for (let h = Math.ceil(openMin / 60); h * 60 <= closeMin; h++) hourMarks.push(h);
+  }
 
-  const hourLabel = (h) => h < 12 ? `${h} AM` : h === 12 ? '12 PM' : `${h - 12} PM`;
+  const segStyle = (seg) => {
+    const top = ((toMinutes(seg.start) - openMin) / totalMin) * 100;
+    const height = ((toMinutes(seg.end) - toMinutes(seg.start)) / totalMin) * 100;
+    return { top: `${top}%`, height: `${height}%` };
+  };
 
   return (
-    <div className="calendar-wrapper">
-
-      <div className="calendar-header">
-        <h2 className="calendar-title">Weekly Schedule</h2>
-        <div className="calendar-legend">
-          <span className="legend-item free">Available</span>
-          <span className="legend-item pending">Pending</span>
-          <span className="legend-item booked">Booked</span>
+    <div className="wc-wrapper">
+      <div className="wc-header">
+        <h2 className="wc-title">Weekly Schedule</h2>
+        <div className="wc-header-right">
+          <div className="wc-legend">
+            <span className="wc-legend-item free">Available</span>
+            <span className="wc-legend-item pending">Pending</span>
+            <span className="wc-legend-item booked">Booked</span>
+          </div>
+          <button className="wc-book-btn" onClick={() => setModalOpen(true)} disabled={!data}>
+            Book appointment
+          </button>
         </div>
       </div>
 
-      <div className="week-nav">
-        <button className="week-nav-btn" onClick={() => setWeekOffset(w => w - 1)}>
-          Prev
-        </button>
-
-        <div className="week-nav-center">
-          <span className="week-label">{formatWeekRange(weekMonday)}</span>
+      <div className="wc-nav">
+        <button className="wc-nav-btn" onClick={() => setWeekOffset(w => w - 1)}>Prev</button>
+        <div className="wc-nav-center">
+          <span className="wc-week-label">{data ? formatRange(data.weekStart, data.weekEnd) : ''}</span>
           {weekOffset !== 0 && (
-            <button className="today-btn" onClick={() => setWeekOffset(0)}>
-              Today
-            </button>
+            <button className="wc-today-btn" onClick={() => setWeekOffset(0)}>Today</button>
           )}
         </div>
-
-        <button className="week-nav-btn" onClick={() => setWeekOffset(w => w + 1)}>
-          Next
-        </button>
+        <button className="wc-nav-btn" onClick={() => setWeekOffset(w => w + 1)}>Next</button>
       </div>
 
       {loading && (
-        <div className="calendar-loading"><div className="spinner" /><p>Loading schedule...</p></div>
+        <div className="wc-loading"><div className="wc-spinner" /><p>Loading schedule...</p></div>
       )}
       {fetchError && !loading && (
-        <div className="calendar-error" role="alert"><p>{fetchError}</p></div>
+        <div className="wc-error" role="alert"><p>{fetchError}</p></div>
       )}
 
-      {!loading && !fetchError && (
-        <div className="calendar-grid" role="grid">
-
-          <div className="grid-row header-row" role="row">
-            <div className="time-label-cell" aria-hidden="true" />
-            {dayHeaders.map((d) => (
-              <div key={d.shortName} className={`day-header-cell ${d.isToday ? 'today' : ''}`} role="columnheader">
-                <span className="day-short">{d.shortName}</span>
-                <span className={`day-num ${d.isToday ? 'today-num' : ''}`}>{d.dateNum}</span>
+      {!loading && !fetchError && data && (
+        <div className="wc-grid">
+          <div className="wc-head-row">
+            <div className="wc-axis-spacer" />
+            {data.days.map((day, i) => (
+              <div key={day.date} className="wc-day-head">
+                <span className="wc-day-short">{DAY_NAMES_SHORT[i]}</span>
+                <span className="wc-day-num">{new Date(day.date).getDate()}</span>
               </div>
             ))}
           </div>
 
-          {HOUR_RANGE.map((hour, rowIdx) => (
-            <div key={hour} className="grid-row" role="row">
-              <div className="time-label-cell">{hourLabel(hour)}</div>
-              {grid[rowIdx].map((slot, colIdx) => (
-                <div key={colIdx} className="grid-cell" role="gridcell">
-                  {slot ? (
-                    <button
-                      className={`slot-block ${slot.status.toLowerCase()}`}
-                      onClick={() => handleSlotClick(slot)}
-                      disabled={slot.status !== 'FREE'}
-                      title={slot.status === 'FREE' ? 'Click to request' : slot.status === 'PENDING' ? 'Awaiting confirmation' : 'Already booked'}
-                    >
-                      <span className="slot-status-label">
-                        {slot.status === 'FREE' ? 'Available' : slot.status === 'PENDING' ? 'Pending' : 'Booked'}
-                      </span>
-                    </button>
-                  ) : (
-                    <div className="slot-empty" />
-                  )}
-                </div>
+          <div className="wc-body-row">
+            <div className="wc-axis">
+              {hourMarks.map(h => (
+                <span
+                  key={h}
+                  className="wc-axis-label"
+                  style={{ top: `${((h * 60 - openMin) / totalMin) * 100}%` }}
+                >
+                  {labelHour(h)}
+                </span>
               ))}
             </div>
-          ))}
+
+            {data.days.map(day => (
+              <div key={day.date} className="wc-track">
+                {hourMarks.map(h => (
+                  <div
+                    key={h}
+                    className="wc-gridline"
+                    style={{ top: `${((h * 60 - openMin) / totalMin) * 100}%` }}
+                  />
+                ))}
+                {day.segments.map((seg, idx) => (
+                  <div
+                    key={idx}
+                    className={`wc-seg ${seg.status.toLowerCase()}`}
+                    style={segStyle(seg)}
+                    title={`${labelTime(seg.start)} - ${labelTime(seg.end)} (${seg.status})`}
+                  >
+                    <span className="wc-seg-label">{labelTime(seg.start)} - {labelTime(seg.end)}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
-      {modalOpen && selectedSlot && (
+      {modalOpen && data && (
         <BookingModal
-          slot={selectedSlot}
-          onConfirm={handleBookingConfirm}
-          onClose={handleModalClose}
-          formatDate={formatDate}
-          formatTime={formatTime}
+          days={data.days}
+          openTime={data.openTime}
+          closeTime={data.closeTime}
+          onSubmit={handleBook}
+          onClose={() => setModalOpen(false)}
         />
       )}
     </div>

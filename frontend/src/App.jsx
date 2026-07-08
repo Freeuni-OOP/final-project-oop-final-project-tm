@@ -24,8 +24,17 @@ function App() {
     checkUserSession();
   }, []);
 
-  const handleLogout = () => {
-    setCurrentUser(null);
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:8080/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setCurrentUser(null);
+    }
   };
 
   if (loading) {

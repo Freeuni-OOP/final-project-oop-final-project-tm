@@ -1,7 +1,9 @@
+import {Link} from "react-router-dom";
+
 const RegisterForm = ({first_name, setFirst_name,
                           last_name, setLast_name,
                           email, setEmail,
-                          password, setPassword,
+                          password, setPassword, isSubmitting,
                           onSubmit
                       }) => {
     return (
@@ -51,7 +53,13 @@ const RegisterForm = ({first_name, setFirst_name,
                     placeholder="Create a password"
                 />
             </div>
-            <button type="submit" className="register-btn">Register</button>
+            <button
+                type="submit"
+                className="register-btn"
+                disabled={isSubmitting}
+            >
+                {isSubmitting ? 'Registering...' : 'Register'}
+            </button>
         </form>
     );
 };

@@ -8,11 +8,11 @@ function ServiceCard({ service }) {
     return (
         <div
             className="service-card"
-            onClick={() => navigate(`/services/${service.service_id}`)}
+            onClick={() => navigate(`/services/${service.serviceId}`)}
         >
             <img
-                src={service.picture_url || 'https://via.placeholder.com/80'}
-                alt={service.title}
+                src={service.imagePath || 'https://via.placeholder.com/80'}
+                alt={'👤'}
                 className="user-avatar"
             />
             <div className="user-info">

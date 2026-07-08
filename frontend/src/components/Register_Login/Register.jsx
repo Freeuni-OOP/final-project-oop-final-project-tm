@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useOutletContext, useNavigate } from 'react-router-dom';
+import {useOutletContext, useNavigate, Link} from 'react-router-dom';
 import RegisterForm from './RegisterForm';
 import VerifyForm from './VerifyForm';
 import './Register.css';
@@ -14,12 +14,15 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [isRegistered, setIsRegistered] = useState(false);
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         setErrorMessage('');
         setSuccessMessage('');
 
@@ -38,6 +41,7 @@ const Register = () => {
             setIsRegistered(true);
         } catch (error) {
             setErrorMessage(error.message);
+            setIsSubmitting(false);
         }
     };
 
@@ -73,6 +77,11 @@ const Register = () => {
 
     return (
         <div className="register-container">
+            <div className={"go-back-div"}>
+                <Link to={"/"} className={"go-back-link"}>
+                    <button className={"go-back-button"}> ← </button>
+                </Link>
+            </div>
             <div className="register-card">
                 {errorMessage && <div className="alert error">{errorMessage}</div>}
                 {successMessage && <div className="alert success">{successMessage}</div>}
@@ -83,6 +92,7 @@ const Register = () => {
                         last_name={last_name} setLast_name={setLast_name}
                         email={email} setEmail={setEmail}
                         password={password} setPassword={setPassword}
+                        isSubmitting={isSubmitting}
                         onSubmit={handleRegisterSubmit}
                     />
                 ) :(

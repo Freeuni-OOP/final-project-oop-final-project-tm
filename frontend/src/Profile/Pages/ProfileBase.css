@@ -36,9 +36,6 @@ body {
 .profile-text {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    flex: 1;
-    min-width: 0;
 }
 
 .name {
@@ -202,4 +199,63 @@ body {
     cursor: pointer;
     transform: scale(1.08);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.follow-button {
+    text-align: center;
+    padding: 20px 28px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 14px;
+    cursor: pointer;
+    background-color: #ffffff;
+    color: #3182ce;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.follow-button:hover {
+    background-color: #3182ce;
+    color: #ffffff;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px rgba(49, 130, 206, 0.25);
+}
+
+.follow-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+}
+
+.follow-requests {
+    display: flex;
+    gap: 24px;
+    padding-top: 20px;
+    border-top: 2px solid #edf2f7;
+    margin-top: 20px;
+    align-self: flex-end;
+}
+
+.followers-text,
+.following-text {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+
+.link-to-offered-serv,
+.link-to-registered-serv,
+.link-to-upload-serv {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+.offered-services,
+.registered-services,
+.upload-new-services {
+    width: 100%;
+    display: block;
 }

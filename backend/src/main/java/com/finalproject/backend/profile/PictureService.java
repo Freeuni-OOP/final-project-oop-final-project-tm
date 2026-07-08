@@ -2,33 +2,52 @@ package com.finalproject.backend.profile;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class PictureService {
+    private final Path directory = Paths.get("backend/Profile-pictures");
 
-    private final Path location = Paths.get("Profile-pictures").toAbsolutePath().normalize();
-
-    public Resource loadImage(String name) throws MalformedURLException {
-        Path file = location.resolve(name).normalize();
-
-        if (!file.startsWith(location)) {
-            System.out.println("Security block: Attempted to access file outside directory.");
-            return null;
+    private String fileExt(String s) {
+        if(s != null && s.contains(".")) {
+            return s.substring((s.lastIndexOf(".")));
         }
+        return ".png";
+    }
 
-        System.out.println("Looking for file at: " + file.toString());
-        Resource resource = new UrlResource(file.toUri());
+    public String saveImage(MultipartFile file) {
+        try {
+            String fileName = UUID.randomUUID().toString() + fileExt(file.getOriginalFilename());
 
-        if (resource.exists() && resource.isReadable()) {
+            Path destinationFile = this.directory.resolve(Paths.get(fileName)).normalize().toAbsolutePath();
+            Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
+
+            return fileName;
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Resource loadImage(String fileName) {
+        try {
+            System.out.println(directory);
+            Resource resource = new UrlResource(directory.resolve(fileName).toUri());
+            if(!resource.isReadable()) {
+                throw new RuntimeException("Not Readable");
+            }
             return resource;
-        } else {
-            System.out.println("File does not exist or is not readable.");
-            return null;
+        } catch(Exception e) {
+            throw new RuntimeException();
         }
     }
 }

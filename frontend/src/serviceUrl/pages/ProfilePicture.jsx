@@ -1,0 +1,29 @@
+import React from 'react';
+
+// Handles the display and fetching of a user's profile picture
+function ProfilePicture({ image }) {
+    // 1. Determine the filename. If no valid image string is passed, default it.
+    const imageName = (image && typeof image === 'string' && image.trim() !== "")
+        ? image.split(/[/\\]/).pop()
+        : "default.png";
+
+    // 2. Construct the full URL to your Spring Boot backend.
+    const picUrl = `http://localhost:8080/api/images/${imageName}`;
+
+    return (
+        <img
+            src={picUrl}
+            alt="User Profile"
+            className="profile-picture"
+
+            // 3. The Fallback: If the browser fails to load the image,
+            // this safely catches the error and displays the default image.
+            onError={(e) => {
+                e.target.onerror = null; // Prevents an infinite loop if default.png is ALSO missing
+                e.target.src = "http://localhost:8080/api/images/default.png";
+            }}
+        />
+    );
+}
+
+export default ProfilePicture;

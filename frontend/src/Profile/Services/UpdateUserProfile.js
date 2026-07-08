@@ -1,6 +1,5 @@
 
 export const UpdateUserProfile = async (userData) => {
-    console.error(userData.getAboutMe);
     const response = await fetch('http://localhost:8080/api/profile/update',
         {method: 'POST',
             credentials: 'include',

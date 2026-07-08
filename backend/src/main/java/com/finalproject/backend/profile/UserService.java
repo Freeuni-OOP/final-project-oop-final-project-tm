@@ -31,8 +31,23 @@ public class UserService {
         System.out.println("here");
         System.out.println(profileDTO.getFirstName());
         user.setAboutMe(profileDTO.getAboutMe());
-        user.setImagePath(profileDTO.getImagePath());
 
         userRepository.save(user);
+    }
+
+    public void updateProfilePicture(Integer id, String imagePath) {
+        User user = userRepository.findById(id).orElseThrow();
+
+        user.setImagePath(imagePath);
+        userRepository.save(user);
+    }
+
+    public Integer getIdByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Email not Found"));
+        return user.getId();
+    }
+
+    public String getName(Integer id) {
+        return userRepository.findById(id).orElse(new User()).getFirstName() + " " + userRepository.findById(id).orElse(new User()).getLastName();
     }
 }

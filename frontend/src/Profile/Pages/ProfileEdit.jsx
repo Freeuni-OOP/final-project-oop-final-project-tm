@@ -3,6 +3,7 @@ import './ProfileEdit.css'
 import {Link, useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {UpdateUserProfile} from "../Services/UpdateUserProfile.js";
+import {UpdateProfilePicture} from "../Services/UpdateProfilePicture.js";
 
 function ProfileEdit() {
 
@@ -36,11 +37,14 @@ function ProfileEditBody({profileData}) {
             firstName: firstName,
             lastName: lastName,
             aboutMe: aboutMe,
-            picUrl: picUrl
         }
 
         try {
             await UpdateUserProfile(updateData);
+            if(picUrl instanceof File) {
+                await UpdateProfilePicture(picUrl);
+            }
+
 
             setSavedChanges(true);
             setTimeout(() => {
@@ -55,7 +59,6 @@ function ProfileEditBody({profileData}) {
 
     return (
         <div className={"edit-block"}>
-            <NavigationBar/>
             <div className={"go-back-div"}>
                 <Link to={"/profile"} className={"go-back-link"}>
                     <button className={"go-back-button"}> Go Back </button>
@@ -90,7 +93,9 @@ function ProfileEditBody({profileData}) {
 
                 <div className={"profile-picture-div"}>
                     <label className={"profile-picture-label"}> Change Profile Picture </label>
-                    <input type= "file" accept="image/*" id="aboutMe-input" name = "aboutMe-input"/>
+                    <input type= "file" accept="image/*" id="pic-input" name = "pic-input"
+                    onChange={(e) => setPicUrl(e.target.files[0])}
+                    />
                 </div>
 
                 <div className={"save-section"}>

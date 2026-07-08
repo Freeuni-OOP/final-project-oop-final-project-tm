@@ -1,3 +1,4 @@
+USE book_to;
 DROP TABLE IF EXISTS slots;
 
 CREATE TABLE slots (

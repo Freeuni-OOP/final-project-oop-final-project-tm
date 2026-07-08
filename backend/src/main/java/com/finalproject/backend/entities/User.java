@@ -1,5 +1,6 @@
 package com.finalproject.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -59,6 +60,7 @@ public class User {
         return imagePath;
     }
 
+    @JsonIgnore
     public String getPassHash() { return passHash; }
 
     public void setEmail(String email) {
@@ -81,6 +83,7 @@ public class User {
         this.lastName = lastName;
     }
 
+    @JsonIgnore
     public void setPassHash(String passHash) {
         this.passHash = passHash;
     }

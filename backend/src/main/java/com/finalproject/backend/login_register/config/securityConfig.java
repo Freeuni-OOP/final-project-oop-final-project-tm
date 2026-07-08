@@ -14,19 +14,20 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class securityConfig {
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
+                        // Add "/error" right here alongside your API path
+                        .requestMatchers("/api/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 );
 
         return http.build();
     }
+
 
 
 

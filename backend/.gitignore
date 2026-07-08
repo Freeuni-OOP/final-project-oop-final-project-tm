@@ -39,3 +39,13 @@ build/
 **/src/main/resources/application-local.yml
 .DS_Store
 Thumbs.db
+
+# Target build directory (Spring Boot output)
+target/
+
+# IntelliJ settings
+.idea/
+*.iml
+
+# Log files
+*.log

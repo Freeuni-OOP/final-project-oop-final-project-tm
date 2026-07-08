@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "services")
 public class Service {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_id")
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "provider_id")
@@ -40,6 +41,9 @@ public class Service {
     @Column(name = "max_capacity")
     private Integer maxCapacity;
 
+    @Column(name = "active", columnDefinition = "boolean default true")
+    private Boolean active;
+
     public Integer getMaxCapacity() {
         return maxCapacity;
     }
@@ -48,7 +52,7 @@ public class Service {
         this.maxCapacity = maxCapacity;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -80,7 +84,9 @@ public class Service {
         this.address = address;
     }
 
-    public int getId() {
+    public void setActive(Boolean active) { this.active = active; }
+
+    public Integer getId() {
         return id;
     }
 
@@ -119,4 +125,6 @@ public class Service {
     public String getAddress() {
         return address;
     }
+
+    public Boolean getActive() { return active; }
 }

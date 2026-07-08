@@ -1,7 +1,7 @@
 import 'react';
 import {useEffect, useState} from "react";
 import ProfileBase from "./ProfileBase.jsx";
-import MiniCalendar from "../../features/calendar/MiniCalendar.jsx";
+import MiniPrivateCalendar from "../../features/calendar/MiniPrivateCalendar.jsx";
 function PrivateProfile() {
     const [data, setData] = useState(null);
     useEffect(() => {
@@ -15,7 +15,7 @@ function PrivateProfile() {
     return (
         <>
             <ProfileBase profileData={data} isPublic={false} />
-            <MiniCalendar userId={data.id} />
+            <MiniPrivateCalendar userId={data.id} />
         </>
     );
 }

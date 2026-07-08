@@ -44,6 +44,9 @@ public class Service {
     @Column(name = "active", columnDefinition = "boolean default true")
     private Boolean active;
 
+    @Column(name = "star", columnDefinition = "int default 0")
+    private Integer star;
+
     public Integer getMaxCapacity() {
         return maxCapacity;
     }
@@ -86,6 +89,8 @@ public class Service {
 
     public void setActive(Boolean active) { this.active = active; }
 
+    public void setStar(Integer star) { this.star = star; }
+
     public Integer getId() {
         return id;
     }
@@ -127,4 +132,7 @@ public class Service {
     }
 
     public Boolean getActive() { return active; }
+
+    public Integer getStar() { return star; }
+
 }

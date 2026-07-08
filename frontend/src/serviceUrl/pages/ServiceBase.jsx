@@ -79,10 +79,10 @@ function ServiceBase() {
         fetchProfilePic();
     }, []);
 
-    // --- API CALL FOR STARRING ---
+    // --- API CALL FOR STATISTICS ---
     const handleStarClick = async () => {
         try {
-            const method = isStarred ? 'DELETE' : 'POST';
+            const method = isStarred ? 'UPDATE' : 'POST';
             const response = await fetch(`http://localhost:8080/api/services/${serviceId}/star`, {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },

@@ -116,8 +116,6 @@ public final class Timeline {
         return new ArrayList<>(bounds);
     }
 
-    //collects every busy start/end into a sorted, deduplicated list
-    //these become the slice boundaries that segments() walks
     //merges adjacent segments into one when they share a status and touch exactly at the boundary
     private static List<Segment> merge(List<Segment> raw) {
         List<Segment> out = new ArrayList<>();

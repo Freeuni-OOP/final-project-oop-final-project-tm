@@ -5,7 +5,8 @@ public enum SlotStatus {
     PENDING,
     BOOKED;
 
-    //defensively parses a raw status string from the DB; null or any
+    //defensively parses a raw status string from the DB
+    //null or any unrecognized value falls back to FREE
     public static SlotStatus fromString(String value) {
         if (value == null) return FREE;
         try {

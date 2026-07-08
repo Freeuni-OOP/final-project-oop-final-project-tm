@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ProfilePicture from './ProfilePicture'; // <-- Make sure to import this!
 import './ServiceBase.css';
-import MinPrivateCalendar from '../../features/calendar/MinPrivateCalendar.jsx'
-import MinServiceCalendar from '../../features/calendar/MinServiceCalendar.jsx'
+import MiniPrivateCalendar from '../../features/calendar/MiniPrivateCalendar.jsx'
+import MiniServiceCalendar from '../../features/calendar/MiniServiceCalendar.jsx'
 
 function ServiceBase() {
     const { serviceId } = useParams();
@@ -18,6 +18,7 @@ function ServiceBase() {
     const [isStarred, setIsStarred] = useState(false);
 
     const [isRegistered, setIsRegistered] = useState(true);
+    const [myId, setMyId] = useState(null);
 
     // --- API CALL FOR SERVICE DATA ---
     useEffect(() => {
@@ -60,6 +61,23 @@ function ServiceBase() {
             }
         };
         fetchRegistration();
+    }, []);
+
+    useEffect(() => {
+        const fetchMyId = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/profile/', {
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setMyId(data.id);
+                }
+            } catch (error) {
+                console.error("Failed to fetch own profile", error);
+            }
+        };
+        fetchMyId();
     }, []);
 
     // --- API CALL FOR PROVIDER PROFILE PICTURE ---
@@ -166,15 +184,15 @@ function ServiceBase() {
                 <div className="calendar-container">
                     <h3 className="calendar-title">Availability</h3>
                     <div className="calendar-placeholder">
-                        <MinServiceCalendar serviceId={serviceId} />
+                        <MiniServiceCalendar serviceId={serviceId} />
                     </div>
                 </div>
 
-                {isRegistered && (
+                {isRegistered && myId && (
                     <div className="calendar-container">
                         <h3 className="calendar-title">Your Calendar</h3>
                         <div className="calendar-placeholder">
-                            <MinPrivateCalendar serviceId={serviceId} />
+                            <MiniPrivateCalendar userId={myId} />
                         </div>
                     </div>
                 )}

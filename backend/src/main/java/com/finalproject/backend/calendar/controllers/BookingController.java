@@ -7,6 +7,7 @@ import com.finalproject.backend.calendar.services.BookingService.BookingCreated;
 import com.finalproject.backend.calendar.services.EmailNotificationService;
 import com.finalproject.backend.entities.User;
 import com.finalproject.backend.repositories.UserRepository;
+import com.finalproject.backend.services.CookieService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,23 +27,38 @@ public class BookingController {
     private final BookingService bookingService;
     private final EmailNotificationService emailService;
     private final UserRepository userRepository;
+    private final CookieService cookieService;
 
     public BookingController(BookingService bookingService,
                              EmailNotificationService emailService,
-                             UserRepository userRepository) {
+                             UserRepository userRepository,
+                             CookieService cookieService) {
         this.bookingService = bookingService;
         this.emailService = emailService;
         this.userRepository = userRepository;
+        this.cookieService = cookieService;
     }
 
-    //takerId comes from a raw, unsigned cookie value - not a verified session
+    //returns null instead of throwing for a missing, invalid or expired token
+    //callers turn that null into a 401
+    private Integer resolveUserId(String userCookie) {
+        if (userCookie == null || userCookie.isEmpty()) return null;
+        try {
+            return cookieService.checkCookie(userCookie);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //takerId comes from the signed jwt_token cookie, resolved to a user id via CookieService
     //notification failures are swallowed here so a broken mail step never undoes an already-created booking
     //validation errors become 400; a fully-booked slot (empty result) becomes 409, not the same failure mode
     @PostMapping("/request")
     public ResponseEntity<?> requestBooking(
-            @CookieValue(value = "userId", required = false) Integer takerId,
+            @CookieValue(value = "jwt_token", required = false) String userCookie,
             @RequestBody BookingRequestDTO dto) {
 
+        Integer takerId = resolveUserId(userCookie);
         if (takerId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "You must be logged in to book."));
@@ -79,24 +95,25 @@ public class BookingController {
                 "status", "PENDING"));
     }
 
-    //same unsigned cookie auth as requestBooking, but ownership is verified server-side
+    //same jwt cookie auth as requestBooking, and ownership is verified server-side
     @PostMapping("/block")
     public ResponseEntity<?> blockTime(
-            @CookieValue(value = "userId", required = false) Integer ownerId,
+            @CookieValue(value = "jwt_token", required = false) String userCookie,
             @RequestBody BookingRequestDTO dto) {
-        return ownerAvailabilityAction(ownerId, dto, true);
+        return ownerAvailabilityAction(userCookie, dto, true);
     }
 
     //POST (unlike the email confirm/reject GET links), so nothing triggers it by prefetching a url
     @PostMapping("/unblock")
     public ResponseEntity<?> unblockTime(
-            @CookieValue(value = "userId", required = false) Integer ownerId,
+            @CookieValue(value = "jwt_token", required = false) String userCookie,
             @RequestBody BookingRequestDTO dto) {
-        return ownerAvailabilityAction(ownerId, dto, false);
+        return ownerAvailabilityAction(userCookie, dto, false);
     }
 
-    //shared handler: 401 no cookie, 400 invalid input or missing service, 403 not the owner
-    private ResponseEntity<?> ownerAvailabilityAction(Integer ownerId, BookingRequestDTO dto, boolean block) {
+    //shared handler: 401 missing or invalid token, 400 invalid input or missing service, 403 not the owner
+    private ResponseEntity<?> ownerAvailabilityAction(String userCookie, BookingRequestDTO dto, boolean block) {
+        Integer ownerId = resolveUserId(userCookie);
         if (ownerId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "You must be logged in."));

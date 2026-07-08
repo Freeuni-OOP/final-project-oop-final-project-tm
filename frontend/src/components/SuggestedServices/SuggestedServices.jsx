@@ -46,7 +46,7 @@ function SuggestedServices() {
                     <button className="slider-arrow-button left" onClick={slideLeft}>❮</button>
                     <div className="slider-container" ref={sliderRef}>
                         {services.map((service) => (
-                            <ServiceCard key={service.serviceId} service={service} />
+                            <ServiceCard key={service.id} service={service} />
                         ))}
                     </div>
                     <button className="slider-arrow-button right" onClick={slideRight}>❯</button>

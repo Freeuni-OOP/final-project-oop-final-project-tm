@@ -3,6 +3,7 @@ package com.finalproject.backend.login_register.controllers;
 import com.finalproject.backend.login_register.DTO.LoginRequest;
 import com.finalproject.backend.login_register.DTO.RegisterRequest;
 import com.finalproject.backend.entities.User;
+import com.finalproject.backend.login_register.config.LoginLimit;
 import com.finalproject.backend.login_register.services.EmailSender;
 import com.finalproject.backend.repositories.UserRepository;
 import com.finalproject.backend.login_register.config.TokenCreator;
@@ -27,25 +28,36 @@ public class AuthController {
     private final EmailSender emailSender;
     private final TokenCreator tokenCreator;
     private final NotificationService notificationService;
+    private final LoginLimit loginLimit;
 
-    public AuthController(UserRepository userRepository, EmailSender emailSender, TokenCreator tokenCreator, NotificationService notif) {
+    public AuthController(UserRepository userRepository, EmailSender emailSender, TokenCreator tokenCreator, NotificationService notif, LoginLimit loginLimit) {
         this.userRepository = userRepository;
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         this.emailSender = emailSender;
         this.tokenCreator = tokenCreator;
         this.notificationService = notif;
+        this.loginLimit = loginLimit;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
+        String IP = request.getRemoteAddr();
+        if(loginLimit.isBlocked(IP)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Failed to log in 5 times. Try again in 15 minutes.");
+        }
+
+
         Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
         if (userOptional.isEmpty()) {
+            loginLimit.markFailedAttempt(IP);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
         User user = userOptional.get();
 
         boolean matches = passwordEncoder.matches(loginRequest.getPassword(), user.getPassHash());
         if (!matches) {
+            loginLimit.markFailedAttempt(IP);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
 
@@ -65,6 +77,8 @@ public class AuthController {
         }
 
         setAuthCookie(response, user.getEmail());
+        notificationService.addNotification(user.getId(), "Welcome back!");
+        loginLimit.resetAttempts(IP);
         return ResponseEntity.ok(user);
     }
 

@@ -7,7 +7,7 @@ export function useSearch() {
     const initialQuery = queryParams.get('query') || '';
 
     const [searchQuery, setSearchQuery] = useState(initialQuery);
-    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [searchField, setSearchField] = useState("title");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
     const [allListings, setAllListings] = useState([]);
@@ -60,14 +60,17 @@ export function useSearch() {
 
         if (searchQuery.trim() !== "") {
             const query = searchQuery.toLowerCase();
-            result = result.filter(item =>
-                item.title?.toLowerCase().includes(query) ||
-                item.description?.toLowerCase().includes(query)
-            );
-        }
-
-        if (selectedCategory !== "All") {
-            result = result.filter(item => item.category === selectedCategory);
+            result = result.filter(item => {
+                if (searchField === "title") {
+                    return item.title?.toLowerCase().includes(query);
+                } else if (searchField === "category") {
+                    return item.category?.toLowerCase().includes(query);
+                } else if (searchField === "description") {
+                    const text = item.bio || item.description || "";
+                    return text.toLowerCase().includes(query);
+                }
+                return true;
+            });
         }
 
         if (minPrice !== "" && !isNaN(minPrice)) {
@@ -79,11 +82,11 @@ export function useSearch() {
         }
 
         return result;
-    }, [searchQuery, selectedCategory, minPrice, maxPrice, allListings]);
+    }, [searchQuery, searchField, minPrice, maxPrice, allListings]);
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchQuery, selectedCategory, minPrice, maxPrice]);
+    }, [searchQuery, searchField, minPrice, maxPrice]);
 
     const paginatedListings = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -94,7 +97,7 @@ export function useSearch() {
 
     const clearFilters = () => {
         setSearchQuery("");
-        setSelectedCategory("All");
+        setSearchField("title");
         setMinPrice("");
         setMaxPrice("");
         setSortBy("serviceId");
@@ -105,8 +108,8 @@ export function useSearch() {
     return {
         searchQuery,
         setSearchQuery,
-        selectedCategory,
-        setSelectedCategory,
+        searchField,
+        setSearchField,
         minPrice,
         setMinPrice,
         maxPrice,

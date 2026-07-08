@@ -1,22 +1,12 @@
 import React from 'react';
 import { useSearch } from "./useSearch";
 
-const categories = [
-    "All",
-    "Math & Physics",
-    "Foreign Languages",
-    "Language & Literature",
-    "Biology & Chemistry",
-    "IT & Programming",
-    "Music & Arts",
-];
-
 export default function SearchPage() {
     const {
         searchQuery,
         setSearchQuery,
-        selectedCategory,
-        setSelectedCategory,
+        searchField,
+        setSearchField,
         minPrice,
         setMinPrice,
         maxPrice,
@@ -40,7 +30,7 @@ export default function SearchPage() {
                 <h1 style={styles.title}>Find a Tutor</h1>
                 <input
                     type="text"
-                    placeholder="Search by title or description..."
+                    placeholder={`Search by ${searchField}...`}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     style={styles.searchInput}
@@ -48,15 +38,13 @@ export default function SearchPage() {
 
                 <div style={styles.filters}>
                     <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        value={searchField}
+                        onChange={(e) => setSearchField(e.target.value)}
                         style={styles.select}
                     >
-                        {categories.map((cat) => (
-                            <option key={cat} value={cat}>
-                                {cat}
-                            </option>
-                        ))}
+                        <option value="title">Search by Title</option>
+                        <option value="category">Search by Category</option>
+                        <option value="description">Search by Description</option>
                     </select>
 
                     <input
@@ -165,7 +153,6 @@ function ListingCard({ listing }) {
 
     const text = listing.bio || listing.description || "No description provided.";
     const isLongText = text.length > 100;
-
     const displayText = isExpanded ? text : text.substring(0, 100) + (isLongText ? "..." : "");
 
     return (
@@ -175,7 +162,10 @@ function ListingCard({ listing }) {
                     {listing.title ? listing.title.charAt(0).toUpperCase() : "T"}
                 </div>
                 <div>
-                    <h3 style={styles.cardName}>{listing.title || "Untitled Service"} </h3>
+                    <h3 style={styles.cardName}>{listing.title || "untitled"}</h3>
+                    {listing.category && (
+                        <span style={styles.categoryBadge}>{listing.category}</span>
+                    )}
                 </div>
             </div>
 

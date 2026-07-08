@@ -6,6 +6,7 @@ public class listingFilterDto {
     private Double max;
     private String category;
     private Long favoriteUserId;
+    private Long excludeFavUserId;
 
     //getters
     public String getText(){
@@ -23,7 +24,9 @@ public class listingFilterDto {
     public Long getFavoriteUserId(){
         return favoriteUserId;
     }
-
+    public Long getExcludeFavUserId(){
+        return excludeFavUserId;
+    }
 
     //setters
     public void setText(String text){
@@ -40,5 +43,8 @@ public class listingFilterDto {
     }
     public void setFavoriteUserId(Long favoriteUserId){
         this.favoriteUserId = favoriteUserId;
+    }
+    public void setExcludeFavUserId(Long excludeUserId){
+        this.excludeFavUserId = excludeUserId;
     }
 }

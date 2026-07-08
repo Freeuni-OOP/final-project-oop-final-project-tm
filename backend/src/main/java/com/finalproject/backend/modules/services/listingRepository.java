@@ -24,6 +24,11 @@ public interface listingRepository extends JpaRepository<listing, Integer> {
                 WHERE f.service.serviceId = l.serviceId 
                 AND f.user.userId = :favoriteUserId
             ))
+        AND (:excludeFavUserId IS NULL OR NOT EXISTS (
+                SELECT f FROM Favorite f 
+                WHERE f.service.serviceId = l.serviceId 
+                AND f.user.userId = :excludeFavUserId
+            ))
     """)
-    List<listing> findByFilters(String text,String category, Double min, Double max, Long favoriteUserId, Sort sort);
+    List<listing> findByFilters(String text, String category, Double min, Double max, Long favoriteUserId, Long excludeFavUserId, Sort sort);
 }

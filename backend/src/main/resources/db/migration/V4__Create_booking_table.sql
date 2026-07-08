@@ -1,4 +1,4 @@
-USE book_to;
+
 DROP TABLE IF EXISTS bookings;
 
 

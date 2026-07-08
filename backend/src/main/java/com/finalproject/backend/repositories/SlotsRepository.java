@@ -3,11 +3,7 @@ package com.finalproject.backend.repositories;
 import com.finalproject.backend.entities.Slot;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+//no custom queries needed: Slot is properly @Table-mapped, so inherited
+//save()/deleteById() from JpaRepository work correctly, unlike ServiceRepository
 public interface SlotsRepository extends JpaRepository<Slot, Integer> {
-
-    List<Slot> findByServiceId_IdAndStartTimeBetweenOrderByStartTime(
-            Integer serviceId, LocalDateTime start, LocalDateTime end);
 }

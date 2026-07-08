@@ -32,6 +32,12 @@
     line-height: 1.4;
 }
 
+.go-back-div {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
 
 .go-back-link {
     text-decoration: none;
@@ -43,15 +49,14 @@
     min-width: 40px;
     border-radius: 50%;
     border: 1px solid #e2e8f0;
-    background-color: #ffffff;
+    background-color: #472121;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     font-size: 16px;
-    color: #64748b;
-    transition: background-color 0.2s, color 0.2s;
+    color: #586b86;
 }
 
 

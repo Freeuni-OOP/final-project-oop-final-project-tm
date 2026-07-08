@@ -2,6 +2,7 @@ import 'react';
 import {useEffect, useState} from "react";
 import ProfileBase from "./ProfileBase.jsx";
 import {Navigate} from "react-router-dom";
+import MiniPrivateCalendar from "../../features/calendar/MiniPrivateCalendar.jsx";
 function PrivateProfile() {
     const [data, setData] = useState(null);
     useEffect(() => {
@@ -17,7 +18,12 @@ function PrivateProfile() {
     }
 
 
-    return <ProfileBase profileData={data} isPublic={false} />
+    return (
+        <>
+            <ProfileBase profileData={data} isPublic={false} />
+            <MiniPrivateCalendar userId={data.id} />
+        </>
+    );
 }
 
 export default PrivateProfile;

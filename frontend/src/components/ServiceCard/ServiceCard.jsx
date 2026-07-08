@@ -8,7 +8,7 @@ function ServiceCard({ service }) {
     return (
         <div
             className="service-card"
-            onClick={() => navigate(`/services/${service.serviceId}`)}
+            onClick={() => navigate(`/services/${service.id}`)}
         >
             <img
                 src={service.imagePath || 'https://via.placeholder.com/80'}

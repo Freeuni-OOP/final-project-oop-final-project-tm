@@ -1,4 +1,19 @@
-# Ignore the root node_modules and IDE configurations
-node_modules/
+# IntelliJ IDEA
 .idea/
+*.iws
 *.iml
+*.ipr
+
+# macOS
+.DS_Store
+
+# Backend build output
+backend/target/
+
+# Frontend dependencies & build
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+
+# Logs
+*.log

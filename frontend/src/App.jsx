@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
+/**
+ * Root application component.
+ * Renders the landing page (list of profiles) as the main page content.
+ */
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);

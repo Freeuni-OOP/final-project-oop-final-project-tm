@@ -15,10 +15,18 @@ export function useSearch() {
     const itemsPerPage = 50;
     const [sortBy, setSortBy] = useState("serviceId");
     const [direction, setDirection] = useState("DESC");
+    const [filterMode, setFilterMode] = useState("all");
 
+    const currUserId = 1;
 
     const fetchListings = useCallback(() => {
-        const url = `http://localhost:8080/api/listings?sortType=${sortBy}&direction=${direction}`;
+        let url = `http://localhost:8080/api/listings?sortType=${sortBy}&direction=${direction}`;
+
+        if (filterMode === "favorites") {
+            url += `&favoriteUserId=${currUserId}`;
+        } else if (filterMode === "others") {
+            url += `&excludeFavUserId=${currUserId}`;
+        }
 
         fetch(url).then(res => {
                 if (!res.ok){
@@ -32,7 +40,7 @@ export function useSearch() {
                     setAllListings([]);
                 }
             }).catch(err => setAllListings([]));
-    }, [sortBy, direction]);
+    }, [sortBy, direction, filterMode]);
 
     useEffect(() => {
         fetchListings();
@@ -41,19 +49,6 @@ export function useSearch() {
     useEffect(() => {
         setSearchQuery(initialQuery);
     }, [initialQuery]);
-
-    useEffect(() => {
-        fetch('http://localhost:8080/api/listings')
-            .then(res => {
-                if (!res.ok) throw new Error(`http error`);
-                return res.json();
-            })
-            .then(data => {
-                if (Array.isArray(data)) setAllListings(data);
-                else setAllListings([]);
-            })
-            .catch(err => setAllListings([]));
-    }, []);
 
     const filteredListings = useMemo(() => {
         let result = allListings;
@@ -103,6 +98,7 @@ export function useSearch() {
         setSortBy("serviceId");
         setDirection("DESC");
         setCurrentPage(1);
+        setFilterMode("all");
     };
 
     return {
@@ -123,6 +119,8 @@ export function useSearch() {
         currentPage,
         setCurrentPage,
         totalPages,
-        clearFilters
+        clearFilters,
+        filterMode,
+        setFilterMode
     };
 }

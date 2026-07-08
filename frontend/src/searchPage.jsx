@@ -15,19 +15,20 @@ export default function SearchPage() {
         setSortBy,
         direction,
         setDirection,
-        handleSortChange,
         filteredListings,
         paginatedListings,
         currentPage,
         setCurrentPage,
         totalPages,
-        clearFilters
+        clearFilters,
+        filterMode,
+        setFilterMode
     } = useSearch();
 
     return (
         <div style={styles.page}>
             <div style={styles.searchSection}>
-                <h1 style={styles.title}>Find a Tutor</h1>
+                <h1 style={styles.title}>Find Service</h1>
                 <input
                     type="text"
                     placeholder={`Search by ${searchField}...`}
@@ -80,6 +81,16 @@ export default function SearchPage() {
                     >
                         <option value="ASC">Low to High (ASC)</option>
                         <option value="DESC">High to Low (DESC)</option>
+                    </select>
+
+                    <select
+                        value={filterMode}
+                        onChange={(e) => setFilterMode(e.target.value)}
+                        style={styles.select}
+                    >
+                        <option value="all">All Listings</option>
+                        <option value="favorites">Liked ❤️</option>
+                        <option value="others">Not Liked 🤍</option>
                     </select>
 
                     <button onClick={clearFilters} style={styles.clearButton}>
@@ -150,10 +161,32 @@ export default function SearchPage() {
 
 function ListingCard({ listing }) {
     const [isExpanded, setIsExpanded] = React.useState(false);
+    const [isLiked, setIsLiked] = React.useState(false);
+    const currUserId = 1;
+    const serviceId = listing.serviceId || listing.id;
+
+    React.useEffect(() => {
+        fetch(`http://localhost:8080/api/favorites/check/${currUserId}/${serviceId}`)
+            .then(res => res.json()).then(data => setIsLiked(data))
+            .catch(err => console.error("Error:", err));
+    }, [serviceId]);
+
+    const handleLikeToggle = () => {
+        const previousState = isLiked;
+        setIsLiked(!isLiked);
+
+        fetch(`http://localhost:8080/api/favorites/${currUserId}/${serviceId}`, {
+            method: "POST"
+        }).catch(err => {
+            console.error("error", err);
+            setIsLiked(previousState);
+        });
+    };
 
     const text = listing.bio || listing.description || "No description provided.";
     const isLongText = text.length > 100;
     const displayText = isExpanded ? text : text.substring(0, 100) + (isLongText ? "..." : "");
+
 
     return (
         <div style={styles.card}>
@@ -161,11 +194,15 @@ function ListingCard({ listing }) {
                 <div style={styles.avatar}>
                     {listing.title ? listing.title.charAt(0).toUpperCase() : "T"}
                 </div>
-                <div>
-                    <h3 style={styles.cardName}>{listing.title || "untitled"}</h3>
-                    {listing.category && (
-                        <span style={styles.categoryBadge}>{listing.category}</span>
-                    )}
+                <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <h3 style={styles.cardName}>{listing.title || "Untitled"}</h3>
+
+                        <button onClick={handleLikeToggle} style={{...styles.likeButton, color: isLiked ? "#ff4d4d" : "#ccc"}}>
+                            {isLiked ? "❤️" : "🤍"}
+                        </button>
+
+                    </div>
                 </div>
             </div>
 
@@ -385,5 +422,12 @@ const styles = {
         padding: "0",
         fontWeight: "600",
         marginBottom: "10px"
+    },
+    likeButton: {
+        border: "none",
+        background: "none",
+        cursor: "pointer",
+        fontSize: "20px",
+        padding: "5px"
     },
 };

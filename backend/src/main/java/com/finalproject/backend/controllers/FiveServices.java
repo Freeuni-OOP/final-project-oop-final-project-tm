@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/services")
+@RequestMapping("/api/miniServices")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 //this whole thing is so the first 5 services can be displayed on the main page
 public class FiveServices {

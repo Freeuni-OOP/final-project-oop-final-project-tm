@@ -11,7 +11,7 @@ function SuggestedServices() {
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/services/suggested');
+                const response = await fetch('http://localhost:8080/api/miniServices/suggested');
                 if (!response.ok) throw new Error('Failed to load services');
                 const data = await response.json();
                 setServices(data);

@@ -4,6 +4,7 @@ import './ServiceCard.css';
 
 function ServiceCard({ service }) {
     const navigate = useNavigate();
+    const defaultImage = 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';
 
     return (
         <div
@@ -11,8 +12,8 @@ function ServiceCard({ service }) {
             onClick={() => navigate(`/services/${service.id}`)}
         >
             <img
-                src={service.imagePath || 'https://via.placeholder.com/80'}
-                alt={'👤'}
+                src={service.imagePath || defaultImage}
+                alt={defaultImage}
                 className="user-avatar"
             />
             <div className="user-info">

@@ -9,13 +9,16 @@ export function useMiniSearch() {
 
     useEffect(() => {
         fetch('http://localhost:8080/api/listings').then(res => {
-                if (!res.ok) throw new Error("error fetching listing list");
-                return res.json();
-            }).then(data => {
-                if (Array.isArray(data)) {
-                    setAllListings(data);
-                }
-            }).catch(error => console.error("Error fetching initial listings:", error));
+            if (!res.ok) throw new Error("error fetching listing list");
+            return res.json();
+        }).then(data => {
+            // 👇 აი ეს ერთი ხაზი დაამატე აქ:
+            console.log("ბექენდიდან წამოვიდა:", data);
+
+            if (Array.isArray(data)) {
+                setAllListings(data);
+            }
+        }).catch(error => console.error("Error fetching initial listings:", error));
     }, []);
 
     const inputChange = (e) => {

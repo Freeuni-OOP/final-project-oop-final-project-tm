@@ -1,4 +1,5 @@
 package com.finalproject.backend.modules.services;
+
 import com.finalproject.backend.modules.services.dtos.listingFilterDto;
 import com.finalproject.backend.modules.services.dtos.listingResponseDto;
 import com.finalproject.backend.services.listingService;
@@ -18,13 +19,13 @@ public class listingController {
     }
 
     @GetMapping
-    public List<listingResponseDto> getListings(listingFilterDto filter, String sortType, String direction) {
-        listingFilterDto filterToUse;
-        if (filter != null) {
-            filterToUse = filter;
-        } else {
-            filterToUse = new listingFilterDto();
-        }
+    public List<listingResponseDto> getListings(
+            listingFilterDto filter,
+            @RequestParam(defaultValue = "id") String sortType,      // 👈 თუ არ მოვა, ჩაჯდება "id"
+            @RequestParam(defaultValue = "ASC") String direction     // 👈 თუ არ მოვა, ჩაჯდება "ASC"
+    ) {
+        listingFilterDto filterToUse = (filter != null) ? filter : new listingFilterDto();
+
         return listingService.findListings(filterToUse, sortType, direction);
     }
 }

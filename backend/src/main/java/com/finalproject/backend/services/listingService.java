@@ -21,11 +21,13 @@ public class listingService {
             return getAllListings();
         }
 
+        String safeSortType = (sortType == null || sortType.isBlank()) ? "id" : sortType;
+
         Sort sort;
-        if (direction.equalsIgnoreCase("DESC")) {
-            sort = Sort.by(sortType).descending();
+        if ("DESC".equalsIgnoreCase(direction)) {
+            sort = Sort.by(safeSortType).descending();
         } else {
-            sort = Sort.by(sortType).ascending();
+            sort = Sort.by(safeSortType).ascending();
         }
 
         List<Service> listings = repository.findByFilters(

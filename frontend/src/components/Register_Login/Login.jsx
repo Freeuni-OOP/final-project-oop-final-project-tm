@@ -120,6 +120,12 @@ const Login = () => {
                         </div>
 
                         <button type="submit" className="login-btn">Log In</button>
+
+                        <div className={"forgot-btn-card"}>
+                            <Link to={"/forgot-password"} className={"forgot-link"}>
+                                <button className={"forgot-btn"}> Forgot your password? </button>
+                            </Link>
+                        </div>
                     </form>
                 ):(
                     <>

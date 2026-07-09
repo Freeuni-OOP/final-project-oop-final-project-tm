@@ -1,8 +1,10 @@
-const VerifyForm = ({ email, verificationCode, setVerificationCode, onSubmit }) => {
+const VerifyForm = ({ email, verificationCode, setVerificationCode, onSubmit,
+                        title = "Verify Your Email",
+                        buttonText = "Verify Account"}) => {
     return (
         <form onSubmit={onSubmit}>
-            <h2>Verify Your Email</h2>
-            <p style={{ fontSize: '14px', color: '#698dac', marginBottom: '20px' }}>
+            <h2>{title}</h2>
+            <p className="verification-subtitle">
                 We sent a 6-digit confirmation code to <strong>{email}</strong>.
             </p>
             <div className="input-group">
@@ -17,7 +19,7 @@ const VerifyForm = ({ email, verificationCode, setVerificationCode, onSubmit }) 
                     placeholder="000000"
                 />
             </div>
-            <button type="submit" className="register-btn">Verify Account</button>
+            <button type="submit" className="register-btn">{buttonText}</button>
         </form>
     );
 };

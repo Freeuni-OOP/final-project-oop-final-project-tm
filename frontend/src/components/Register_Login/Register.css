@@ -96,6 +96,11 @@
     font-weight: bold;
 }
 
+.verification-subtitle {
+    font-size: 14px;
+    color: #646262;
+    margin-bottom: 24px;
+}
 .register-btn {
     width: 100%;
     padding: 0.75rem;

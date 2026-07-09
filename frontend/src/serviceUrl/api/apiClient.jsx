@@ -17,7 +17,7 @@ async function request(path, { method = 'GET', body, headers = {} } = {}) {
     });
 
     if (response.status === 401) {
-        throw new ApiError('Unauthorized', 401);
+        throw new ApiError(response.error(), 401);
     }
 
     if (!response.ok) {

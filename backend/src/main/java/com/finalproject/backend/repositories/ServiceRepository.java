@@ -2,6 +2,7 @@ package com.finalproject.backend.repositories;
 
 import com.finalproject.backend.entities.Service;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -43,4 +44,13 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
                    "WHERE sl.slot_id = :slotId",
            nativeQuery = true)
     Optional<String> findOwnerEmailBySlotId(@Param("slotId") Integer slotId);
+
+    @Modifying
+    @Query("UPDATE Service s SET s.star = s.star + 1 WHERE s.id = :serviceId")
+    int addStar(@Param("serviceId") Integer serviceId);
+
+    @Modifying
+    @Query("UPDATE Service s SET s.star = s.star - 1 WHERE s.id = :serviceId AND s.star > 0")
+    int removeStar(@Param("serviceId") Integer serviceId);
+
 }

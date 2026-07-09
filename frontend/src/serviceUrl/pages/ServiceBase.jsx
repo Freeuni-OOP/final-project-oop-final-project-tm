@@ -5,6 +5,7 @@ import { useServiceData } from '../hooks/useServiceData';
 import { useProviderImage } from '../hooks/useProviderImage';
 import { useRegistrationStatus } from '../hooks/useRegistrationStatus';
 import { useStarToggle } from '../hooks/useStarToggle';
+import {useFetchStatistics} from '../hooks/useFetchStatistics';
 
 import ServiceHeader from '../components/ServiceHeader';
 import ServiceCalendars from '../components/ServiceCalendars';
@@ -18,7 +19,7 @@ function ServiceBase() {
     const isRegistered = useRegistrationStatus();
     const { userId, loading: userLoading } = useCurrentUser();
     const [isStarred, toggleStar] = useStarToggle(serviceId);
-
+    const statistics = useFetchStatistics(serviceId);
 
     if (loading || userLoading) return <div>Loading...</div>;
     if (errorMessage) return <div>{errorMessage}</div>;
@@ -26,6 +27,7 @@ function ServiceBase() {
     return (
         <div className="service-page-container">
             <ServiceHeader
+                statistics = {statistics}
                 service={service}
                 providerImage={providerImage}
                 isStarred={isStarred}

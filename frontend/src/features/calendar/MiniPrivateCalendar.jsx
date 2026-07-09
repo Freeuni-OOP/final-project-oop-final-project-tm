@@ -25,7 +25,7 @@ function MiniPrivateCalendar({ userId }) {
   const [weekOffset, setWeekOffset] = useState(0);
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/calendar/user/${userId}?weekOffset=${weekOffset}`, { cache: 'no-store' })
+    fetch(`${API_BASE}/api/calendar/user/${userId}?weekOffset=${weekOffset}`, { cache: 'no-store', credentials: 'include' })
       .then(res => res.json())
       .then(setData)
       .catch(() => setData(null));

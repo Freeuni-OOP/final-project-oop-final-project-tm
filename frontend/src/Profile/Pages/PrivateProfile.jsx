@@ -21,7 +21,6 @@ function PrivateProfile() {
     return (
         <>
             <ProfileBase profileData={data} isPublic={false} />
-            <MiniPrivateCalendar userId={data.id} />
         </>
     );
 }

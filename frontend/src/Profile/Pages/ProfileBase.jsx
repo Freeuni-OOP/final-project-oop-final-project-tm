@@ -139,7 +139,6 @@ function ProfileBase({profileData, isPublic}) {
             {
                 !isPublic && (
                     <MiniPrivateCalendar userId={profileData.id} />
-
                 )
             }
                 </div>

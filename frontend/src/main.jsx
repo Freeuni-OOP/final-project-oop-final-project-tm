@@ -30,10 +30,13 @@ const routers = createBrowserRouter([
                     { path: "profile/:userId", element: <PublicProfile /> },
                     { path: "profile/", element: <PrivateProfile /> },
                     { path: "profile/edit", element: <ProfileEdit />},
-                    { path: "profile/edit", element: <ProfileEdit />},
                     { path: "service-creation", element: <ServiceCreation /> },
                     { path: "calendar/:serviceId", element: <ServiceCalendarPage />},
+                    { path: "profile/calendar/:userId", element: <PrivateWeeklyCalendar />},
+                    { path: "calendar/:serviceId", element: <ServiceCalendarPage />},
                     { path: "calendar/:serviceId", element: <SettingsCalendar />},
+
+
                 ]
             },
             { path: "login", element: <Login /> },

@@ -16,6 +16,8 @@ import ServiceCreation from "./service-creation/pages/ServiceCreation.jsx";
 import SettingsCalendar from "./features/calendar/SettingsCalendar.jsx";
 import ForgotPassword from './components/Register_Login/ForgotPassword.jsx';
 import ServiceCalendarPage from "./features/calendar/ServiceCalendarPage.jsx";
+import PrivateWeeklyCalendar from "./features/calendar/PrivateWeeklyCalendar.jsx";
+import SearchPage from "./SearchPage.jsx";
 
 const routers = createBrowserRouter([
     {
@@ -30,7 +32,6 @@ const routers = createBrowserRouter([
                     { path: "services/:serviceId", element: <ServiceBase /> },
                     { path: "profile/:userId", element: <PublicProfile /> },
                     { path: "profile/", element: <PrivateProfile /> },
-                    { path: "profile/edit", element: <ProfileEdit />},
                     { path: "profile/edit", element: <ProfileEdit />},
                     { path: "service-creation", element: <ServiceCreation /> },
                     { path: "calendar/:serviceId", element: <ServiceCalendarPage />},

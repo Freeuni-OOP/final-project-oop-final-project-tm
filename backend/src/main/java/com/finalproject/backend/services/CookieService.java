@@ -16,7 +16,7 @@ public class CookieService {
 
     public Integer checkCookie(String userCookie) {
         if(userCookie == null || userCookie.isEmpty()) {
-            throw new RuntimeException("Cookie Missing");
+            return -1;
         }
 
         String mail = tokenCreator.validateTokenAndGetEmail(userCookie);

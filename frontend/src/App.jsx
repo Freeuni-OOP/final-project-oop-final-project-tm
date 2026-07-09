@@ -1,22 +1,51 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import FakeMainPage from './fakeMainPage';
-import SearchPage from './searchPage';
-import ProfilePage from './profilePage';
-import UserHiresPage from './userHiresPage';
-import './App.css';
+import { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 
+/**
+ * Root application component.
+ * Renders the landing page (list of profiles) as the main page content.
+ */
 function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<FakeMainPage />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/profile/hires/:status" element={<UserHiresPage />} />
-            </Routes>
-        </Router>
-    );
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkUserSession = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/auth/verify-session', {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        }
+      } catch (error) {
+        console.error("Session network evaluation failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkUserSession();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:8080/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setCurrentUser(null);
+    }
+  };
+
+  if (loading) {
+    return <div style={{ textAlign: 'center', padding: '3rem' }}>Loading...</div>;
+  }
+
+  return <Outlet context={{ currentUser, setCurrentUser, handleLogout }} />;
 }
 
 export default App;

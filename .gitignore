@@ -1,1 +1,19 @@
+# IntelliJ IDEA
 .idea/
+*.iws
+*.iml
+*.ipr
+
+# macOS
+.DS_Store
+
+# Backend build output
+backend/target/
+
+# Frontend dependencies & build
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+
+# Logs
+*.log

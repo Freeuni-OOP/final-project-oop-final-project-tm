@@ -31,3 +31,21 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Shared Project Security & OS ###
+.env
+.env.local
+**/src/main/resources/application-local.properties
+**/src/main/resources/application-local.yml
+.DS_Store
+Thumbs.db
+
+# Target build directory (Spring Boot output)
+target/
+
+# IntelliJ settings
+.idea/
+*.iml
+
+# Log files
+*.log

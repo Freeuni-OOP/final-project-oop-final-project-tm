@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSearch } from "./useSearch";
 
 export default function SearchPage() {
@@ -186,10 +187,10 @@ function ListingCard({ listing }) {
     const text = listing.bio || listing.description || "No description provided.";
     const isLongText = text.length > 100;
     const displayText = isExpanded ? text : text.substring(0, 100) + (isLongText ? "..." : "");
-
+    const navigate = useNavigate();
 
     return (
-        <div style={styles.card}>
+        <div style={styles.card} onClick={() => navigate(`/services/${listing.id}`)}>
             <div style={styles.cardHeader}>
                 <div style={styles.avatar}>
                     {listing.title ? listing.title.charAt(0).toUpperCase() : "T"}
@@ -198,7 +199,12 @@ function ListingCard({ listing }) {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <h3 style={styles.cardName}>{listing.title || "Untitled"}</h3>
 
-                        <button onClick={handleLikeToggle} style={{...styles.likeButton, color: isLiked ? "#ff4d4d" : "#ccc"}}>
+                        <button onClick={(e) => {
+                                e.stopPropagation(); // prevents card click from firing
+                                handleLikeToggle();
+                            }}
+                            style={{...styles.likeButton, color: isLiked ? "#ff4d4d" : "#ccc"}}
+                        >
                             {isLiked ? "❤️" : "🤍"}
                         </button>
 

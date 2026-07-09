@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LoginLimit {
     //5 wrong attempts in 15 mins
     private static final int MAX_ATTEMPTS = 5;
-    private static final int TIME_WINDOW_MILLIS = 60000;
+    private static final int TIME_WINDOW_MILLIS = 900000;
 
     private record AttemptData(int count, long startTime) {}
     private final Map<String, AttemptData> attempts = new ConcurrentHashMap<>();

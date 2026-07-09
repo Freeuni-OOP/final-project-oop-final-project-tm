@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMiniSearch } from './useMiniSearch.js';
 
 export default function MiniSearch() {
@@ -6,10 +7,9 @@ export default function MiniSearch() {
         query,
         filteredResults,
         inputChange,
-        itemClick,
         submitSearch
     } = useMiniSearch();
-
+    const navigate = useNavigate();
     return (
         <div style={{ position: 'relative', width: '100%' }}>
             <form onSubmit={submitSearch} style={{ margin: 0, width: '100%' }}>
@@ -28,7 +28,7 @@ export default function MiniSearch() {
                     {filteredResults.map((item) => (
                         <li
                             key={item.id}
-                            onClick={() => itemClick(item.id)}
+                            onClick={() => navigate(`/services/${item.id}`)}
                             style={itemStyle}
                             onMouseEnter={(e) => e.target.style.background = '#f8fafc'}
                             onMouseLeave={(e) => e.target.style.background = 'transparent'}

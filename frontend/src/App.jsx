@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 /**
  * Root application component.
@@ -8,6 +8,7 @@ import { Outlet } from 'react-router-dom';
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkUserSession = async () => {
@@ -38,6 +39,7 @@ function App() {
       console.error("Logout failed:", error);
     } finally {
       setCurrentUser(null);
+      navigate('/')
     }
   };
 

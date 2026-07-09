@@ -3,9 +3,11 @@ package com.finalproject.backend.login_register.controllers;
 import com.finalproject.backend.login_register.DTO.LoginRequest;
 import com.finalproject.backend.login_register.DTO.RegisterRequest;
 import com.finalproject.backend.entities.User;
+import com.finalproject.backend.login_register.config.LoginLimit;
 import com.finalproject.backend.login_register.services.EmailSender;
 import com.finalproject.backend.repositories.UserRepository;
 import com.finalproject.backend.login_register.config.TokenCreator;
+import com.finalproject.backend.services.NotificationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,24 +27,37 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final EmailSender emailSender;
     private final TokenCreator tokenCreator;
+    private final NotificationService notificationService;
+    private final LoginLimit loginLimit;
 
-    public AuthController(UserRepository userRepository, EmailSender emailSender, TokenCreator tokenCreator) {
+    public AuthController(UserRepository userRepository, EmailSender emailSender, TokenCreator tokenCreator, NotificationService notif, LoginLimit loginLimit) {
         this.userRepository = userRepository;
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         this.emailSender = emailSender;
         this.tokenCreator = tokenCreator;
+        this.notificationService = notif;
+        this.loginLimit = loginLimit;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
+        String IP = request.getRemoteAddr();
+        if(loginLimit.isBlocked(IP)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Failed to log in 5 times. Try again in 15 minutes.");
+        }
+
+
         Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
         if (userOptional.isEmpty()) {
+            loginLimit.markFailedAttempt(IP);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
         User user = userOptional.get();
 
         boolean matches = passwordEncoder.matches(loginRequest.getPassword(), user.getPassHash());
         if (!matches) {
+            loginLimit.markFailedAttempt(IP);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
 
@@ -51,7 +66,7 @@ public class AuthController {
             user.setVerificationCode(freshCode);
             userRepository.save(user);
             try {
-                emailSender.sendEmail(user.getEmail(), freshCode);
+                emailSender.sendEmail(user.getEmail(), freshCode, "Verify your Registration", "Thank you for registering! Your 6-digit verification code is: ");
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed to send new email.");
@@ -62,6 +77,8 @@ public class AuthController {
         }
 
         setAuthCookie(response, user.getEmail());
+        notificationService.addNotification(user.getId(), "Welcome back!");
+        loginLimit.resetAttempts(IP);
         return ResponseEntity.ok(user);
     }
 
@@ -84,13 +101,14 @@ public class AuthController {
         user.setVerificationCode(verificationCode);
 
         try {
-            emailSender.sendEmail(user.getEmail(), verificationCode);
+            emailSender.sendEmail(user.getEmail(), verificationCode,  "Verify your Registration", "Thank you for registering! Your 6-digit verification code is: ");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification email.");
         }
 
         userRepository.save(user);
+        notificationService.addNotification(user.getId(), "You have successfully signed up, welcome to book to!");
         return ResponseEntity.status(HttpStatus.CREATED).body("Registration successful! Please check your email for verification code.");
     }
 
@@ -158,5 +176,49 @@ public class AuthController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if(userOptional.isEmpty()) {
+            return ResponseEntity.ok("If an user by this mail exists, a code has been sent");
+        }
+        User user = userOptional.get();
+        String code = emailSender.generateCode();
+        user.setVerificationCode(code);
+        userRepository.save(user);
+
+        try {
+            emailSender.sendEmail(email, code, "Reset Password", "The code to reset your password is: ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send verification email.");
+        }
+
+        return ResponseEntity.ok("If an user by this mail exists, a code has been sent");
+    }
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+        String newPassword = request.get("newPassword");
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if(userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        User user = userOptional.get();
+
+        if(user.getVerificationCode() == null || !user.getVerificationCode().equals(code)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
+        }
+        user.setPassHash(passwordEncoder.encode(newPassword));
+        user.setVerificationCode(null);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("password has been reset, you can now log in!");
     }
 }

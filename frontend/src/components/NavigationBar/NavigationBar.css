@@ -54,13 +54,6 @@
     font-size: 14px;
 }
 
-.search-icon {
-    position: absolute;
-    left: 14px;
-    color: #81A6C6;
-    font-size: 25px;
-}
-
 .login-button,
 .SignUp-button {
     background-color: #fffbf6;

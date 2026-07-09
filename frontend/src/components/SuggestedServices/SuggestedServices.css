@@ -1,25 +1,25 @@
 .suggested-section {
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 40px 20px;
 }
 
 .suggested-title {
     font-size: 25px;
-    color: #fffbf6;
+    color: #698dac;
     margin-bottom: 20px;
     font-weight: bold;
 }
 
 .slider-wrapper {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
 }
 
 .slider-container {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     align-items: center;
     overflow-x: auto;
     scroll-behavior: smooth;
@@ -33,7 +33,7 @@
 .slider-arrow-button {
     width: 70px;
     height: 70px;
-    min-width: 40px;
+    min-width: 10px;
     border-radius: 50%;
     border: 1px solid #e2e8f0;
     background-color: #ffffff;

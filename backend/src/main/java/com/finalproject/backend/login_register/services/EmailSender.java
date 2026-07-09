@@ -19,11 +19,11 @@ public class EmailSender {
         return String.valueOf(code);
     }
 
-    public void sendEmail(String toEmail, String code) {
+    public void sendEmail(String toEmail, String code, String subject, String input) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
-        message.setSubject("Verify your Registration");
-        message.setText("Thank you for registering! Your 6-digit verification code is: " + code);
+        message.setSubject(subject);
+        message.setText(input+ code);
         mailSender.send(message);
     }
 }

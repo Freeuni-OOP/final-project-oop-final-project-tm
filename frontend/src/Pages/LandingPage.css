@@ -3,3 +3,31 @@
     margin: 0 auto;
     padding: 0 20px 40px 20px;
 }
+.join-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.join-text {
+    font-size: 48px;
+    font-weight: bold;
+    color: #698dac;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+    margin-bottom: 1.5rem;
+}
+
+.join-text:hover {
+    transform: scale(1.05);
+    color: #5b7b97;
+}
+.join-section-subtitle {
+    font-size: 15px;
+    color: #698dac;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+    margin-bottom: 1rem;
+}

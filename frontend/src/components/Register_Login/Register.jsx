@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {useOutletContext, useNavigate, Link} from 'react-router-dom';
+import { useOutletContext, useNavigate, Link } from 'react-router-dom';
 import RegisterForm from './RegisterForm';
 import VerifyForm from './VerifyForm';
 import './Register.css';
@@ -12,6 +12,7 @@ const Register = () => {
     const [last_name, setLast_name] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [isRegistered, setIsRegistered] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,6 +23,10 @@ const Register = () => {
         e.preventDefault();
         if (isSubmitting) return;
 
+        if (password !== confirmPassword) {
+            setErrorMessage('Passwords do not match.');
+            return;
+        }
         setIsSubmitting(true);
         setErrorMessage('');
         setSuccessMessage('');
@@ -34,7 +39,6 @@ const Register = () => {
             });
 
             const responseText = await response.text();
-
             if (!response.ok) throw new Error(responseText || 'Registration failed!');
 
             setSuccessMessage(responseText);
@@ -66,6 +70,7 @@ const Register = () => {
             setLast_name('');
             setEmail('');
             setPassword('');
+            setConfirmPassword('');
             setVerificationCode('');
             setCurrentUser(userData);
             navigate('/');
@@ -92,10 +97,11 @@ const Register = () => {
                         last_name={last_name} setLast_name={setLast_name}
                         email={email} setEmail={setEmail}
                         password={password} setPassword={setPassword}
+                        confirmPassword={confirmPassword} setConfirmPassword={setConfirmPassword}
                         isSubmitting={isSubmitting}
                         onSubmit={handleRegisterSubmit}
                     />
-                ) :(
+                ) : (
                     <VerifyForm
                         email={email}
                         verificationCode={verificationCode}

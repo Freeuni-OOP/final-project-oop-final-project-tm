@@ -24,6 +24,7 @@ function SuggestedServices() {
         fetchServices();
     }, []);
 
+    //the arrows for the spin thing
     const slideLeft = () => {
         if (sliderRef.current) {
             sliderRef.current.scrollLeft -= 360;

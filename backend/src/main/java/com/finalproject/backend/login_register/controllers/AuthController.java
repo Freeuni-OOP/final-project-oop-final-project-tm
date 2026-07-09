@@ -47,7 +47,7 @@ public class AuthController {
                     .body("Failed to log in 5 times. Try again in 15 minutes.");
         }
 
-
+        //searches if the given user exists
         Optional<User> userOptional = userRepository.findByEmail(loginRequest.getEmail());
         if (userOptional.isEmpty()) {
             loginLimit.markFailedAttempt(IP);
@@ -55,12 +55,14 @@ public class AuthController {
         }
         User user = userOptional.get();
 
+        //compares the password and adds failed attempts to log in
         boolean matches = passwordEncoder.matches(loginRequest.getPassword(), user.getPassHash());
         if (!matches) {
             loginLimit.markFailedAttempt(IP);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
 
+        //an unauthorized user should not be able to log in
         if (!user.getEnabled()) {
             String freshCode = emailSender.generateCode();
             user.setVerificationCode(freshCode);
@@ -94,6 +96,7 @@ public class AuthController {
         user.setLastName(registerRequest.getLast_name());
         user.setEnabled(false);
 
+        //saves the encoded password to ensure safety
         String passHash = passwordEncoder.encode(registerRequest.getPassword());
         user.setPassHash(passHash);
 
@@ -122,6 +125,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
 
+        //confirms the correct verification
         User user = userOptional.get();
         if (user.getVerificationCode() != null && user.getVerificationCode().equals(code)) {
             user.setEnabled(true);
@@ -200,6 +204,8 @@ public class AuthController {
 
         return ResponseEntity.ok("If an user by this mail exists, a code has been sent");
     }
+
+    //if the user has access to their email, they can change their password by entering the correct code
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");

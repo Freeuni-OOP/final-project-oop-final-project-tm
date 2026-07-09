@@ -15,6 +15,7 @@ public class TokenCreator {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long EXPIRATION_TIME = 86400000;
 
+    //creates tokens for the cookie logic using email
     public String generateToken(String email) {
         return Jwts.builder().setSubject(email)
                 .setIssuedAt(new Date())

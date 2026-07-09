@@ -53,6 +53,7 @@ const Login = () => {
         setErrorMessage('');
         setSuccessMessage('');
 
+        //checks the login information
         try {
             const response = await fetch('http://localhost:8080/api/auth/verify', {
                 method: 'POST',
@@ -91,6 +92,7 @@ const Login = () => {
                 {errorMessage && <div className="alert error">{errorMessage}</div>}
                 {successMessage && <div className="alert success">{successMessage}</div>}
 
+                {/*the user has a verified account and can log in normally*/}
                 {!isVerifying ? (
                     <form onSubmit={handleLogin}>
                         <h2>Sign In</h2>
@@ -127,7 +129,7 @@ const Login = () => {
                             </Link>
                         </div>
                     </form>
-                ):(
+                ):( /*the user has to confirm their account before they can log in*/
                     <>
                         <VerifyForm
                             email={email}

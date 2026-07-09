@@ -19,6 +19,8 @@ function NavigationBar({ user, onLogout }) {
                 <MiniSearch />
             </div>
 
+            {/*the navigation bar will show a profile icon/initial if the person is logged in and
+            a login/register button if theyre not*/}
             {user ? (
                 <div className="profile-area">
                     <NotificationButton />

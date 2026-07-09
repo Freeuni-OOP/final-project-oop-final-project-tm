@@ -18,6 +18,8 @@ public class LoginLimit {
     public void resetAttempts(String IP) {
         attempts.remove(IP);
     }
+
+    //keeps track of the time that has passed since the user started trying to log in
     public boolean isBlocked(String IP) {
         AttemptData data = attempts.get(IP);
         if(data == null) {
@@ -35,13 +37,13 @@ public class LoginLimit {
 
     public void markFailedAttempt(String IP) {
         long curr = Instant.now().toEpochMilli();
-
+        //ensures we don't have to keep track of failed attempts separately
         attempts.compute(IP, (key, existing) -> {
             if(existing == null || curr - existing.startTime >TIME_WINDOW_MILLIS) {
                 return new AttemptData(1, curr);
             }
             return new AttemptData(existing.count()+ 1, existing.startTime());
-                }
+            }
         );
     }
 

@@ -37,6 +37,7 @@ const ForgotPassword = () => {
         }
     };
 
+    //ensures the code is entered
     const handleCodeSubmit = (e) => {
         e.preventDefault();
         if (!code) {
@@ -60,6 +61,7 @@ const ForgotPassword = () => {
         setIsSubmitting(true);
         setErrorMessage('');
 
+        //resets their password and displays the needed text
         try {
             const response = await fetch('http://localhost:8080/api/auth/reset-password', {
                 method: 'POST',
@@ -88,6 +90,7 @@ const ForgotPassword = () => {
                 </Link>
             </div>
 
+            {/*directs the user to different page for a code and a new password*/}
             <div className="forgot-card">
                 {errorMessage && <div className="alert error">{errorMessage}</div>}
                 {successMessage && <div className="alert success">{successMessage}</div>}
@@ -115,6 +118,7 @@ const ForgotPassword = () => {
                     </form>
                 )}
 
+                {/*code confirmation*/}
                 {step === 2 && (
                     <VerifyForm
                         email={email}
@@ -126,6 +130,7 @@ const ForgotPassword = () => {
                     />
                 )}
 
+                {/*user can now actually reset the password*/}
                 {step === 3 && (
                     <form onSubmit={handleResetSubmit}>
                         <h2>New Password</h2>

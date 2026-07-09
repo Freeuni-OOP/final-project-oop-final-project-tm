@@ -20,7 +20,6 @@ public class securityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Add "/error" right here alongside your API path
                         .requestMatchers("/api/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 );

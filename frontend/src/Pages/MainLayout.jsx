@@ -5,6 +5,7 @@ function MainLayout() {
     const context = useOutletContext();
     return (
         <div>
+            {/*handles navbar state by monitoring if the user is logged in*/}
             <NavigationBar user={context.currentUser} onLogout={context.handleLogout} />
             <main>
                 <Outlet context={context} />

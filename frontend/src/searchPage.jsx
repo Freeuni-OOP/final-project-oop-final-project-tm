@@ -163,8 +163,10 @@ export default function SearchPage() {
 function ListingCard({ listing }) {
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [isLiked, setIsLiked] = React.useState(false);
+
     const currUserId = 1;
     const serviceId = listing.serviceId || listing.id;
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         fetch(`http://localhost:8080/api/favorites/check/${currUserId}/${serviceId}`)
@@ -175,22 +177,16 @@ function ListingCard({ listing }) {
     const handleLikeToggle = () => {
         const previousState = isLiked;
         setIsLiked(!isLiked);
-
-        fetch(`http://localhost:8080/api/favorites/${currUserId}/${serviceId}`, {
-            method: "POST"
-        }).catch(err => {
-            console.error("error", err);
-            setIsLiked(previousState);
-        });
+        fetch(`http://localhost:8080/api/favorites/${currUserId}/${serviceId}`, { method: "POST" })
+            .catch(err => { setIsLiked(previousState); });
     };
 
     const text = listing.bio || listing.description || "No description provided.";
     const isLongText = text.length > 100;
     const displayText = isExpanded ? text : text.substring(0, 100) + (isLongText ? "..." : "");
-    const navigate = useNavigate();
 
     return (
-        <div style={styles.card} onClick={() => navigate(`/services/${listing.id}`)}>
+        <div style={styles.card}>
             <div style={styles.cardHeader}>
                 <div style={styles.avatar}>
                     {listing.title ? listing.title.charAt(0).toUpperCase() : "T"}
@@ -198,16 +194,11 @@ function ListingCard({ listing }) {
                 <div style={{ flex: 1 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <h3 style={styles.cardName}>{listing.title || "Untitled"}</h3>
-
-                        <button onClick={(e) => {
-                                e.stopPropagation(); // prevents card click from firing
-                                handleLikeToggle();
-                            }}
-                            style={{...styles.likeButton, color: isLiked ? "#ff4d4d" : "#ccc"}}
+                        <button onClick={handleLikeToggle}
+                                style={styles.likeButton}
                         >
-                            {isLiked ? "❤️" : "🤍"}
+                                {isLiked ? "❤️" : "🤍"}
                         </button>
-
                     </div>
                 </div>
             </div>
@@ -217,9 +208,8 @@ function ListingCard({ listing }) {
             </p>
 
             {isLongText && (
-                <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    style={styles.readMoreButton}
+                <button onClick={() => setIsExpanded(!isExpanded)}
+                        style={styles.readMoreButton}
                 >
                     {isExpanded ? "Read Less" : "Read More"}
                 </button>
@@ -231,6 +221,13 @@ function ListingCard({ listing }) {
                         {listing.price ? `$${listing.price}/hr` : "Price not set"}
                     </span>
                 </div>
+
+                <button
+                    onClick={() => navigate(`/services/${serviceId}`)}
+                    style={styles.viewDetailsButton}
+                >
+                    View Details
+                </button>
             </div>
         </div>
     );
@@ -436,4 +433,15 @@ const styles = {
         fontSize: "20px",
         padding: "5px"
     },
+    viewDetailsButton: {
+        background: "#007bff",
+        color: "white",
+        border: "none",
+        padding: "6px 12px",
+        borderRadius: "6px",
+        cursor: "pointer",
+        fontSize: "13px",
+        fontWeight: "600",
+        transition: "background 0.2s"
+    }
 };

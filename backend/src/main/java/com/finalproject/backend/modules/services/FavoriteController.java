@@ -1,6 +1,10 @@
 package com.finalproject.backend.modules.services;
 
-import com.finalproject.backend.modules.users.UserRepository;
+
+import com.finalproject.backend.entities.Service;
+import com.finalproject.backend.repositories.FavoriteRepository;
+import com.finalproject.backend.repositories.UserModuleRepository;
+import com.finalproject.backend.repositories.listingRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +16,10 @@ import java.util.List;
 public class FavoriteController {
 
     private final FavoriteRepository favoriteRepository;
-    private final UserRepository userRepository;
+    private final UserModuleRepository userRepository;
     private final listingRepository listingRepository;
 
-    public FavoriteController(FavoriteRepository favRep, UserRepository userRep, listingRepository listRep) {
+    public FavoriteController(FavoriteRepository favRep, UserModuleRepository userRep, listingRepository listRep) {
         this.favoriteRepository = favRep;
         this.userRepository = userRep;
         this.listingRepository = listRep;
@@ -23,7 +27,7 @@ public class FavoriteController {
 
     @PostMapping("/{userId}/{serviceId}")
     @Transactional
-    public ResponseEntity<String> toggleFavorite(@PathVariable Long userId, @PathVariable Integer serviceId) {
+    public ResponseEntity<String> toggleFavorite(@PathVariable Integer userId, @PathVariable Integer serviceId) {
         if (favoriteRepository.existsByUserIdAndServiceId(userId, serviceId)) {
             favoriteRepository.deleteByUserIdAndServiceId(userId, serviceId);
             return ResponseEntity.ok("Removed");
@@ -37,12 +41,12 @@ public class FavoriteController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<listing>> getUserFavorites(@PathVariable Long userId) {
+    public ResponseEntity<List<Service>> getUserFavorites(@PathVariable Integer userId) {
         return ResponseEntity.ok(favoriteRepository.findAllByUserId(userId).stream().map(Favorite::getService).toList());
     }
 
     @GetMapping("/check/{userId}/{serviceId}")
-    public ResponseEntity<Boolean> checkFavorite(@PathVariable Long userId, @PathVariable Integer serviceId) {
+    public ResponseEntity<Boolean> checkFavorite(@PathVariable Integer userId, @PathVariable Integer serviceId) {
         return ResponseEntity.ok(favoriteRepository.existsByUserIdAndServiceId(userId, serviceId));
     }
 }

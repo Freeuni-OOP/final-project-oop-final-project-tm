@@ -1,5 +1,6 @@
-package com.finalproject.backend.modules.services;
+package com.finalproject.backend.repositories;
 
+import com.finalproject.backend.entities.Service;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface listingRepository extends JpaRepository<listing, Integer> {
+public interface listingRepository extends JpaRepository<Service, Integer> {
 
     @Query("""
-        SELECT l FROM listing l
+        SELECT l FROM Service l
         WHERE 
             (:text IS NULL OR 
                 LOWER(l.title) LIKE LOWER(CONCAT('%', :text, '%')) OR 
@@ -21,14 +22,14 @@ public interface listingRepository extends JpaRepository<listing, Integer> {
         AND (:max IS NULL OR l.price <= :max)
         AND (:favoriteUserId IS NULL OR EXISTS (
                 SELECT f FROM Favorite f 
-                WHERE f.service.serviceId = l.serviceId 
-                AND f.user.userId = :favoriteUserId
+                WHERE f.service.id = l.id 
+                AND f.user.id = :favoriteUserId
             ))
         AND (:excludeFavUserId IS NULL OR NOT EXISTS (
                 SELECT f FROM Favorite f 
-                WHERE f.service.serviceId = l.serviceId 
-                AND f.user.userId = :excludeFavUserId
+                WHERE f.service.id = l.id 
+                AND f.user.id = :excludeFavUserId
             ))
     """)
-    List<listing> findByFilters(String text, String category, Double min, Double max, Long favoriteUserId, Long excludeFavUserId, Sort sort);
+    List<Service> findByFilters(String text, String category, Double min, Double max, Long favoriteUserId, Long excludeFavUserId, Sort sort);
 }

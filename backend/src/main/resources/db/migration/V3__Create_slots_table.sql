@@ -1,3 +1,5 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
 USE book_to;
 DROP TABLE IF EXISTS slots;
 
@@ -12,3 +14,5 @@ CREATE TABLE slots (
                        REFERENCES services(service_id)
                        ON DELETE CASCADE
 );
+
+SET FOREIGN_KEY_CHECKS = 1;

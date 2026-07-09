@@ -218,7 +218,7 @@
     font-size: 1.3rem;
 }
 
-service-bottom-half {
+.service-bottom-half {
     display: flex;
     justify-content: space-between; /* your existing two-column layout */
     gap: 24px;

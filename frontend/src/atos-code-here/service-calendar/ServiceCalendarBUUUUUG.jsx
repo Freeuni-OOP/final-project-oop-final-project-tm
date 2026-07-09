@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 
-function ServiceCalendar() {
+function ServiceCalendarBUUUUUG() {
     const location = useLocation();
     const { serviceId, maxCapacity } = location.state || {};
 

@@ -27,7 +27,7 @@ const routers = createBrowserRouter([
                 element: <MainLayout />,
                 children: [
                     { path: "", element: <LandingPage /> },
-                    { path: "search", element: <SearchPage /> }, // 👈 აი, ეს დაამატე!
+                    { path: "search", element: <SearchPage /> },
                     { path: "services/:serviceId", element: <ServiceBase /> },
                     { path: "profile/:userId", element: <PublicProfile /> },
                     { path: "profile/", element: <PrivateProfile /> },

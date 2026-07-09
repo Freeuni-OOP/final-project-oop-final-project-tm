@@ -3,6 +3,7 @@ package com.finalproject.backend.profile;
 import com.finalproject.backend.login_register.config.TokenCreator;
 import com.finalproject.backend.profile.DTO.ProfileDTO;
 import com.finalproject.backend.services.CookieService;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +29,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileDTO> getPublicProfile(
-            @PathVariable Integer id
+    public ResponseEntity<Pair<ProfileDTO, Integer>> getPublicProfile(
+            @PathVariable Integer id,
+            @CookieValue(value = "jwt_token") String userCookie
     ) {
-        return ResponseEntity.ok(userService.getUser(id));
+        Integer cookieId = cookieService.checkCookie(userCookie);
+        ProfileDTO profileDTO = userService.getUser(id);
+        Pair<ProfileDTO, Integer> p = Pair.of(profileDTO, cookieId);
+        return ResponseEntity.ok(p);
     }
 
     @PostMapping("/update")

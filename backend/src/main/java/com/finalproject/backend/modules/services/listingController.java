@@ -21,8 +21,8 @@ public class listingController {
     @GetMapping
     public List<listingResponseDto> getListings(
             listingFilterDto filter,
-            @RequestParam(defaultValue = "id") String sortType,      // 👈 თუ არ მოვა, ჩაჯდება "id"
-            @RequestParam(defaultValue = "ASC") String direction     // 👈 თუ არ მოვა, ჩაჯდება "ASC"
+            @RequestParam(defaultValue = "id") String sortType,
+            @RequestParam(defaultValue = "ASC") String direction
     ) {
         listingFilterDto filterToUse = (filter != null) ? filter : new listingFilterDto();
 

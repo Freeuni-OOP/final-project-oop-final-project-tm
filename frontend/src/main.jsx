@@ -16,6 +16,7 @@ import ServiceCreation from "./service-creation/pages/ServiceCreation.jsx";
 import SettingsCalendar from "./features/calendar/SettingsCalendar.jsx";
 import ForgotPassword from './components/Register_Login/ForgotPassword.jsx';
 import ServiceCalendarPage from "./features/calendar/ServiceCalendarPage.jsx";
+import SearchPage from "./searchPage";
 
 const routers = createBrowserRouter([
     {
@@ -26,6 +27,7 @@ const routers = createBrowserRouter([
                 element: <MainLayout />,
                 children: [
                     { path: "", element: <LandingPage /> },
+                    { path: "search", element: <SearchPage /> }, // 👈 აი, ეს დაამატე!
                     { path: "services/:serviceId", element: <ServiceBase /> },
                     { path: "profile/:userId", element: <PublicProfile /> },
                     { path: "profile/", element: <PrivateProfile /> },

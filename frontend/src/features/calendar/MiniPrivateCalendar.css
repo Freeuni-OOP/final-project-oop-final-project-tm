@@ -1,0 +1,132 @@
+.mini-calendar {
+    display: inline-block;
+    font-family: inherit;
+    background: #fff;
+    border: 1px solid #ece4c7;
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.mini-calendar-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8a7d4a;
+    margin-bottom: 12px;
+}
+
+.mini-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.mini-calendar-range {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #4a4430;
+}
+
+.mini-calendar-nav {
+    border: none;
+    background: #f3ecd2;
+    color: #6b6038;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    line-height: 1;
+    transition: background 0.15s ease;
+}
+
+.mini-calendar-nav:hover {
+    background: #e6d9a6;
+}
+
+.mini-calendar-grid {
+    display: flex;
+    gap: 4px;
+}
+
+.mini-calendar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.mini-calendar-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.mini-calendar-dow {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #9a9377;
+}
+
+.mini-calendar-date {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #4a4430;
+}
+
+.mini-calendar-track {
+    position: relative;
+    width: 26px;
+    height: 150px;
+    background: #faf6e9;
+    border: 1px solid #ece4c7;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.mini-calendar-seg {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    border-radius: 3px;
+}
+
+.mini-calendar-seg.pending { background: #f5d98a; }
+.mini-calendar-seg.booked  { background: #eaa9a9; }
+
+.mini-calendar-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    font-size: 0.7rem;
+    color: #6b6038;
+}
+
+.mini-calendar-legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mini-calendar-legend i {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.mini-calendar-legend i.free    { background: #faf6e9; border: 1px solid #ece4c7; }
+.mini-calendar-legend i.pending { background: #f5d98a; }
+.mini-calendar-legend i.booked  { background: #eaa9a9; }
+
+.mini-calendar-loading {
+    font-size: 0.8rem;
+    color: #9a9377;
+    padding: 16px;
+}

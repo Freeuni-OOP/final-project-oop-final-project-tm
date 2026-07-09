@@ -1,12 +1,19 @@
 import 'react';
+import { useNavigate } from 'react-router-dom';
 import './ServiceCard.css';
 
 function ServiceCard({ service }) {
+    const navigate = useNavigate();
+    const defaultImage = 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';
+
     return (
-        <div className="service-card">
+        <div
+            className="service-card"
+            onClick={() => navigate(`/services/${service.id}`)}
+        >
             <img
-                src={service.picture_url || 'https://via.placeholder.com/80'}
-                alt={service.title}
+                src={service.getImagePath || defaultImage}
+                alt={defaultImage}
                 className="user-avatar"
             />
             <div className="user-info">

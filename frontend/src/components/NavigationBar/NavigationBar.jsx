@@ -14,7 +14,6 @@ function NavigationBar({ user, onLogout }) {
                 </div>
             </div>
             <div className="search-container">
-                <span className="search-icon">⌕</span>
                 <input type="text" placeholder="Search..." className="search-input" />
             </div>
             {user ? (
@@ -22,7 +21,7 @@ function NavigationBar({ user, onLogout }) {
                     <NotificationButton />
                     <button
                         className="profile-icon-btn"
-                        onClick={() => navigate(`/profile/${user.id}`)}
+                        onClick={() => navigate(`/profile/`)}
                     >
                         {user.firstName[0].toUpperCase()}
                     </button>

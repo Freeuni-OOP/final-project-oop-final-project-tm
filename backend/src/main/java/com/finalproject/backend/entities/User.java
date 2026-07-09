@@ -24,6 +24,7 @@ public class User {
     @Column(name = "about_me")
     private String aboutMe;
 
+    @JsonIgnore
     @Column(name = "password_hash")
     private String passHash;
 
@@ -33,6 +34,7 @@ public class User {
     @Column(name = "is_enabled", columnDefinition = "boolean default false")
     private Boolean isEnabled;
 
+    @JsonIgnore
     @Column(name = "verification_code")
     private String verificationCode;
 

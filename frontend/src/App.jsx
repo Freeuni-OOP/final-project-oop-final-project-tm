@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
+/**
+ * Root application component.
+ * Renders the landing page (list of profiles) as the main page content.
+ */
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkUserSession = async () => {
@@ -24,8 +29,18 @@ function App() {
     checkUserSession();
   }, []);
 
-  const handleLogout = () => {
-    setCurrentUser(null);
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:8080/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setCurrentUser(null);
+      navigate('/')
+    }
   };
 
   if (loading) {

@@ -1,0 +1,234 @@
+/* Main Page Wrapper */
+.service-page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 60px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* --- TOP HALF (Image & Info) --- */
+.service-top-half {
+    display: flex;
+    flex-direction: row;
+    gap: 80px;
+    padding-bottom: 60px;
+    border-bottom: 2px solid #eaeaea;
+}
+
+/* Made the profile picture wider and larger overall (460px) */
+.service-profile-container {
+    width: 460px;
+    flex-shrink: 0;
+}
+
+/* Overrides ProfilePicture.css to match your required size */
+.service-profile-container .profile-picture {
+    width: 100%;
+    height: 460px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    background-color: #f0f0f0;
+}
+
+.service-info-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+/* --- Header Group (Category, Title, Address) --- */
+.service-header-group {
+    margin-bottom: 25px;
+}
+
+.service-title {
+    margin: 0 0 15px 0;
+    font-size: 3.5rem;
+    color: #222;
+    line-height: 1.1;
+}
+
+/* NEW: Layout row aligning location and category pill side-by-side */
+.service-location-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.service-address {
+    display: inline-block;
+    padding: 6px 16px;
+    background-color: #f1f5f9;
+    color: #475569;
+    border-radius: 20px;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+/* UPDATED: Adjusted margins, font-size, and padding to complement the address text */
+.service-category {
+    display: inline-block;
+    padding: 6px 16px;
+    background-color: #f1f5f9;
+    color: #475569;
+    border-radius: 20px;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0; /* Removed bottom margin */
+}
+
+/* --- Stats Row --- */
+.service-stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.stat-badge {
+    background-color: #f6f8fa;
+    border: 1px solid #d0d7de;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 1.05rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+}
+
+.stat-badge strong {
+    color: #222;
+    margin: 0 6px;
+    font-size: 1.2rem;
+}
+
+/* --- Price and Actions --- */
+.service-price-and-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.service-price h2 {
+    margin: 0;
+    font-size: 2.2rem;
+    color: #222;
+    line-height: 1;
+}
+
+.price-subtitle {
+    margin-top: 4px;
+    font-size: 1rem;
+    color: #666;
+}
+
+/* --- Action Buttons --- */
+.service-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.action-btn {
+    padding: 10px 24px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    text-decoration: none;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid #cbd5e1;
+    color: #475569;
+}
+
+.btn-outline:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.btn-starred {
+    background-color: #fffbeb;
+    border: 2px solid #fcd34d;
+    color: #b45309;
+}
+
+/* --- Description --- */
+.service-description-label {
+    margin: 0 0 10px 0;
+    font-size: 1.6rem;
+    color: #333;
+}
+
+.service-description-text {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: #555;
+    max-width: 900px;
+}
+
+/* --- BOTTOM HALF (Two Calendars) --- */
+.service-bottom-half {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+}
+
+.calendar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.8rem;
+}
+
+.calendar-placeholder {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+    background-color: #fafafa;
+    border: 3px dashed #cbd5e1;
+    border-radius: 16px;
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 1.3rem;
+}
+
+.service-bottom-half {
+    display: flex;
+    justify-content: space-between; /* your existing two-column layout */
+    gap: 24px;
+}
+
+.service-bottom-half.single-calendar {
+    justify-content: center;
+}
+
+.service-bottom-half.single-calendar .calendar-container {
+    max-width: 480px; /* prevents it from stretching full-width when alone */
+    width: 100%;
+}

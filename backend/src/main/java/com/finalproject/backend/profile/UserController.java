@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<Pair<ProfileDTO, Integer>> getPublicProfile(
             @PathVariable Integer id,
-            @CookieValue(value = "jwt_token") String userCookie
+            @CookieValue(value = "jwt_token", required = false) String userCookie
     ) {
         Integer cookieId = cookieService.checkCookie(userCookie);
         ProfileDTO profileDTO = userService.getUser(id);

@@ -1,13 +1,13 @@
 import 'react';
 import './ProfileBase.css'
 import {useEffect, useState} from "react";
-import NavigationBar from "../../components/NavigationBar/NavigationBar.jsx";
 import ProfilePicture from "./ProfilePicture.jsx";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {FollowingManagement} from "../Services/FollowingManagement.js";
 import {GetFollowerCount} from "../Services/GetFollowerCount.js";
 import {GetFollowingCount} from "../Services/GetFollowingCount.js";
 import {IsViewerFollowing} from "../Services/IsViewerFollowing.js";
+import MiniPrivateCalendar from "../../features/calendar/MiniPrivateCalendar.jsx";
 
 function ProfileBase({profileData, isPublic}) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -20,7 +20,7 @@ function ProfileBase({profileData, isPublic}) {
     const[followingCount, setFollowingCount] = useState(0);
     const [isFollowing, setIsFollowing] = useState(false);
     const publicId = profileData.id;
-
+    const navigate = useNavigate();
 
     console.log("Full profileData: ", profileData);
     console.log("Image Path from Backend: ", imagePath);
@@ -48,6 +48,11 @@ function ProfileBase({profileData, isPublic}) {
         }
         fetchCount();
     }, [publicId])
+
+    const handleCalendarClick = () => {
+        // 3. Define the path you want to navigate to
+        navigate(`/profile/calendar/${publicId}`);
+    };
 
     const handleFollowing = async() => {
         const nextIsFollowing = !isFollowing;
@@ -115,8 +120,9 @@ function ProfileBase({profileData, isPublic}) {
                         </Link>
                         {
                             // SABA here is the link, url has to match
+                            // thank you ELENE ;D
                         }
-                        <Link to ="/service/creation" className = {"link-to-upload-serv"}>
+                        <Link to ="/service-creation" className = {"link-to-upload-serv"}>
                             <button className={"upload-new-services"}> Upload New Service</button>
                         </Link>
 
@@ -126,20 +132,17 @@ function ProfileBase({profileData, isPublic}) {
                         )
                     }
                 </div>
+                <div className={"calend"}
+                     onClick={handleCalendarClick}
+                >
 
             {
                 !isPublic && (
-                    <div className="calendar-column">
-                        <h3 className="calendar-title">Availability Calendar</h3>
-                        <div className="mock-calendar-grid">
-                            {/* This creates 28 dummy squares for a 4-week grid */}
-                            {[...Array(28)].map((_, i) => (
-                                <div key={i} className="calendar-square"></div>
-                            ))}
-                        </div>
-                    </div>
+                    <MiniPrivateCalendar userId={profileData.id} />
+
                 )
             }
+                </div>
             </div>
         </div>
     );

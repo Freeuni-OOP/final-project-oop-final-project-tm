@@ -19,7 +19,12 @@ public class CookieService {
             return -1;
         }
 
-        String mail = tokenCreator.validateTokenAndGetEmail(userCookie);
-        return userService.getIdByEmail(mail);
+        try {
+            String mail = tokenCreator.validateTokenAndGetEmail(userCookie);
+            return userService.getIdByEmail(mail);
+        } catch (Exception e) {
+            return -1;
+        }
     }
+
 }

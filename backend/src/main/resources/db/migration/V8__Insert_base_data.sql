@@ -29,22 +29,22 @@ INSERT INTO services (provider_id, title, bio, image_path, price) VALUES
 (2, 'Vintage Watch Restoration Basics', 'A delicate, meditative dive into the world of horology. Learn how to safely open, clean, and re-oil antique mechanical movements. I provide the tools and guidance; you bring the patience.', 'https://images.squarespace-cdn.com/content/v1/53fce39fe4b0e51709f79b46/cc28b985-fc11-449a-8aa3-e28a48a535d0/PXL_20230907_151219732.jpg', 90.00),
 
 (3, 'Alpine Flora Identification Field Trip', 'Spend a day with me in the mountains learning how to identify endemic plant species. We will discuss the ecosystem, the challenges of high-altitude life, and how climate change is affecting these fragile habitats.', 'https://fastly.picsum.photos/id/519/200/200.jpg?hmac=7MwcBjyXrRX5GB6GuDATVm_6MFDRmZaSK7r5-jqDNS0', 60.00),
-(3, 'Nature Photography Masterclass', 'Capture the wilderness like a pro. This course covers composition, lighting in diverse environments, and how to tell a story through botanical photography. Bring your camera and sturdy hiking boots.', NULL, 55.00),
+(3, 'Nature Photography Masterclass', 'Capture the wilderness like a pro. This course covers composition, lighting in diverse environments, and how to tell a story through botanical photography. Bring your camera and sturdy hiking boots.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 55.00),
 
-(4, 'The Science of Espresso Extraction', 'Beyond the button press. Learn about grind size, water pressure, puck preparation, and the chemistry behind the perfect shot. We will dial in a coffee together until it tastes balanced and sweet.', NULL, 45.00),
-(4, 'Jazz Bass Fundamentals', 'A beginner-friendly guide to walking bass lines and jazz improvisation. We will cover standard chord progressions, rhythm, and how to find your groove within an ensemble.', NULL, 35.00),
+(4, 'The Science of Espresso Extraction', 'Beyond the button press. Learn about grind size, water pressure, puck preparation, and the chemistry behind the perfect shot. We will dial in a coffee together until it tastes balanced and sweet.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 45.00),
+(4, 'Jazz Bass Fundamentals', 'A beginner-friendly guide to walking bass lines and jazz improvisation. We will cover standard chord progressions, rhythm, and how to find your groove within an ensemble.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 35.00),
 
-(5, 'Tech Startup Branding Strategy', 'How to define your voice in a crowded market. We will go over audience segmentation, content strategy, and how to build a brand identity that resonates with early adopters in the tech space.', NULL, 150.00),
-(5, 'Professional Social Media Audit', 'Struggling to gain traction? I will provide a deep dive into your current digital presence, offering actionable insights on how to improve your engagement and conversion rates.', NULL, 85.00),
+(5, 'Tech Startup Branding Strategy', 'How to define your voice in a crowded market. We will go over audience segmentation, content strategy, and how to build a brand identity that resonates with early adopters in the tech space.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 150.00),
+(5, 'Professional Social Media Audit', 'Struggling to gain traction? I will provide a deep dive into your current digital presence, offering actionable insights on how to improve your engagement and conversion rates.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 85.00),
 
-(6, 'Danish Modern Furniture Workshop', 'Learn to build a simple, elegant side table using traditional joinery techniques. We emphasize functionality, clean lines, and high-quality craftsmanship.', NULL, 200.00),
-(6, 'Introduction to Nordic Woodworking', 'Learn the basics of hand-tool woodworking. We will cover timber selection, sharpening your chisels, and the basics of creating durable, beautiful joints that last a lifetime.', NULL, 110.00),
+(6, 'Danish Modern Furniture Workshop', 'Learn to build a simple, elegant side table using traditional joinery techniques. We emphasize functionality, clean lines, and high-quality craftsmanship.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 200.00),
+(6, 'Introduction to Nordic Woodworking', 'Learn the basics of hand-tool woodworking. We will cover timber selection, sharpening your chisels, and the basics of creating durable, beautiful joints that last a lifetime.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 110.00),
 
-(7, 'Introduction to Civil Rights Advocacy', 'A foundational course on understanding your rights and how to navigate legal systems. We will look at case studies from around the world and discuss how to engage in ethical advocacy.', NULL, 65.00),
-(7, 'Traditional Weaving Workshop', 'A workshop on Senegalese weaving techniques. This is a chance to learn a beautiful, ancient craft while we discuss the history and cultural significance of textile arts in West Africa.', NULL, 50.00),
+(7, 'Introduction to Civil Rights Advocacy', 'A foundational course on understanding your rights and how to navigate legal systems. We will look at case studies from around the world and discuss how to engage in ethical advocacy.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 65.00),
+(7, 'Traditional Weaving Workshop', 'A workshop on Senegalese weaving techniques. This is a chance to learn a beautiful, ancient craft while we discuss the history and cultural significance of textile arts in West Africa.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 50.00),
 
-(8, 'Authentic Sourdough Baking', 'Forget store-bought loaves. Learn how to create, feed, and maintain your own sourdough starter, and master the art of the perfect, crusty artisan loaf.', NULL, 40.00),
-(8, 'Italian Home Cooking Secrets', 'Simple, high-quality ingredients made right. We will focus on the fundamentals of handmade pasta, perfect marinara, and classic desserts that impress every time.', NULL, 55.00);
+(8, 'Authentic Sourdough Baking', 'Forget store-bought loaves. Learn how to create, feed, and maintain your own sourdough starter, and master the art of the perfect, crusty artisan loaf.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 40.00),
+(8, 'Italian Home Cooking Secrets', 'Simple, high-quality ingredients made right. We will focus on the fundamentals of handmade pasta, perfect marinara, and classic desserts that impress every time.', 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg', 55.00);
 
 
 

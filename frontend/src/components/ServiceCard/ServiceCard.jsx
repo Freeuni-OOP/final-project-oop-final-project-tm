@@ -12,7 +12,7 @@ function ServiceCard({ service }) {
             onClick={() => navigate(`/services/${service.id}`)}
         >
             <img
-                src={service.imagePath || defaultImage}
+                src={service.getImagePath || defaultImage}
                 alt={defaultImage}
                 className="user-avatar"
             />

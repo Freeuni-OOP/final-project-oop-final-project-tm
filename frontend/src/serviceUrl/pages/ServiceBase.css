@@ -72,16 +72,16 @@
     margin-bottom: 0;
 }
 
-/* UPDATED: Adjusted margins, font-size, and padding to complement the address text */
+//* UPDATED: FORCING THE SIZE TO CHANGE */
 .service-category {
     display: inline-block;
-    padding: 6px 16px;
+    padding: 12px 30px !important; /* Increased padding */
     background-color: #f1f5f9;
     color: #475569;
     border-radius: 20px;
-    font-size: 2rem;
+    font-size: 2.5rem !important; /* Forced huge font size for testing */
     font-weight: 600;
-    margin-bottom: 0; /* Removed bottom margin */
+    margin-bottom: 0;
 }
 
 /* --- Stats Row --- */

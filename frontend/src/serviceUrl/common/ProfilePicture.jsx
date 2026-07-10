@@ -9,7 +9,7 @@ function ProfilePicture({ image , service}) {
     // If the image is back end file, extract the filename.
     if(typeof image === 'string' && image.length > 5 && image.substring(0, 5) === "https"){
         console.log(image);
-        picUrl = service.imagePath;
+        picUrl = image;
     } else {
         const imageName = (image && typeof image === 'string' && image.trim() !== "")
             ? image.split(/[/\\]/).pop()

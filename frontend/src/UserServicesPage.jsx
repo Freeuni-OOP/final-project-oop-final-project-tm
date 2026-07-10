@@ -1,95 +1,115 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { mockUserHires, mockOfferedServices } from './mockServicesData';
 
 export default function UserServicesPage() {
-    const { status } = useParams();
+    const { userId, status } = useParams();
     const navigate = useNavigate();
     const [filteredListings, setFilteredListings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (status === 'offered') {
-            setFilteredListings(mockOfferedServices);
-        } else if (status === 'registered' || status === 'current') {
-            const active = mockUserHires.filter(item => item.status === 'ACTIVE');
-            setFilteredListings(active);
-        } else if (status === 'past') {
-            const completed = mockUserHires.filter(item => item.status === 'COMPLETED');
-            setFilteredListings(completed);
-        }
-    }, [status]);
+        const fetchServices = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                if (status === 'offered') {
+                    const response = await fetch(`/api/profile/services/offered/${userId}`);
+                    if (!response.ok) throw new Error('Failed to fetch offered services');
+                    const data = await response.json();
+                    setFilteredListings(data);
+                } else {
+                    const response = await fetch('/api/profile/services/registered', {
+                        credentials: 'include'
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch registered services');
+                    const data = await response.json();
+
+                    if (status === 'registered' || status === 'current') {
+                        const active = data.filter(item => item.active !== false);
+                        setFilteredListings(active);
+                    } else if (status === 'past') {
+                        const completed = data.filter(item => item.active === false);
+                        setFilteredListings(completed);
+                    }
+                }
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchServices();
+    }, [status, userId]);
 
     const getPageName = () => {
-        if (status === 'offered'){
-            return 'My Offered Services';
-        }
-        if (status === 'current'){
-            return 'Active Registered Services';
-        }
-        if (status === 'past'){
-            return 'Completed Services';
-        }
+        if (status === 'offered') return 'Offered Services';
+        if (status === 'current' || status === 'registered') return 'Active Registered Services';
+        if (status === 'past') return 'Completed Services';
         return 'Services';
     };
+
+    if (loading) return <div style={styles.container}>Loading services...</div>;
+    if (error) return <div style={{...styles.container, color: 'red'}}>Error: {error}</div>;
 
     return (
         <div style={styles.container}>
             <h2 style={styles.title}>{getPageName()}</h2>
 
             <div style={styles.tabContainer}>
-                <button onClick={() => navigate('/profile/services/offered')}
-                    style={{...styles.tabButton, fontWeight: status === 'offered' ? 'bold' : 'normal'}}
+                <button onClick={() => navigate(`/profile/${userId}/services/offered`)}
+                        style={{...styles.tabButton, fontWeight: status === 'offered' ? 'bold' : 'normal'}}
                 > Offered
                 </button>
-                <button onClick={() => navigate('/profile/services/registered')}
-                    style={{...styles.tabButton, fontWeight: status === 'registered' ? 'bold' : 'normal'}}
+                <button onClick={() => navigate(`/profile/${userId}/services/registered`)}
+                        style={{...styles.tabButton, fontWeight: (status === 'registered' || status === 'current') ? 'bold' : 'normal'}}
                 > Registered
                 </button>
-                <button onClick={() => navigate('/profile/services/past')}
-                    style={{...styles.tabButton, fontWeight: status === 'past' ? 'bold' : 'normal'}}
+                <button onClick={() => navigate(`/profile/${userId}/services/past`)}
+                        style={{...styles.tabButton, fontWeight: status === 'past' ? 'bold' : 'normal'}}
                 > Past
                 </button>
             </div>
 
             <div style={styles.listContainer}>
                 {filteredListings.length > 0 ? (
-                    filteredListings.map((listing) => (
-                        <div
-                            key={listing.serviceId}
-                            onClick={() => navigate(`/services/${listing.serviceId}`)}
-                            style={styles.card}
-                        >
-                            <div style={styles.cardHeader}>
-                                <h3 style={styles.cardTitle}>{listing.title}</h3>
-                                <span style={{
-                                    ...styles.statusTag,
-                                    backgroundColor: listing.status === 'ACTIVE' ? '#e6f4ea' : listing.status === 'COMPLETED' ? '#f3e8ff' : '#e8f0fe',
-                                    color: listing.status === 'ACTIVE' ? 'green' : listing.status === 'COMPLETED' ? 'purple' : '#1a73e8'
-                                }}>
-                                    {listing.status}
-                                </span>
+                    filteredListings.map((listing) => {
+                        const serviceId = listing.id || listing.serviceId;
+                        return (
+                            <div key={serviceId} onClick={() => navigate(`/services/${serviceId}`)} style={styles.card}>
+                                <div style={styles.cardHeader}>
+                                    <h3 style={styles.cardTitle}>{listing.title}</h3>
+                                    <span style={{
+                                        ...styles.statusTag,
+                                        backgroundColor: listing.active !== false ? '#e6f4ea' : '#f3e8ff',
+                                        color: listing.active !== false ? 'green' : 'purple'
+                                    }}>
+                                        {listing.active !== false ? 'ACTIVE' : 'COMPLETED'}
+                                    </span>
+                                </div>
+                                <p style={styles.cardCategory}>Category: {listing.category}</p>
+                                <p style={styles.cardPrice}>Price: <strong>${listing.price}</strong></p>
                             </div>
-                            <p style={styles.cardCategory}>Category: {listing.category}</p>
-                            <p style={styles.cardPrice}>Price: <strong>${listing.price}</strong></p>
-                        </div>
-                    ))
+                        );
+                    })
                 ) : (
-                    <p style={styles.emptyText}>No services found in this category.</p>
+                    <p style={styles.emptyText}>No services found.</p>
                 )}
             </div>
 
-            <button onClick={() => navigate('/profile')} style={styles.backButton}> Back to Profile </button>
+            <button onClick={() => navigate(-1)} style={styles.backButton}> Back </button>
         </div>
     );
 }
 
 const styles = {
     container: { maxWidth: '800px', margin: '30px auto', padding: '20px', fontFamily: 'sans-serif' },
-    title: { color: '#333', textTransform: 'capitalize', marginBottom: '20px' },
+    title: { color: '#333', marginBottom: '20px' },
     tabContainer: { display: 'flex', gap: '10px', marginBottom: '25px', borderBottom: '1px solid #ddd', paddingBottom: '10px' },
     tabButton: { background: 'none', border: 'none', cursor: 'pointer', color: '#555', fontSize: '16px' },
     listContainer: { display: 'flex', flexDirection: 'column', gap: '15px' },
-    card: { border: '1px solid #e0e0e0', padding: '20px', borderRadius: '10px', cursor: 'pointer', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', transition: 'transform 0.2s' },
+    card: { border: '1px solid #e0e0e0', padding: '20px', borderRadius: '10px', cursor: 'pointer', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
     cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     cardTitle: { margin: 0, fontSize: '18px', color: '#222' },
     cardCategory: { color: '#666', fontSize: '14px', margin: '5px 0' },

@@ -32,7 +32,7 @@ const routers = createBrowserRouter([
                     { path: "", element: <LandingPage /> },
                     { path: "search", element: <SearchPage /> },
                     { path: "services/:serviceId", element: <ServiceBase /> },
-                    { path: "profile/services/:status", element: <UserServicesPage /> },
+                    { path: "profile/:userId/services/:status", element: <UserServicesPage /> },
                     { path: "profile/:userId", element: <PublicProfile /> },
                     { path: "profile/", element: <PrivateProfile /> },
                     { path: "profile/edit", element: <ProfileEdit />},

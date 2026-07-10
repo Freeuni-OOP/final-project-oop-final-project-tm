@@ -9,6 +9,7 @@ import { useStarToggle } from '../hooks/useStarToggle';
 import ServiceHeader from '../components/ServiceHeader';
 import ServiceCalendars from '../components/ServiceCalendars';
 import { useCurrentUser } from '../common/getProfileId.jsx';
+import {useStarCounter} from "../hooks/useStarCounter.jsx";
 
 function ServiceBase() {
     const { serviceId } = useParams();
@@ -18,6 +19,7 @@ function ServiceBase() {
     const isRegistered = useRegistrationStatus();
     const { userId, loading: userLoading } = useCurrentUser();
     const [isStarred, toggleStar] = useStarToggle(serviceId);
+    const {starNum} = useStarCounter(serviceId);
 
     if (loading || userLoading) return <div>Loading...</div>;
     if (errorMessage) return <div>{errorMessage}</div>;
@@ -29,6 +31,7 @@ function ServiceBase() {
                 providerImage={providerImage}
                 isStarred={isStarred}
                 onStarClick={toggleStar}
+                starNum={starNum}
             />
             <ServiceCalendars
                 serviceId={serviceId}

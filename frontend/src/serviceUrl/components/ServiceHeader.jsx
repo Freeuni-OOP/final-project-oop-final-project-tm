@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import ProfilePicture from '../common/ProfilePicture';
 
-function ServiceHeader({ service, providerImage, isStarred, onStarClick }) {
+function ServiceHeader({ service, providerImage, isStarred, onStarClick, starNum}) {
     return (
         <div className="service-top-half">
             <div className="service-profile-container">
@@ -23,7 +23,7 @@ function ServiceHeader({ service, providerImage, isStarred, onStarClick }) {
                 </div>
 
                 <div className="service-stats-row">
-                    <div className="stat-badge">⭐ <strong>4.9</strong></div>
+                    <div className="stat-badge">⭐ <strong> {starNum} </strong></div>
                     <div className="stat-badge">✅ <strong>--</strong> Completed</div>
                     <div className="stat-badge">⚡ <strong>--</strong> Response Time</div>
                 </div>

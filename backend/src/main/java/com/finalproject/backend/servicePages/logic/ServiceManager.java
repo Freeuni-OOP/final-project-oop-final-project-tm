@@ -61,7 +61,10 @@ public class ServiceManager {
     }
 
     public Map<String, Integer> getStarNumber(int serviceId){
-        return Map.of("starNum", 0);
+        Service service = serviceRepository.findById(serviceId)
+                .orElseThrow(()->new RuntimeException("Service Not Found"));
+        int userId = service.getProviderId().getId();
+        return Map.of("starNum", starRepository.countByStarred(service));
     }
 
     @Transactional

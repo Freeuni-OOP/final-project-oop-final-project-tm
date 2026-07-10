@@ -6,4 +6,5 @@ export const servicesApi = {
     star: (serviceId) => apiClient.post(`/services/${serviceId}/star`),
     unstar: (serviceId) => apiClient.delete(`/services/${serviceId}/star`),
     stared: (serviceId) => apiClient.get(`/services/${serviceId}/star`),
+    starNum: (serviceId) => apiClient.get(`/services/${serviceId}/star-num`),
 };

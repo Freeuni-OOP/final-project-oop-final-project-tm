@@ -63,6 +63,16 @@ public class ServiceController {
         }
     }
 
+    @GetMapping("/{serviceId}/star-num")
+    public ResponseEntity<?> getStaredNum(@PathVariable("serviceId") int serviceId) {
+        try{
+            Map <String,Integer> info = serviceManager.getStarNumber(serviceId);
+            return ResponseEntity.ok(info);
+        } catch (Exception e){
+            return ResponseEntity.status(400).body(Map.of("message", e.getMessage()));
+        }
+    }
+
     @GetMapping("/{serviceId}/star")
     public ResponseEntity<?> staredService(@PathVariable("serviceId") int serviceId,
         @CookieValue(value = "jwt_token", required = false) String userCookie) {

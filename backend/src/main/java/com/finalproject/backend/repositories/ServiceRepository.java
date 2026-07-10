@@ -16,6 +16,7 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
 
     public List<Service> findAllByProviderId(User provider);
 
+    // used for getting registered services
     @Query(value = "SELECT c.* FROM slots AS a JOIN bookings AS b ON a.slot_id = b.slot_id JOIN services AS c ON a.service_id = c.service_id WHERE b.taker_id = :id", nativeQuery = true)
     public List<Service> findRegisteredServices(Integer id);
 

@@ -47,8 +47,9 @@ if lsof -ti:8080 >/dev/null 2>&1; then
     kill $(lsof -ti:8080) 2>/dev/null
     sleep 1
 fi
+ROOT_DIR="$(pwd)"
 cd backend
-./mvnw clean spring-boot:run &
+./mvnw clean spring-boot:run -Dspring-boot.run.workingDirectory="$ROOT_DIR" &
 BACKEND_PID=$!
 cd ..
 

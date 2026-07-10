@@ -20,3 +20,8 @@ export const mockUserHires = [
     { serviceId: 119, title: "Kubernetes Cluster Management", category: "Development", price: 400, status: "ACTIVE" },
     { serviceId: 120, title: "Mobile App QA Testing", category: "Development", price: 130, status: "COMPLETED" }
 ];
+
+export const mockOfferedServices = [
+    { serviceId: 201, title: "C++ Advanced Tutoring", category: "Education", price: 100, status: "OFFERED" },
+    { serviceId: 202, title: "Full-Stack Web App Creation", category: "Development", price: 500, status: "OFFERED" }
+];

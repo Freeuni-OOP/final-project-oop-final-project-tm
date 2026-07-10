@@ -1,0 +1,2 @@
+ALTER TABLE services
+    ADD COLUMN star INT NOT NULL DEFAULT 0;

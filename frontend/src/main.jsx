@@ -17,7 +17,7 @@ import SettingsCalendar from "./features/calendar/SettingsCalendar.jsx";
 import ForgotPassword from './components/Register_Login/ForgotPassword.jsx';
 import ServiceCalendarPage from "./features/calendar/ServiceCalendarPage.jsx";
 import PrivateWeeklyCalendar from "./features/calendar/PrivateWeeklyCalendar.jsx";
-import SearchPage from "./SearchPage.jsx";
+import SearchPage from "./searchPage.jsx";
 
 const routers = createBrowserRouter([
     {

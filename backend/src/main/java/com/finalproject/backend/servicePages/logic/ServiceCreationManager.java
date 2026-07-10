@@ -60,6 +60,7 @@ public class ServiceCreationManager {
         service.setBio(request.getBio());
         service.setImagePath(uploadPath + "/" + imagePath);
         service.setActive(true);
+        service.setStar(0);
 
         // Date parsing logic
         String date = request.getDate();

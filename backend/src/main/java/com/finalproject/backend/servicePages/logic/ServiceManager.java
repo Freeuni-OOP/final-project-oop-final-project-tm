@@ -1,7 +1,13 @@
 package com.finalproject.backend.servicePages.logic;
 
 import com.finalproject.backend.entities.Service;
+import com.finalproject.backend.entities.StarID;
+import com.finalproject.backend.entities.Stars;
+import com.finalproject.backend.entities.User;
 import com.finalproject.backend.repositories.ServiceRepository;
+import com.finalproject.backend.repositories.StarRepository;
+import com.finalproject.backend.repositories.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +17,15 @@ import java.util.Optional;
 public class ServiceManager {
 
     private final ServiceRepository serviceRepository;
-
+    private final StarRepository starRepository;
+    private final UserRepository userRepository;
     // Constructor injection matching your AuthController style
-    public ServiceManager(ServiceRepository serviceRepository) {
+    public ServiceManager(ServiceRepository serviceRepository,
+                          StarRepository starRepository,
+                          UserRepository userRepository) {
         this.serviceRepository = serviceRepository;
+        this.starRepository = starRepository;
+        this.userRepository = userRepository;
     }
 
     public  Map<String, Object> getServiceInformation(int serviceId) {
@@ -42,6 +53,56 @@ public class ServiceManager {
         responseJson.put("serviceProfileId", service.getProviderId().getId());
 
         return responseJson;
+    }
+
+    public Map<String, Boolean> getStarEssence(int serviceId,int userId){
+        StarID starID = new StarID(userId,serviceId);
+        return Map.of("stared",starRepository.existsById(starID));
+    }
+
+    public Map<String, Integer> getStarNumber(int serviceId){
+        return Map.of("starNum", 0);
+    }
+
+    @Transactional
+    public void addStar(int serviceId,int userId){
+            Stars star = new Stars();
+            StarID starID = new StarID(userId,serviceId);
+            if(starRepository.existsById(starID)){
+                return;
+            }
+            User user = userRepository.findById(userId)
+                    .orElseThrow(()->new RuntimeException("User Not Found"));
+            Service service = serviceRepository.findById(serviceId)
+                    .orElseThrow(()->new RuntimeException("Service Not Found"));
+            star.setStarID(starID);
+            star.setStarer(user);
+            star.setStarred(service);
+            starRepository.save(star);
+            System.out.println("star added");
+            service.setStar(service.getStar()+1);
+            serviceRepository.save(service);
+            System.out.println("star num increased in service");
+    }
+
+    public void removeStar(int serviceId,int userId){
+        Stars star = new Stars();
+        StarID starID = new StarID(userId,serviceId);
+        if(!starRepository.existsById(starID)){
+            return;
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new RuntimeException("User Not Found"));
+        Service service = serviceRepository.findById(serviceId)
+                .orElseThrow(()->new RuntimeException("Service Not Found"));
+        star.setStarID(starID);
+        star.setStarer(user);
+        star.setStarred(service);
+        starRepository.delete(star);
+        System.out.println("star deleted");
+        service.setStar(service.getStar()-1);
+        serviceRepository.save(service);
+        System.out.println("star num decreased in service");
     }
 
     public Map<String, Object> getServiceImagePath(int serviceId) {

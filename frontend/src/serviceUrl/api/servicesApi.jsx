@@ -5,4 +5,5 @@ export const servicesApi = {
     getProviderProfile: (serviceId) => apiClient.get(`/services/profile/${serviceId}`),
     star: (serviceId) => apiClient.post(`/services/${serviceId}/star`),
     unstar: (serviceId) => apiClient.delete(`/services/${serviceId}/star`),
+    stared: (serviceId) => apiClient.get(`/services/${serviceId}/star`),
 };

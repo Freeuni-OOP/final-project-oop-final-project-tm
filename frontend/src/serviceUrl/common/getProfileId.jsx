@@ -8,7 +8,11 @@ export function useCurrentUser() {
     useEffect(() => {
         let cancelled = false;
         apiClient.get('/profile/')
-            .then((data) => { if (!cancelled) setUserId(data.id); })
+            .then((data) => {
+                if (!cancelled && data && data.id) {
+                    setUserId(data.id);
+                }
+            })
             .catch((error) => console.error('Failed to fetch current user', error))
             .finally(() => { if (!cancelled) setLoading(false); });
         return () => { cancelled = true; };

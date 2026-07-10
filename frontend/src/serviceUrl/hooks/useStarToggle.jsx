@@ -1,8 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { servicesApi } from '../api/servicesApi';
 
-export function useStarToggle(serviceId, initial = false) {
-    const [isStarred, setIsStarred] = useState(initial);
+export function useStarToggle(serviceId) {
+    const [isStarred, setIsStarred] = useState(false);
+
+    useEffect(() => {
+        // Helper async function to safely handle the promise
+        const fetchStarStatus = async () => {
+            try {
+                const response = await servicesApi.stared(serviceId); // Added await here
+                if (response && response.stared === true) {
+                    setIsStarred(true);
+                }
+            } catch (error) {
+                  console.error('Failed to fetch star status', error);
+            }
+        };
+
+        if (serviceId) {
+            fetchStarStatus();
+        }
+    }, [serviceId]);
 
     const toggle = async () => {
         try {

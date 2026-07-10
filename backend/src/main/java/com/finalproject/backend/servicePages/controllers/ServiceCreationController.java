@@ -1,6 +1,7 @@
 package com.finalproject.backend.servicePages.controllers;
 
 import com.finalproject.backend.profile.UserService;
+import com.finalproject.backend.servicePages.commons.CookieChecker;
 import com.finalproject.backend.servicePages.exception.AuthException;
 import com.finalproject.backend.servicePages.logic.ServiceCreationManager;
 import com.finalproject.backend.servicePages.model.ServiceCreationRequest;
@@ -21,23 +22,15 @@ public class ServiceCreationController {
     private final ServiceCreationManager manager;
     private final TokenCreator tokenCreator;
     private final UserService userService;
-    public ServiceCreationController(ServiceCreationManager manager, TokenCreator tokenCreator, UserService userService) {
+    private final CookieChecker cookieChecker;
+    public ServiceCreationController(ServiceCreationManager manager,
+                                     TokenCreator tokenCreator,
+                                     UserService userService,
+                                     CookieChecker cookieChecker) {
         this.manager = manager;
         this.tokenCreator = tokenCreator;
         this.userService = userService;
-    }
-    // Checks if user cookie is valid and returns user id
-    private Integer checkCookie(String userCookie) {
-        if(userCookie == null || userCookie.isEmpty()) {
-            System.out.println("Cookie Missing");
-            throw new AuthException("Cookie Missing", "AUTH_COOKIE_MISSING");
-        }
-        String mail = tokenCreator.validateTokenAndGetEmail(userCookie);
-        System.out.println("Email: " + mail + "\n");
-        if (mail == null) {
-            throw new AuthException("Invalid Token", "AUTH_TOKEN_INVALID");
-        }
-        return userService.getIdByEmail(mail);
+        this.cookieChecker = cookieChecker;
     }
 
     @PostMapping("")
@@ -46,7 +39,7 @@ public class ServiceCreationController {
             @CookieValue(value = "jwt_token", required = false) String userCookie) {
 
         try {
-            Integer userId = checkCookie(userCookie);
+            Integer userId = cookieChecker.checkCookie(userCookie);
 
             int newServiceId = manager.postServiceInformation(request, userId);
 

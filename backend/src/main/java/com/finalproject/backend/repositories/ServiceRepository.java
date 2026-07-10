@@ -1,6 +1,7 @@
 package com.finalproject.backend.repositories;
 
 import com.finalproject.backend.entities.Service;
+import com.finalproject.backend.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,16 @@ import java.util.Optional;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<Service, Integer> {
+
+
+    public List<Service> findAllByProviderId(User provider);
+
+    @Query(value = "SELECT DISTINCT c.* FROM slots AS a " +
+            "JOIN bookings AS b ON a.slot_id = b.slot_id " +
+            "JOIN services AS c ON a.service_id = c.service_id " +
+            "WHERE b.taker_id = :id " +
+            "AND c.provider_id != :id", nativeQuery = true)
+    public List<Service> findRegisteredServices(Integer id);
 
     //pessimistic row lock (FOR UPDATE); only actually locks inside a @Transactional caller
     //this is what requestBooking and blockTime rely on to serialize concurrent bookings for the same service

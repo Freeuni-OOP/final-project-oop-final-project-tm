@@ -109,14 +109,14 @@ function ProfileBase({profileData, isPublic}) {
                             > {isFollowing ? "Following" : "Follow" } </button>
                         )
                     }
-                    <Link to ="/service/services/offered" className = {"link-to-offered-serv"}>
-                        <button className={"offered-services"}> Offered Services </button>
+                    <Link to={`/profile/${publicId}/services/offered`}>
+                        <button className={"offered-services"}>Offered Services</button>
                     </Link>
                     {
                     !isPublic && (
                     <div className={"additional-buttons"}>
-                        <Link to ="/service/services/registered" className = {"link-to-registered-serv"}>
-                            <button className={"registered-services"}> Registered Services</button>
+                        <Link to={`/profile/${publicId}/services/registered`}>
+                            <button className={"registered-services"}>Registered Services</button>
                         </Link>
                         {
                             // SABA here is the link, url has to match

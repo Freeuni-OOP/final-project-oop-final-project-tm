@@ -6,7 +6,6 @@ import com.finalproject.backend.repositories.ServiceRepository;
 import com.finalproject.backend.repositories.UserRepository;
 import com.finalproject.backend.servicePages.model.ServiceCreationRequest;
 import com.finalproject.backend.services.NotificationService;
-import com.finalproject.backend.services.NotificationService;
 
 import java.io.IOException;
 import java.nio.file.Files;

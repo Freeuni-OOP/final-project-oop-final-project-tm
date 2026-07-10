@@ -30,7 +30,7 @@ public class FollowController {
     }
 
     @PostMapping("/new/{id}")
-    public ResponseEntity<Integer> newFollow(@CookieValue(value = "jwt_token") String userCookie,
+    public ResponseEntity<Integer> newFollow(@CookieValue(value = "jwt_token", required = false) String userCookie,
                           @PathVariable Integer id) {
 
         Integer followerId =  cookieService.checkCookie(userCookie);

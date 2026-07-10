@@ -12,9 +12,7 @@ export function useMiniSearch() {
             if (!res.ok) throw new Error("error fetching listing list");
             return res.json();
         }).then(data => {
-            // 👇 აი ეს ერთი ხაზი დაამატე აქ:
-            console.log("ბექენდიდან წამოვიდა:", data);
-
+            console.log("came from backend", data);
             if (Array.isArray(data)) {
                 setAllListings(data);
             }

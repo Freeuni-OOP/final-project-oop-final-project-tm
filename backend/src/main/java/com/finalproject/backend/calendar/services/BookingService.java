@@ -3,10 +3,7 @@ package com.finalproject.backend.calendar.services;
 import com.finalproject.backend.calendar.model.CalendarHours;
 import com.finalproject.backend.calendar.model.SlotStatus;
 import com.finalproject.backend.calendar.model.Timeline;
-import com.finalproject.backend.entities.Booking;
-import com.finalproject.backend.entities.BookingID;
-import com.finalproject.backend.entities.Slot;
-import com.finalproject.backend.entities.User;
+import com.finalproject.backend.entities.*;
 import com.finalproject.backend.repositories.BookingRepository;
 import com.finalproject.backend.repositories.ServiceRepository;
 import com.finalproject.backend.repositories.SlotsRepository;
@@ -67,7 +64,7 @@ public class BookingService {
         }
 
         Slot slot = new Slot();
-        slot.setServiceId(entityManager.getReference(com.finalproject.backend.entities.Service.class, serviceId));
+        slot.setServiceId(entityManager.getReference(Service.class, serviceId));
         slot.setStartTime(startDateTime);
         slot.setEndTime(endDateTime);
         slot = slotsRepository.save(slot);
@@ -134,7 +131,7 @@ public class BookingService {
 
         for (int i = 0; i < capacity; i++) {
             Slot slot = new Slot();
-            slot.setServiceId(entityManager.getReference(com.finalproject.backend.entities.Service.class, serviceId));
+            slot.setServiceId(entityManager.getReference(Service.class, serviceId));
             slot.setStartTime(startDateTime);
             slot.setEndTime(endDateTime);
             slot = slotsRepository.save(slot);

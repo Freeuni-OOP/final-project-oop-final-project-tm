@@ -187,6 +187,7 @@ function ListingCard({ listing }) {
 
     return (
         <div style={styles.card}>
+
             <div style={styles.cardHeader}>
                 <div style={styles.avatar}>
                     {listing.title ? listing.title.charAt(0).toUpperCase() : "T"}
@@ -202,6 +203,12 @@ function ListingCard({ listing }) {
                     </div>
                 </div>
             </div>
+
+            {listing.category && (
+                <div style={styles.categoryTag}>
+                    {listing.category}
+                </div>
+            )}
 
             <p style={styles.description}>
                 {displayText}
@@ -443,5 +450,17 @@ const styles = {
         fontSize: "13px",
         fontWeight: "600",
         transition: "background 0.2s"
+    },
+    categoryTag: {
+        display: "inline-block",
+        background: "#e0f2fe",
+        color: "#0284c7",
+        padding: "4px 10px",
+        borderRadius: "6px",
+        fontSize: "12px",
+        fontWeight: "700",
+        marginBottom: "12px",
+        textTransform: "uppercase",
+        letterSpacing: "0.5px"
     }
 };

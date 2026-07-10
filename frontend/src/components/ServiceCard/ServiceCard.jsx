@@ -4,7 +4,7 @@ import './ServiceCard.css';
 
 function ServiceCard({ service }) {
     const navigate = useNavigate();
-    const defaultImage = 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';
+    const defaultImage = 'https://placehold.co/100x100/dae3ef/1b1850?text=No+Image';
 
     return (
         <div
@@ -13,8 +13,12 @@ function ServiceCard({ service }) {
         >
             <img
                 src={service.imagePath || defaultImage}
-                alt={service.title || "Service Image"}
+                alt={service.title || "Service"}
                 className="user-avatar"
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = defaultImage;
+                }}
             />
             <div className="user-info">
                 <h4 className="provider-title">{service.title}</h4>

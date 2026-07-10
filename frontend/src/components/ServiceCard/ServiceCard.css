@@ -46,3 +46,29 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.service-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.service-category {
+    font-size: 11px !important;
+    color: #475569;
+    background-color: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.service-price {
+    font-size: 15px;
+    font-weight: bold;
+    color: #1b1850;
+}

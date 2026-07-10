@@ -49,6 +49,9 @@ class ServiceRepoTest {
         s.setCategory("Music");
         s.setAddress("123 Main St");
         s.setMaxCapacity(15);
+        s.setStar(5);
+        s.setActive(true);
+
         return s;
     }
 

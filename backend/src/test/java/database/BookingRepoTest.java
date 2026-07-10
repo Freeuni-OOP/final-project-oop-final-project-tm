@@ -49,6 +49,8 @@ public class BookingRepoTest {
         service.setProviderId(provider);
         service.setTitle("Yoga Lesson");
         service.setPrice(30.0);
+        service.setStar(5);
+        service.setActive(true);
         serviceRepository.save(service);
 
         Slot slot = new Slot();
@@ -62,6 +64,7 @@ public class BookingRepoTest {
         Slot slot = buildSlot("provider1@freeuni.com");
 
         Booking booking = new Booking();
+        booking.setId(new BookingID(taker.getId(), slot.getSlotId()));
         booking.setId(new BookingID(taker.getId(), slot.getSlotId()));
         booking.setUser(taker);
         booking.setSlot(slot);

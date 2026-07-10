@@ -45,6 +45,9 @@ public class SlotRepoTest {
         s.setTitle("Yoga Class");
         s.setPrice(20.0);
         s.setCategory("yoga");
+        s.setStar(5);
+        s.setActive(true);
+
         return serviceRepository.save(s);
     }
 

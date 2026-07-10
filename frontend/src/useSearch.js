@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
-export function useSearch() {
+export function useSearch(currentUser) {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const initialQuery = queryParams.get('query') || '';
@@ -17,15 +17,19 @@ export function useSearch() {
     const [direction, setDirection] = useState("DESC");
     const [filterMode, setFilterMode] = useState("all");
 
-    const currUserId = 1;
+    const currUserId = currentUser ? currentUser.id : null;
 
     const fetchListings = useCallback(() => {
         let url = `http://localhost:8080/api/listings?sortType=${sortBy}&direction=${direction}`;
 
-        if (filterMode === "favorites") {
-            url += `&favoriteUserId=${currUserId}`;
-        } else if (filterMode === "others") {
-            url += `&excludeFavUserId=${currUserId}`;
+        if (currUserId) {
+            if (filterMode === "favorites") {
+                url += `&favoriteUserId=${currUserId}`;
+            } else if (filterMode === "others") {
+                url += `&excludeFavUserId=${currUserId}`;
+            }
+        } else if (filterMode !== "all") {
+            setFilterMode("all");
         }
 
         fetch(url).then(res => {
@@ -40,7 +44,7 @@ export function useSearch() {
                     setAllListings([]);
                 }
             }).catch(err => setAllListings([]));
-    }, [sortBy, direction, filterMode]);
+    }, [sortBy, direction, filterMode, currUserId]);
 
     useEffect(() => {
         fetchListings();

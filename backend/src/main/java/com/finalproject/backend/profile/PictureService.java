@@ -16,8 +16,7 @@ import java.util.UUID;
 
 @Service
 public class PictureService {
-    private final Path directory = Paths.get("backend/Profile-pictures");
-
+    private final Path directory = Paths.get(System.getProperty("user.dir"), "Profile-pictures");
     private String fileExt(String s) {
         if(s != null && s.contains(".")) {
             return s.substring((s.lastIndexOf(".")));
@@ -40,14 +39,14 @@ public class PictureService {
 
     public Resource loadImage(String fileName) {
         try {
-            System.out.println(directory);
+            System.out.println(directory.toAbsolutePath());
             Resource resource = new UrlResource(directory.resolve(fileName).toUri());
             if(!resource.isReadable()) {
                 throw new RuntimeException("Not Readable");
             }
             return resource;
         } catch(Exception e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 }

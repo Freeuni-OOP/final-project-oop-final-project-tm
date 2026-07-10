@@ -19,7 +19,6 @@ function ServiceBase() {
     const { userId, loading: userLoading } = useCurrentUser();
     const [isStarred, toggleStar] = useStarToggle(serviceId);
 
-
     if (loading || userLoading) return <div>Loading...</div>;
     if (errorMessage) return <div>{errorMessage}</div>;
 

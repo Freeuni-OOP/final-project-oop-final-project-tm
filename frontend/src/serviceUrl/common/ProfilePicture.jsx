@@ -1,14 +1,22 @@
 import React from 'react';
 
 // Handles the display and fetching of a user's profile picture
-function ProfilePicture({ image }) {
-    // 1. Determine the filename. If no valid image string is passed, default it.
-    const imageName = (image && typeof image === 'string' && image.trim() !== "")
-        ? image.split(/[/\\]/).pop()
-        : "default.png";
-
+function ProfilePicture({ image , service}) {
     // 2. Construct the full URL to your Spring Boot backend.
-    const picUrl = `http://localhost:8080/api/images/${imageName}`;
+    let picUrl;
+    // 1. Determine the filename. If no valid image string is passed, default it.
+    // If the image string is a valid URL, extract the filename.
+    // If the image is back end file, extract the filename.
+    if(typeof image === 'string' && image.length > 5 && image.substring(0, 5) === "https"){
+        console.log(image);
+        picUrl = service.imagePath;
+    } else {
+        const imageName = (image && typeof image === 'string' && image.trim() !== "")
+            ? image.split(/[/\\]/).pop()
+            : "default.png";
+        picUrl = `http://localhost:8080/api/images/${imageName}`;
+        console.log(picUrl);
+    }
 
     return (
         <img

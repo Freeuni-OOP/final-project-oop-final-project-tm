@@ -5,7 +5,7 @@ function ServiceHeader({ service, providerImage, isStarred, onStarClick }) {
     return (
         <div className="service-top-half">
             <div className="service-profile-container">
-                <ProfilePicture image={providerImage} />
+                <ProfilePicture image={providerImage} service={service} />
             </div>
 
             <div className="service-info-container">

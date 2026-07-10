@@ -29,4 +29,85 @@ INSERT INTO services (service_id, provider_id, title, bio, image_path, price, ca
                                                                                             (18, 2, 'Calculus Tutoring', 'Advanced math help', NULL, 200.00, 'Math & Physics'),
                                                                                             (19, 3, 'Tbilisi City Tour', 'Customized local tours', NULL, 200.00, 'Travel'),
                                                                                             (20, 4, 'Programming Basics', 'Intro to coding', NULL, 200.00, 'IT & Programming'),
-                                                                                            (21, 5, 'Painting Class', 'Learn to paint landscapes', NULL, 200.00, 'Music & Arts');
+                                                                                        (21, 5, 'Painting Class', 'Learn to paint landscapes', NULL, 200.00, 'Music & Arts');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ========================================================
+-- 1. სლოტების დამატება (SLOTS) სხვადასხვა სერვისებისთვის
+-- ========================================================
+
+-- Amara (provider_id = 1) -> სერვისები 1, 2, 17
+INSERT INTO slots (slot_id, service_id, start_time, end_time) VALUES
+                                                                  (1, 1, '2026-07-15 10:00:00', '2026-07-15 11:00:00'),
+                                                                  (2, 1, '2026-07-15 11:00:00', '2026-07-15 12:00:00'),
+                                                                  (3, 2, '2026-07-16 15:00:00', '2026-07-16 17:00:00');
+
+-- Hiroshi (provider_id = 2) -> სერვისები 3, 4, 18
+INSERT INTO slots (slot_id, service_id, start_time, end_time) VALUES
+                                                                  (4, 3, '2026-07-15 09:00:00', '2026-07-15 11:00:00'),
+                                                                  (5, 3, '2026-07-15 14:00:00', '2026-07-15 16:00:00'),
+                                                                  (6, 4, '2026-07-17 11:00:00', '2026-07-17 13:00:00');
+
+-- Elena (provider_id = 3) -> სერვისები 5, 6, 19
+INSERT INTO slots (slot_id, service_id, start_time, end_time) VALUES
+                                                                  (7, 5, '2026-07-18 10:00:00', '2026-07-18 14:00:00'),
+                                                                  (8, 6, '2026-07-19 16:00:00', '2026-07-19 18:00:00'),
+                                                                  (9, 19, '2026-07-20 12:00:00', '2026-07-20 14:00:00');
+
+-- Mateo (provider_id = 4) -> სერვისები 7, 8, 20
+INSERT INTO slots (slot_id, service_id, start_time, end_time) VALUES
+                                                                  (10, 7, '2026-07-15 08:00:00', '2026-07-15 09:30:00'),
+                                                                  (11, 8, '2026-07-16 18:00:00', '2026-07-16 19:30:00');
+
+-- Sanaa (provider_id = 5) -> სერვისები 9, 10, 21
+INSERT INTO slots (slot_id, service_id, start_time, end_time) VALUES
+                                                                  (12, 9, '2026-07-20 10:00:00', '2026-07-20 12:00:00'),
+                                                                  (13, 10, '2026-07-21 11:00:00', '2026-07-21 12:00:00');
+
+-- Lars (provider_id = 6) -> სერვისები 11, 12
+INSERT INTO slots (slot_id, service_id, start_time, end_time) VALUES
+                                                                  (14, 11, '2026-07-22 10:00:00', '2026-07-22 13:00:00'),
+                                                                  (15, 12, '2026-07-23 15:00:00', '2026-07-23 18:00:00');
+
+
+-- ========================================================
+-- 2. ჯავშნების დამატება (BOOKINGS)
+-- ========================================================
+-- taker_id არის ის იუზერი, ვინც ყიდულობს/ჯავშნის სერვისს
+
+INSERT INTO bookings (taker_id, slot_id, status) VALUES
+-- რეზერვაციები Amara-ს სლოტებზე (slot 1, 2, 3)
+(2, 1, 'ACTIVE'),     -- Hiroshi-მ დაჯავშნა Amara-ს სერვისი 1
+(3, 2, 'COMPLETED'),  -- Elena-მ დაასრულა Amara-ს სერვისი 1
+(4, 3, 'ACTIVE'),     -- Mateo-მ დაჯავშნა Amara-ს სერვისი 2
+
+-- რეზერვაციები Hiroshi-ს სლოტებზე (slot 4, 5, 6)
+(1, 4, 'ACTIVE'),     -- Amara-მ დაჯავშნა Hiroshi-ს სერვისი 3
+(5, 5, 'ACTIVE'),     -- Sanaa-მ დაჯავშნა Hiroshi-ს სერვისი 3
+(6, 6, 'COMPLETED'),  -- Lars-მა დაასრულა Hiroshi-ს სერვისი 4
+
+-- რეზერვაციები Elena-ს სლოტებზე (slot 7, 8, 9)
+(7, 7, 'ACTIVE'),     -- Fatoumata-მ დაჯავშნა Elena-ს სერვისი 5
+(8, 8, 'ACTIVE'),     -- Alessandro-მ დაჯავშნა Elena-ს სერვისი 6
+(1, 9, 'PENDING'),    -- Amara-მ დაჯავშნა Elena-ს სერვისი 19 (თბილისის ტური)
+
+-- რეზერვაციები Mateo-ს სლოტებზე (slot 10, 11)
+(2, 10, 'ACTIVE'),    -- Hiroshi-მ დაჯავშნა Mateo-ს სერვისი 7
+(3, 11, 'COMPLETED'), -- Elena-მ დაასრულა Mateo-ს სერვისი 8
+
+-- რეზერვაციები Sanaa-ს სლოტებზე (slot 12, 13)
+(4, 12, 'ACTIVE'),    -- Mateo-მ დაჯავშნა Sanaa-ს სერვისი 9
+(6, 13, 'ACTIVE');    -- Lars-მა დაჯავშნა Sanaa-ს სერვისი 10

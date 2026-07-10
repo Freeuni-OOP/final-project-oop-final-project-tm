@@ -1,6 +1,6 @@
 package com.finalproject.backend.services;
 
-import com.finalproject.backend.entities.Service; // <-- დავამატეთ Service
+import com.finalproject.backend.entities.Service;
 import com.finalproject.backend.modules.services.dtos.listingFilterDto;
 import com.finalproject.backend.modules.services.dtos.listingResponseDto;
 import com.finalproject.backend.repositories.listingRepository;
@@ -35,6 +35,7 @@ public class listingService {
                 filter.getCategory(),
                 filter.getMin(),
                 filter.getMax(),
+                filter.getProviderId(),
                 filter.getFavoriteUserId(),
                 filter.getExcludeFavUserId(),
                 sort

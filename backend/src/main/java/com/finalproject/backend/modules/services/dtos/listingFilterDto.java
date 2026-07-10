@@ -4,6 +4,7 @@ public class listingFilterDto {
     private String text;
     private Double min;
     private Double max;
+    private Long providerId;
     private String category;
     private Long favoriteUserId;
     private Long excludeFavUserId;
@@ -27,6 +28,9 @@ public class listingFilterDto {
     public Long getExcludeFavUserId(){
         return excludeFavUserId;
     }
+    public Long getProviderId() {
+        return providerId;
+    }
 
     //setters
     public void setText(String text){
@@ -46,5 +50,8 @@ public class listingFilterDto {
     }
     public void setExcludeFavUserId(Long excludeUserId){
         this.excludeFavUserId = excludeUserId;
+    }
+    public void setProviderId(Long providerId) {
+        this.providerId = providerId;
     }
 }

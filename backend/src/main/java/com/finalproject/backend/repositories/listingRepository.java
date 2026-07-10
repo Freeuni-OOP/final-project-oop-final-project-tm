@@ -4,6 +4,7 @@ import com.finalproject.backend.entities.Service;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public interface listingRepository extends JpaRepository<Service, Integer> {
         AND (:category IS NULL OR LOWER(l.category) = LOWER(:category))
         AND (:min IS NULL OR l.price >= :min)
         AND (:max IS NULL OR l.price <= :max)
+        AND (:providerId IS NULL OR l.providerId.id = :providerId)
         AND (:favoriteUserId IS NULL OR EXISTS (
                 SELECT f FROM Favorite f 
                 WHERE f.service.id = l.id 
@@ -31,5 +33,5 @@ public interface listingRepository extends JpaRepository<Service, Integer> {
                 AND f.user.id = :excludeFavUserId
             ))
     """)
-    List<Service> findByFilters(String text, String category, Double min, Double max, Long favoriteUserId, Long excludeFavUserId, Sort sort);
+    List<Service> findByFilters(String text, String category, Double min, Double max, Long providerId, Long favoriteUserId, Long excludeFavUserId, Sort sort);
 }

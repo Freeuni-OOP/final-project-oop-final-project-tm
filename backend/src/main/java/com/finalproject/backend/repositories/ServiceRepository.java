@@ -1,6 +1,7 @@
 package com.finalproject.backend.repositories;
 
 import com.finalproject.backend.entities.Service;
+import com.finalproject.backend.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -43,4 +44,18 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
                    "WHERE sl.slot_id = :slotId",
            nativeQuery = true)
     Optional<String> findOwnerEmailBySlotId(@Param("slotId") Integer slotId);
+
+
+    @Query("SELECT s FROM Service s WHERE s.providerId.id = :userId")
+    List<Service> findByProviderId(@Param("userId") Integer userId);
+
+    @Query(value = """
+           SELECT s.service_id, s.title, s.category, s.price, b.status
+           FROM bookings b
+           JOIN slots sl ON b.slot_id = sl.slot_id
+           JOIN services s ON sl.service_id = s.service_id
+           WHERE b.taker_id = :userId
+           GROUP BY s.service_id, s.title, s.category, s.price, b.status
+    """, nativeQuery = true)
+    List<Object[]> findRegisteredServicesByUserId(@Param("userId") Integer userId);
 }

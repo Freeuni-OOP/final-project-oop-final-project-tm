@@ -8,15 +8,21 @@ export default function UserServicesPage() {
     const [filteredListings, setFilteredListings] = useState([]);
 
     useEffect(() => {
-        if (status === 'offered') {
-            setFilteredListings(mockOfferedServices);
-        } else if (status === 'registered' || status === 'current') {
-            const active = mockUserHires.filter(item => item.status === 'ACTIVE');
-            setFilteredListings(active);
-        } else if (status === 'past') {
-            const completed = mockUserHires.filter(item => item.status === 'COMPLETED');
-            setFilteredListings(completed);
-        }
+        const endpoint = status === 'offered'
+            ? 'http://localhost:8080/api/profile/services/offered'
+            : status === 'registered'
+                ? 'http://localhost:8080/api/profile/services/registered'
+                : null;
+
+        if (!endpoint) return;
+
+        fetch(endpoint, { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => setFilteredListings(Array.isArray(data) ? data : []))
+            .catch(err => {
+                console.error("Error fetching services:", err);
+                setFilteredListings([]);
+            });
     }, [status]);
 
     const getPageName = () => {

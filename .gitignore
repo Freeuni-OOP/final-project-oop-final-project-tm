@@ -17,3 +17,4 @@ frontend/dist-ssr/
 
 # Logs
 *.log
+backend/Profile-pictures/*

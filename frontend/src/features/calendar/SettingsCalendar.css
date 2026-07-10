@@ -1,0 +1,15 @@
+.sc-block-btn {
+  background: #dc3545;
+}
+
+.sc-block-btn:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.sc-unblock-btn {
+  background: #6c757d;
+}
+
+.sc-unblock-btn:hover:not(:disabled) {
+  background: #5a6268;
+}

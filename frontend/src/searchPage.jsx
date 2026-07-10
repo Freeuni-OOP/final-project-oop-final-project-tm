@@ -1,8 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useSearch } from "./useSearch";
 
 export default function SearchPage() {
+    const { currentUser } = useOutletContext();
+
     const {
         searchQuery,
         setSearchQuery,
@@ -24,7 +26,7 @@ export default function SearchPage() {
         clearFilters,
         filterMode,
         setFilterMode
-    } = useSearch();
+    } = useSearch(currentUser);
 
     return (
         <div style={styles.page}>
@@ -90,8 +92,8 @@ export default function SearchPage() {
                         style={styles.select}
                     >
                         <option value="all">All Listings</option>
-                        <option value="favorites">Liked ❤️</option>
-                        <option value="others">Not Liked 🤍</option>
+                        <option value="favorites" disabled={!currentUser}>Liked ❤️ {!currentUser && "(Log in required)"}</option>
+                        <option value="others" disabled={!currentUser}>Not Liked 🤍 {!currentUser && "(Log in required)"}</option>
                     </select>
 
                     <button onClick={clearFilters} style={styles.clearButton}>
@@ -114,7 +116,7 @@ export default function SearchPage() {
                 <>
                     <div style={styles.grid}>
                         {paginatedListings.map((listing, index) => (
-                            <ListingCard key={index} listing={listing} />
+                            <ListingCard key={index} listing={listing} currentUser={currentUser} />
                         ))}
                     </div>
 
@@ -160,7 +162,7 @@ export default function SearchPage() {
     );
 }
 
-function ListingCard({ listing }) {
+function ListingCard({ listing, currentUser }) {
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [isLiked, setIsLiked] = React.useState(false);
 
@@ -169,16 +171,32 @@ function ListingCard({ listing }) {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        fetch(`http://localhost:8080/api/favorites/check/${currUserId}/${serviceId}`)
-            .then(res => res.json()).then(data => setIsLiked(data))
-            .catch(err => console.error("Error:", err));
-    }, [serviceId]);
+        if (!currentUser?.id) {
+            setIsLiked(false);
+            return;
+        }
+
+        fetch(`http://localhost:8080/api/favorites/check/${currentUser.id}/${serviceId}`, {
+            credentials: 'include'
+        }).then(res => res.ok ? res.json() : false)
+            .then(data => setIsLiked(!!data))
+            .catch(() => setIsLiked(false));
+    }, [serviceId, currentUser?.id]);
 
     const handleLikeToggle = () => {
+        if (!currentUser?.id) return;
+
         const previousState = isLiked;
         setIsLiked(!isLiked);
-        fetch(`http://localhost:8080/api/favorites/${currUserId}/${serviceId}`, { method: "POST" })
-            .catch(err => { setIsLiked(previousState); });
+
+        fetch(`http://localhost:8080/api/favorites/${currentUser.id}/${serviceId}`, {
+            method: "POST",
+            credentials: 'include'
+        })
+            .then(res => {
+                if (!res.ok) setIsLiked(previousState);
+            })
+            .catch(() => setIsLiked(previousState));
     };
 
     const text = listing.bio || listing.description || "No description provided.";
@@ -196,8 +214,19 @@ function ListingCard({ listing }) {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <h3 style={styles.cardName}>{listing.title || "Untitled"}</h3>
                         <button onClick={handleLikeToggle}
-                                style={styles.likeButton}
+
+
+                            /**********************************************************/
+                                style={{
+                                    ...styles.likeButton,
+                                    opacity: !currentUser ? 0.5 : 1,
+                                    cursor: !currentUser ? "not-allowed" : "pointer"
+                                }}
+                                disabled={!currentUser}
+                                title={!currentUser ? "Log in to add to favorites" : "Toggle Favorite"}
                         >
+
+
                                 {isLiked ? "❤️" : "🤍"}
                         </button>
                     </div>

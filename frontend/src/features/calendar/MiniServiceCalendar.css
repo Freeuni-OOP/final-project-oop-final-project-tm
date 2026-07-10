@@ -1,0 +1,132 @@
+.mini-service-calendar {
+    display: inline-block;
+    font-family: inherit;
+    background: #fff;
+    border: 1px solid #ece4c7;
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.mini-service-calendar-title {
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8a7d4a;
+    margin-bottom: 8px;
+}
+
+.mini-service-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.mini-service-calendar-range {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #4a4430;
+}
+
+.mini-service-calendar-nav {
+    border: none;
+    background: #f3ecd2;
+    color: #6b6038;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    line-height: 1;
+    transition: background 0.15s ease;
+}
+
+.mini-service-calendar-nav:hover {
+    background: #e6d9a6;
+}
+
+.mini-service-calendar-grid {
+    display: flex;
+    gap: 3px;
+}
+
+.mini-service-calendar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.mini-service-calendar-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.mini-service-calendar-dow {
+    font-size: 0.52rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #9a9377;
+}
+
+.mini-service-calendar-date {
+    font-size: 0.64rem;
+    font-weight: 700;
+    color: #4a4430;
+}
+
+.mini-service-calendar-track {
+    position: relative;
+    width: 18px;
+    height: 100px;
+    background: #faf6e9;
+    border: 1px solid #ece4c7;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.mini-service-calendar-seg {
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    border-radius: 2px;
+}
+
+.mini-service-calendar-seg.pending { background: #f5d98a; }
+.mini-service-calendar-seg.booked  { background: #eaa9a9; }
+
+.mini-service-calendar-legend {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 0.6rem;
+    color: #6b6038;
+}
+
+.mini-service-calendar-legend span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mini-service-calendar-legend i {
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.mini-service-calendar-legend i.free    { background: #faf6e9; border: 1px solid #ece4c7; }
+.mini-service-calendar-legend i.pending { background: #f5d98a; }
+.mini-service-calendar-legend i.booked  { background: #eaa9a9; }
+
+.mini-service-calendar-loading {
+    font-size: 0.7rem;
+    color: #9a9377;
+    padding: 12px;
+}

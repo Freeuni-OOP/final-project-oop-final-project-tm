@@ -16,7 +16,11 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
 
     public List<Service> findAllByProviderId(User provider);
 
-    @Query(value = "SELECT DISTINCT c.* FROM slots AS a JOIN bookings AS b ON a.slot_id = b.slot_id JOIN services AS c ON a.service_id = c.service_id WHERE b.taker_id = :id AND c.provider_id != :id", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT c.* FROM slots AS a " +
+            "JOIN bookings AS b ON a.slot_id = b.slot_id " +
+            "JOIN services AS c ON a.service_id = c.service_id " +
+            "WHERE b.taker_id = :id " +
+            "AND c.provider_id != :id", nativeQuery = true)
     public List<Service> findRegisteredServices(Integer id);
 
     //pessimistic row lock (FOR UPDATE); only actually locks inside a @Transactional caller

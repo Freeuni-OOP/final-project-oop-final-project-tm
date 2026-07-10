@@ -13,7 +13,7 @@ export function useSearch() {
     const [allListings, setAllListings] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 50;
-    const [sortBy, setSortBy] = useState("serviceId");
+    const [sortBy, setSortBy] = useState("id");
     const [direction, setDirection] = useState("DESC");
     const [filterMode, setFilterMode] = useState("all");
 
@@ -95,7 +95,7 @@ export function useSearch() {
         setSearchField("title");
         setMinPrice("");
         setMaxPrice("");
-        setSortBy("serviceId");
+        setSortBy("id");
         setDirection("DESC");
         setCurrentPage(1);
         setFilterMode("all");

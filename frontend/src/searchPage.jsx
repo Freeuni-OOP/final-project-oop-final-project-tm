@@ -70,7 +70,7 @@ export default function SearchPage() {
                         onChange={(e) => setSortBy(e.target.value)}
                         style={styles.select}
                     >
-                        <option value="serviceId">Newest</option>
+                        <option value="id">Newest</option>
                         <option value="price">Sort by Price</option>
                         <option value="title">Sort by Title</option>
                     </select>

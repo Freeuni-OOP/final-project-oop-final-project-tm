@@ -25,11 +25,11 @@ public class PictureController {
     @PostMapping
     public ResponseEntity<String> uploadImage(@RequestParam("picUrl") MultipartFile file,
                                               @CookieValue(value = "jwt_token", required = false) String userCookie) {
-        String savedFile = pictureService.saveImage(file);
-
         if(userCookie == null || userCookie.isEmpty()) {
             throw new Error("Cookie Missing");
         }
+        String savedFile = pictureService.saveImage(file);
+
 
         String email = tokenCreator.validateTokenAndGetEmail(userCookie);
         Integer id = userService.getIdByEmail(email);

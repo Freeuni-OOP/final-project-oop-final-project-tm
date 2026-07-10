@@ -1,0 +1,21 @@
+### 1. Successful Registration (Should return 201 Created)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "lizizizi@gmail.com",
+  "password": "222",
+  "first_name": "lizi",
+  "last_name": "nanana"
+}
+
+### 2. Register - Duplicate Email (should return 400 Bad Request)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "lizizizi@gmail.com",
+  "password": "differentpassword",
+  "first_name": "lizi",
+  "last_name": "nanana"
+}

@@ -9,6 +9,11 @@ import {GetFollowingCount} from "../Services/GetFollowingCount.js";
 import {IsViewerFollowing} from "../Services/IsViewerFollowing.js";
 import MiniPrivateCalendar from "../../features/calendar/MiniPrivateCalendar.jsx";
 
+/*
+*  Since public and private profiles are so similar, and usually changing one means
+* changing the other, both are built on this one ProfileBase which decides to show features
+* based on isPublic.
+* */
 function ProfileBase({profileData, isPublic}) {
     const [isExpanded, setIsExpanded] = useState(false);
     const {firstName, lastName, aboutMe, imagePath} = profileData;
@@ -22,8 +27,8 @@ function ProfileBase({profileData, isPublic}) {
     const publicId = profileData.id;
     const navigate = useNavigate();
 
-    console.log("Full profileData: ", profileData);
-    console.log("Image Path from Backend: ", imagePath);
+    // console.log("Full profileData: ", profileData);
+    // console.log("Image Path from Backend: ", imagePath);
 
     useEffect(() => {
         const fetchCount = async () => {
@@ -50,8 +55,7 @@ function ProfileBase({profileData, isPublic}) {
     }, [publicId])
 
     const handleCalendarClick = () => {
-        // 3. Define the path you want to navigate to
-        navigate(`/profile/calendar/${publicId}`);
+        navigate(`/profile/calendar/${publicId}`); // so that I can navigate to the big calendar
     };
 
     const handleFollowing = async() => {
@@ -60,10 +64,10 @@ function ProfileBase({profileData, isPublic}) {
 
         try {
             const count = await FollowingManagement(nextIsFollowing, publicId);
-            console.log("FOLLOWERS:   ", count);
+            // console.log("FOLLOWERS:   ", count);
             setFollowerCount(count);
         } catch (error) {
-            console.log("error in following: ", error);
+            console.error("error in following: ", error);
         }
 
 
@@ -79,6 +83,8 @@ function ProfileBase({profileData, isPublic}) {
                     <div className="profile-text">
                         <h1 className="name"> {fullName}
                         </h1>
+                        { // Here is logic for read more, very nice
+                        }
                         <h2 className="bio"> {isExpanded ? fullBio : shortBio}
                             <button className="read-more"
                                     onClick={() => setIsExpanded(!isExpanded)}>

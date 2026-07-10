@@ -14,7 +14,7 @@ function PrivateProfile() {
     if(!data) return <div> Loading ... </div>
 
     if(data.id === null || data.id === undefined) {
-        return <Navigate to="/register" replace />
+        return <Navigate to="/register" replace /> // If they are not logged in, we should encourage them to log in
     }
 
 

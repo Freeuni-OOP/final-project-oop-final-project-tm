@@ -14,6 +14,8 @@ public class UserController {
     private final UserService userService;
     private final CookieService cookieService;
 
+    // pretty standard controller, contains getting and also updating a profile
+
     public UserController(UserService userService, CookieService cookieService) {
         this.userService = userService;
         this.cookieService = cookieService;

@@ -115,13 +115,13 @@ function ProfileBase({profileData, isPublic}) {
                             > {isFollowing ? "Following" : "Follow" } </button>
                         )
                     }
-                    <Link to="/profile/services/offered">
+                    <Link to={`/profile/${publicId}/services/offered`}>
                         <button className={"offered-services"}>Offered Services</button>
                     </Link>
                     {
                     !isPublic && (
                     <div className={"additional-buttons"}>
-                        <Link to="/profile/services/registered">
+                        <Link to={`/profile/${publicId}/services/registered`}>
                             <button className={"registered-services"}>Registered Services</button>
                         </Link>
                         {

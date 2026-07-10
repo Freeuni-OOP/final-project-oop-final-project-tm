@@ -8,3 +8,6 @@
 Thumbs.db
 git add .
 node_modules/
+backend/Profile-pictures/
+backend/backend/
+*.log

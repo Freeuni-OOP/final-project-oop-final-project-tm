@@ -1,0 +1,10 @@
+# IDE settings
+.idea/
+*.iml
+*.iws
+
+# Operating system junk
+.DS_Store
+Thumbs.db
+git add .
+node_modules/

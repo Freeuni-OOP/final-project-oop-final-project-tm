@@ -24,8 +24,8 @@ function ServiceHeader({ service, providerImage, isStarred, onStarClick }) {
 
                 <div className="service-stats-row">
                     <div className="stat-badge">⭐ <strong>4.9</strong></div>
-                    <div className="stat-badge">✅ <strong>340</strong> Completed</div>
-                    <div className="stat-badge">⚡ <strong>1 hr</strong> Response Time</div>
+                    <div className="stat-badge">✅ <strong>--</strong> Completed</div>
+                    <div className="stat-badge">⚡ <strong>--</strong> Response Time</div>
                 </div>
 
                 <div className="service-price-and-actions">
